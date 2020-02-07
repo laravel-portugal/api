@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('/links', function () {
+    return collect([
+        [
+            'title' => 'aaa',
+            'description' => 'bbb',
+            'url' => 'ccc',
+        ],
+    ]);
+});
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
