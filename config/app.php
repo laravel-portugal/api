@@ -175,6 +175,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Domains Service Providers...
+         */
+        \Domains\Tags\TagsServiceProvider::class,
     ],
 
     /*
