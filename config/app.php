@@ -179,6 +179,7 @@ return [
          * Domains Service Providers...
          */
         \Domains\Tags\TagsServiceProvider::class,
+        \Domains\Links\LinksServiceProvider::class,
     ],
 
     /*
