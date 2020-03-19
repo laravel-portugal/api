@@ -3,12 +3,12 @@
 namespace Domains\Tags\Tests\Features;
 
 use Domains\Tags\Models\Tag;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TagsIndexTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -20,7 +20,7 @@ class TagsIndexTest extends TestCase
     /** @test */
     public function it_lists_all_resources(): void
     {
-        $response = $this->get('/tags')
+        $response = $this->getJson('/tags')
             ->assertSuccessful()
             ->assertJsonStructure([
                 'data' => [

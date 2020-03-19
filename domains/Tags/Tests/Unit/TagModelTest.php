@@ -35,8 +35,20 @@ class TagModelTest extends TestCase
     }
 
     /** @test */
+    public function it_uses_correct_primary_key(): void
+    {
+        $this->assertEquals('id', $this->model->getKeyName());
+    }
+
+    /** @test */
     public function it_uses_soft_deletes(): void
     {
         $this->assertArrayHasKey(SoftDeletingScope::class, $this->model->getGlobalScopes());
+    }
+
+    /** @test */
+    public function it_uses_timestamps(): void
+    {
+        $this->assertTrue($this->model->usesTimestamps());
     }
 }
