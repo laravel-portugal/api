@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-         backupGlobals="false"
-         backupStaticAttributes="false"
          bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+         colors="true">
     <testsuites>
-        <testsuite name="Domains">
-            <directory suffix="Test.php">./domains/*/Tests</directory>
+        <testsuite name="Tags">
+            <directory suffix="Test.php">./domains/Tags/Tests</directory>
+        </testsuite>
+        <testsuite name="Links">
+            <directory suffix="Test.php">./domains/Links/Tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -21,6 +17,7 @@
             <directory suffix=".php">./domains</directory>
             <exclude>
                 <directory suffix=".php">./domains/*/Database</directory>
+                <directory suffix=".php">./domains/*/Routes</directory>
                 <directory suffix=".php">./domains/*/Tests</directory>
             </exclude>
         </whitelist>

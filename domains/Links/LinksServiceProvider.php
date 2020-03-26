@@ -1,11 +1,11 @@
 <?php
 
-namespace Domains\Tags;
+namespace Domains\Links;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class TagsServiceProvider extends ServiceProvider
+class LinksServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {

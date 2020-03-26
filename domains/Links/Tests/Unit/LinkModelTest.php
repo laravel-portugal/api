@@ -1,37 +1,42 @@
 <?php
 
-namespace Domains\Tags\Tests\Unit;
+namespace Domains\Links\Tests\Unit;
 
 use Carbon\Carbon;
+use Domains\Links\Models\Link;
 use Domains\Tags\Models\Tag;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Tests\TestCase;
 
-class TagModelTest extends TestCase
+class LinkModelTest extends TestCase
 {
-    private Tag $model;
+    private Link $model;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->model = factory(Tag::class)->make();
+        $this->model = factory(Link::class)->make();
     }
 
     /** @test */
     public function it_contains_required_properties(): void
     {
-        $this->assertNotNull($this->model->name);
-        $this->assertIsString($this->model->name);
+        $this->assertIsString($this->model->link);
+        $this->assertIsString($this->model->description);
+        $this->assertIsString($this->model->cover_image);
+        $this->assertIsString($this->model->author_name);
+        $this->assertIsString($this->model->author_email);
 
-        $this->assertNotNull($this->model->created_at);
+        $this->assertNull($this->model->approved_at);
+
         $this->assertInstanceOf(Carbon::class, $this->model->created_at);
     }
 
     /** @test */
     public function it_uses_correct_table_name(): void
     {
-        $this->assertEquals('tags', $this->model->getTable());
+        $this->assertEquals('links', $this->model->getTable());
     }
 
     /** @test */
@@ -50,5 +55,17 @@ class TagModelTest extends TestCase
     public function it_uses_timestamps(): void
     {
         $this->assertTrue($this->model->usesTimestamps());
+    }
+
+    /** @test */
+    public function it_has_tags_relation(): void
+    {
+        $this->assertInstanceOf(Tag::class, $this->model->tags()->getModel());
+    }
+
+    /** @test */
+    public function it_has_approved_scope(): void
+    {
+        $this->assertTrue(method_exists($this->model, 'scopeApproved'));
     }
 }
