@@ -1,6 +1,7 @@
 <?php
 
 use Domains\Links\Models\Link;
+use Domains\Tags\Models\Tag;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
@@ -14,4 +15,15 @@ $factory->define(Link::class, static fn (\Faker\Generator $faker) => [
     'author_email' => $faker->safeEmail,
     'created_at' => Carbon::now(),
     'approved_at' => null,
+]);
+
+$factory->afterCreating(Link::class, static function (Link $link) {
+    $link->tags()
+        ->attach(
+            factory(Tag::class)->create()
+        );
+});
+
+$factory->state(Link::class, 'approved', static fn () => [
+    'approved_at' => Carbon::now(),
 ]);

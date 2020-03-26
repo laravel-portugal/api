@@ -62,4 +62,10 @@ class LinkModelTest extends TestCase
     {
         $this->assertInstanceOf(Tag::class, $this->model->tags()->getModel());
     }
+
+    /** @test */
+    public function it_has_approved_scope(): void
+    {
+        $this->assertTrue(method_exists($this->model, 'scopeApproved'));
+    }
 }
