@@ -6,6 +6,7 @@ use Domains\Tags\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class LinksStoreTest extends TestCase
@@ -25,6 +26,8 @@ class LinksStoreTest extends TestCase
     /** @test */
     public function it_stores_resources(): void
     {
+        Storage::fake();
+
         $payload = [
             'link' => $this->faker->url,
             'description' => $this->faker->paragraph,
@@ -44,7 +47,7 @@ class LinksStoreTest extends TestCase
             'description' => $payload['description'],
             'author_name' => $payload['author_name'],
             'author_email' => $payload['author_email'],
-            'cover_image' => 'cover_image.jpg',
+            'cover_image' => 'cover_images/' . $payload['cover_image']->hashName(),
             'approved_at' => null,
         ]);
 
@@ -54,6 +57,8 @@ class LinksStoreTest extends TestCase
                 'tag_id' => $this->tag->id,
             ]
         );
+
+        Storage::assertExists('cover_images/' . $payload['cover_image']->hashName());
     }
 
     /** @test */
