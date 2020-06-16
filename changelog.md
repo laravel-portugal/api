@@ -28,6 +28,12 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 - N/A
 
+## 1.0.2 - 2020-06-16
+
+### Changed
+
+- Updated Laravel to v7.15.0. 
+
 ## 1.0.1 - 2020-04-02
 
 ### Security
