@@ -28,6 +28,12 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 - N/A
 
+## 1.0.4 - 2020-09-19
+
+### Added
+
+- Title to links
+
 ## 1.0.3 - 2020-09-19
 
 ### Changed

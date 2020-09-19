@@ -16,6 +16,7 @@ class LinkFactory extends Factory
     {
         return [
             'link' => $this->faker->url,
+            'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'cover_image' => 'cover_images/' . UploadedFile::fake()->image('cover_image')->getFilename(),
             'author_name' => $this->faker->name,

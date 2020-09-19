@@ -33,6 +33,7 @@ class LinksStoreTest extends TestCase
 
         $payload = [
             'link' => $this->faker->url,
+            'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,
             'author_email' => $this->faker->safeEmail,
@@ -51,6 +52,7 @@ class LinksStoreTest extends TestCase
 
         $this->seeInDatabase('links', [
             'link' => $payload['link'],
+            'title' => $payload['title'],
             'description' => $payload['description'],
             'author_name' => $payload['author_name'],
             'author_email' => $payload['author_email'],
@@ -74,6 +76,7 @@ class LinksStoreTest extends TestCase
         $this->post('/links')
             ->seeJsonStructure([
                 'link',
+                'title',
                 'description',
                 'author_name',
                 'author_email',

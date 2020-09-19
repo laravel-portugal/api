@@ -24,6 +24,7 @@ class LinkModelTest extends TestCase
     public function it_contains_required_properties(): void
     {
         self::assertIsString($this->model->link);
+        self::assertIsString($this->model->title);
         self::assertIsString($this->model->description);
         self::assertIsString($this->model->cover_image);
         self::assertIsString($this->model->author_name);

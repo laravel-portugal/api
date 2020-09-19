@@ -14,6 +14,7 @@ class Link extends Model
 
     protected $fillable = [
         'link',
+        'title',
         'description',
         'author_name',
         'author_email',

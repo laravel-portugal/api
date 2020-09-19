@@ -26,6 +26,7 @@ class LinksIndexTest extends TestCase
                     [
                         'id',
                         'link',
+                        'title',
                         'description',
                         'cover_image',
                         'author_name',

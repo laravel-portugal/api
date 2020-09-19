@@ -20,6 +20,7 @@ class LinksStoreController extends Controller
     {
         $this->validate($request, [
             'link' => ['required', 'string'],
+            'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'author_name' => ['required', 'string'],
             'author_email' => ['required', 'email'],
@@ -30,6 +31,7 @@ class LinksStoreController extends Controller
 
         $link = $this->links->create([
             'link' => $request->input('link'),
+            'title' => $request->input('title'),
             'description' => $request->input('description'),
             'author_name' => $request->input('author_name'),
             'author_email' => $request->input('author_email'),
