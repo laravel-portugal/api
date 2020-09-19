@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true">
+         colors="true"
+>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./domains</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">./domains/*/Database</directory>
+            <directory suffix=".php">./domains/*/Routes</directory>
+            <directory suffix=".php">./domains/*/Tests</directory>
+            <directory suffix=".php">./tests</directory>
+        </exclude>
+    </coverage>
     <testsuites>
         <testsuite name="Tags">
             <directory suffix="Test.php">./domains/Tags/Tests</directory>
@@ -11,25 +24,12 @@
             <directory suffix="Test.php">./domains/Links/Tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./app</directory>
-            <directory suffix=".php">./domains</directory>
-            <exclude>
-                <directory suffix=".php">./domains/*/Database</directory>
-                <directory suffix=".php">./domains/*/Routes</directory>
-                <directory suffix=".php">./domains/*/Tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
     <php>
         <server name="APP_ENV" value="testing"/>
-        <server name="BCRYPT_ROUNDS" value="4"/>
+        <server name="APP_KEY" value="base64:gC38CkQRKoFz2BjNOUWhkomX3MXBg4NedkXj8sxqZ5E="/>
         <server name="CACHE_DRIVER" value="array"/>
         <server name="DB_CONNECTION" value="sqlite"/>
         <server name="DB_DATABASE" value=":memory:"/>
-        <server name="MAIL_DRIVER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
-        <server name="SESSION_DRIVER" value="array"/>
     </php>
 </phpunit>

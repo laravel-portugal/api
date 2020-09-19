@@ -2,71 +2,83 @@
 
 namespace Domains\Links\Tests\Feature;
 
+use Domains\Tags\Database\Factories\TagFactory;
 use Domains\Tags\Models\Tag;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Faker\Factory;
+use Faker\Generator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class LinksStoreTest extends TestCase
 {
-    use RefreshDatabase;
-    use WithFaker;
+    use DatabaseMigrations;
 
     private Tag $tag;
+    private Generator $faker;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->tag = factory(Tag::class)->create();
+        $this->tag = TagFactory::new()->create();
+        $this->faker = Factory::create();
     }
 
     /** @test */
     public function it_stores_resources(): void
     {
-        Storage::fake();
+        Storage::fake('local');
 
         $payload = [
             'link' => $this->faker->url,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,
             'author_email' => $this->faker->safeEmail,
-            'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
             'tags' => [
                 ['id' => $this->tag->id],
             ],
         ];
 
-        $this->postJson('/links', $payload)
-            ->assertNoContent();
+        $files = [
+            'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
+        ];
 
-        $this->assertDatabaseHas('links', [
+        $response = $this->call('POST', '/links', $payload, [], $files);
+
+        self::assertTrue($response->isEmpty());
+
+        $this->seeInDatabase('links', [
             'link' => $payload['link'],
             'description' => $payload['description'],
             'author_name' => $payload['author_name'],
             'author_email' => $payload['author_email'],
-            'cover_image' => 'cover_images/' . $payload['cover_image']->hashName(),
+            'cover_image' => 'cover_images/' . $files['cover_image']->hashName(),
             'approved_at' => null,
         ]);
 
-        $this->assertDatabaseHas(
+        $this->seeInDatabase(
             'link_tag',
             [
                 'tag_id' => $this->tag->id,
             ]
         );
 
-        Storage::assertExists('cover_images/' . $payload['cover_image']->hashName());
+        Storage::assertExists('cover_images/' . $files['cover_image']->hashName());
     }
 
     /** @test */
     public function it_fails_to_store_resources_on_validation_errors(): void
     {
-        $this->postJson('/links')
-            ->assertJsonValidationErrors([
-                'link', 'description', 'author_name', 'author_email', 'cover_image', 'tags',
+        $this->post('/links')
+            ->seeJsonStructure([
+                'link',
+                'description',
+                'author_name',
+                'author_email',
+                'cover_image',
+                'tags',
             ]);
     }
 }
