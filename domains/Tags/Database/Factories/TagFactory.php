@@ -1,11 +1,20 @@
 <?php
 
+namespace Domains\Tags\Database\Factories;
+
 use Carbon\Carbon;
 use Domains\Tags\Models\Tag;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/** @var Factory $factory */
-$factory->define(Tag::class, static fn (\Faker\Generator $faker) => [
-    'name' => $faker->name,
-    'created_at' => Carbon::now(),
-]);
+class TagFactory extends Factory
+{
+    protected $model = Tag::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->name,
+            'created_at' => Carbon::now(),
+        ];
+    }
+}

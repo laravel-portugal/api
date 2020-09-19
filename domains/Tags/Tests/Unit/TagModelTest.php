@@ -3,6 +3,7 @@
 namespace Domains\Tags\Tests\Unit;
 
 use Carbon\Carbon;
+use Domains\Tags\Database\Factories\TagFactory;
 use Domains\Tags\Models\Tag;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Tests\TestCase;
@@ -15,40 +16,40 @@ class TagModelTest extends TestCase
     {
         parent::setUp();
 
-        $this->model = factory(Tag::class)->make();
+        $this->model = TagFactory::new()->make();
     }
 
     /** @test */
     public function it_contains_required_properties(): void
     {
-        $this->assertNotNull($this->model->name);
-        $this->assertIsString($this->model->name);
+        self::assertNotNull($this->model->name);
+        self::assertIsString($this->model->name);
 
-        $this->assertNotNull($this->model->created_at);
-        $this->assertInstanceOf(Carbon::class, $this->model->created_at);
+        self::assertNotNull($this->model->created_at);
+        self::assertInstanceOf(Carbon::class, $this->model->created_at);
     }
 
     /** @test */
     public function it_uses_correct_table_name(): void
     {
-        $this->assertEquals('tags', $this->model->getTable());
+        self::assertEquals('tags', $this->model->getTable());
     }
 
     /** @test */
     public function it_uses_correct_primary_key(): void
     {
-        $this->assertEquals('id', $this->model->getKeyName());
+        self::assertEquals('id', $this->model->getKeyName());
     }
 
     /** @test */
     public function it_uses_soft_deletes(): void
     {
-        $this->assertArrayHasKey(SoftDeletingScope::class, $this->model->getGlobalScopes());
+        self::assertArrayHasKey(SoftDeletingScope::class, $this->model->getGlobalScopes());
     }
 
     /** @test */
     public function it_uses_timestamps(): void
     {
-        $this->assertTrue($this->model->usesTimestamps());
+        self::assertTrue($this->model->usesTimestamps());
     }
 }

@@ -28,6 +28,12 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 - N/A
 
+## 1.0.3 - 2020-09-19
+
+### Changed
+
+- Updated Laravel to v8.x. 
+
 ## 1.0.2 - 2020-06-16
 
 ### Changed

@@ -4,7 +4,7 @@ namespace Domains\Links\Controllers;
 
 use App\Http\Controllers\Controller;
 use Domains\Links\Models\Link;
-use Domains\Links\Requests\LinkStoreRequest;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class LinksStoreController extends Controller
@@ -16,8 +16,18 @@ class LinksStoreController extends Controller
         $this->links = $links;
     }
 
-    public function __invoke(LinkStoreRequest $request): Response
+    public function __invoke(Request $request): Response
     {
+        $this->validate($request, [
+            'link' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'author_name' => ['required', 'string'],
+            'author_email' => ['required', 'email'],
+            'cover_image' => ['required', 'image'],
+            'tags' => ['required', 'array'],
+            'tags.*.id' => ['required', 'integer', 'exists:tags'],
+        ]);
+
         $link = $this->links->create([
             'link' => $request->input('link'),
             'description' => $request->input('description'),
