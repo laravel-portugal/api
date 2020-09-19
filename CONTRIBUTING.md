@@ -11,7 +11,7 @@ Please read and understand the contribution guide before creating an issue or pu
 * Send a coherent commit history, making sure each individual commit in your pull request is meaningful.
 * You may need to [rebase](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) to avoid merge conflicts.
 * If you are changing the behavior, or the public api, you may need to update the docs.
-* Don't forget to update the [CHANGELOG](changelog.md), specially if you added new functionality.
+* Don't forget to update the [CHANGELOG](CHANGELOG.md), specially if you added new functionality.
 * Please remember that we follow [SemVer](http://semver.org/).
 
 ## Procedure
