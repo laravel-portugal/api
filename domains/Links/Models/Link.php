@@ -30,4 +30,14 @@ class Link extends Model
     {
         return $query->whereNotNull('approved_at');
     }
+
+    public function scopeUnapproved(Builder $query): Builder
+    {
+        return $query->whereNull('approved_at');
+    }
+
+    public function scopeForAuthorWithEmail(Builder $query, string $email): Builder
+    {
+        return $query->where('author_email', $email);
+    }
 }
