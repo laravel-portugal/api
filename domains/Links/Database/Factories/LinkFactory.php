@@ -41,4 +41,11 @@ class LinkFactory extends Factory
             'approved_at' => Carbon::now(),
         ]);
     }
+
+    public function withAuthorEmail(string $email): self
+    {
+        return $this->state([
+            'author_email' => $email,
+        ]);
+    }
 }
