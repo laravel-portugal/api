@@ -42,7 +42,7 @@ jobs:
 
       - name: Store test coverage report
         run: vendor/bin/php-coveralls -v
-        if: github.event_name == "push"
+        if: github.event_name == 'push'
         env:
           COVERALLS_RUN_LOCALLY: 1
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
