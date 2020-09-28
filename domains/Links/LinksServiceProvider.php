@@ -29,6 +29,6 @@ class LinksServiceProvider extends ServiceProvider
 
     private function loadConfig(): void
     {
-        app()->configure('links');
+        $this->app->configure('links');
     }
 }
