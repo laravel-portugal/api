@@ -19,7 +19,7 @@ class LinksStoreController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->validate($request, [
-            'link' => ['required', 'string'],
+            'link' => ['required', 'string', 'active_url'],
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'author_name' => ['required', 'string'],
