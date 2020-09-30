@@ -84,4 +84,35 @@ class LinksStoreTest extends TestCase
                 'tags',
             ]);
     }
+
+    /** @test */
+    public function it_fails_to_store_resources_with_invalid_link(): void
+    {
+
+        //assert link validation using simple string
+        $payload = [
+            'link' => "this_is_not_a_real_url",
+            'title' => $this->faker->title,
+            'description' => $this->faker->paragraph,
+            'author_name' => $this->faker->name,
+            'author_email' => $this->faker->safeEmail,
+            'tags' => [
+                ['id' => $this->tag->id],
+            ],
+        ];
+
+        $this->post('/links', $payload)
+            ->seeJsonStructure([
+                'link'
+            ]);
+
+
+        //assert link validation using invalid url
+        $payload['link'] = "https://this_is_not_a_valid_url.invalid";
+
+        $this->post('/links', $payload)
+            ->seeJsonStructure([
+                'link'
+            ]);
+    }
 }
