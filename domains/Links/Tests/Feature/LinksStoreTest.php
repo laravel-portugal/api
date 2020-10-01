@@ -31,16 +31,7 @@ class LinksStoreTest extends TestCase
     {
         Storage::fake('local');
 
-        $payload = [
-            'link' => $this->faker->url,
-            'title' => $this->faker->title,
-            'description' => $this->faker->paragraph,
-            'author_name' => $this->faker->name,
-            'author_email' => $this->faker->safeEmail,
-            'tags' => [
-                ['id' => $this->tag->id],
-            ],
-        ];
+        $payload = $this->linkPayload();
 
         $files = [
             'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
@@ -85,13 +76,31 @@ class LinksStoreTest extends TestCase
             ]);
     }
 
-    /** @test */
+    /** @test  */
     public function it_fails_to_store_resources_with_invalid_link(): void
     {
 
         //assert link validation using simple string
+        $payload = $this->linkPayload(['link' => "this_is_not_a_valid_url"]);
+        $this->post('/links', $payload)
+            ->seeJsonStructure([
+                'link'
+            ]);
+
+        //assert link validation using invalid url
+        $payload = $this->linkPayload(['link' => "https://this_is_not_a_valid_url.invalid"]);
+
+        $this->post('/links', $payload)
+            ->seeJsonStructure([
+                'link'
+            ]);
+    }
+
+    protected function linkPayload(array $attributes = []): array
+    {
+
         $payload = [
-            'link' => "this_is_not_a_real_url",
+            'link' => $this->faker->url,
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,
@@ -101,18 +110,6 @@ class LinksStoreTest extends TestCase
             ],
         ];
 
-        $this->post('/links', $payload)
-            ->seeJsonStructure([
-                'link'
-            ]);
-
-
-        //assert link validation using invalid url
-        $payload['link'] = "https://this_is_not_a_valid_url.invalid";
-
-        $this->post('/links', $payload)
-            ->seeJsonStructure([
-                'link'
-            ]);
+        return array_merge($payload, $attributes);
     }
 }
