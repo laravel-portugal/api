@@ -18,6 +18,14 @@ class LinksStoreTest extends TestCase
     private Tag $tag;
     private Generator $faker;
 
+    public function invalidLinkProvider(): array
+    {
+        return [
+            ['https://this_is_not_a_valid_url.invalid'],
+            ['this_is_not_a_valid_url'],
+        ];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,7 +39,16 @@ class LinksStoreTest extends TestCase
     {
         Storage::fake('local');
 
-        $payload = $this->linkPayload();
+        $payload = [
+            'link' => $this->faker->url,
+            'title' => $this->faker->title,
+            'description' => $this->faker->paragraph,
+            'author_name' => $this->faker->name,
+            'author_email' => $this->faker->safeEmail,
+            'tags' => [
+                ['id' => $this->tag->id],
+            ],
+        ];
 
         $files = [
             'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
@@ -76,31 +93,15 @@ class LinksStoreTest extends TestCase
             ]);
     }
 
-    /** @test  */
-    public function it_fails_to_store_resources_with_invalid_link(): void
+    /** @test
+     * @dataProvider invalidLinkProvider
+     *
+     * @param string $invalidLink
+     */
+    public function it_fails_to_store_resources_with_invalid_link(string $invalidLink): void
     {
-
-        //assert link validation using simple string
-        $payload = $this->linkPayload(['link' => "this_is_not_a_valid_url"]);
-        $this->post('/links', $payload)
-            ->seeJsonStructure([
-                'link'
-            ]);
-
-        //assert link validation using invalid url
-        $payload = $this->linkPayload(['link' => "https://this_is_not_a_valid_url.invalid"]);
-
-        $this->post('/links', $payload)
-            ->seeJsonStructure([
-                'link'
-            ]);
-    }
-
-    protected function linkPayload(array $attributes = []): array
-    {
-
         $payload = [
-            'link' => $this->faker->url,
+            'link' => $invalidLink,
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,
@@ -110,6 +111,9 @@ class LinksStoreTest extends TestCase
             ],
         ];
 
-        return array_merge($payload, $attributes);
+        $this->post('/links', $payload)
+            ->seeJsonStructure([
+                'link',
+            ]);
     }
 }
