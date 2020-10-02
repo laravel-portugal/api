@@ -22,7 +22,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Fixed
 
-- N/A
+- Verify link is valid URL (#23)
 
 ### Security
 

@@ -18,6 +18,14 @@ class LinksStoreTest extends TestCase
     private Tag $tag;
     private Generator $faker;
 
+    public function invalidLinkProvider(): array
+    {
+        return [
+            ['https://this_is_not_a_valid_url.invalid'],
+            ['this_is_not_a_valid_url'],
+        ];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -82,6 +90,30 @@ class LinksStoreTest extends TestCase
                 'author_email',
                 'cover_image',
                 'tags',
+            ]);
+    }
+
+    /** @test
+     * @dataProvider invalidLinkProvider
+     *
+     * @param string $invalidLink
+     */
+    public function it_fails_to_store_resources_with_invalid_link(string $invalidLink): void
+    {
+        $payload = [
+            'link' => $invalidLink,
+            'title' => $this->faker->title,
+            'description' => $this->faker->paragraph,
+            'author_name' => $this->faker->name,
+            'author_email' => $this->faker->safeEmail,
+            'tags' => [
+                ['id' => $this->tag->id],
+            ],
+        ];
+
+        $this->post('/links', $payload)
+            ->seeJsonStructure([
+                'link',
             ]);
     }
 }
