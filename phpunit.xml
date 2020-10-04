@@ -23,6 +23,9 @@
         <testsuite name="Links">
             <directory suffix="Test.php">./domains/Links/Tests</directory>
         </testsuite>
+        <testsuite name="Accounts">
+            <directory suffix="Test.php">./domains/Accounts/Tests</directory>
+        </testsuite>
     </testsuites>
     <php>
         <server name="APP_ENV" value="testing"/>

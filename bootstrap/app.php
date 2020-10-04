@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -23,8 +23,8 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
- $app->withFacades();
- $app->withEloquent();
+$app->withFacades();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +59,20 @@ $app->singleton(
 */
 
 $app->configure('app');
+$app->configure('mail');
+
+/*
+ |--------------------------------------------------------------------------
+ | Register Alias
+ |--------------------------------------------------------------------------
+ |
+ */
+$app->alias('mail.manager', Illuminate\Mail\MailManager::class);
+$app->alias('mail.manager', Illuminate\Contracts\Mail\Factory::class);
+
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -86,9 +100,12 @@ $app->configure('app');
 |
 */
 
-// $app->register(App\Providers\AuthServiceProvider::class);
- $app->register(\Domains\Links\LinksServiceProvider::class);
- $app->register(\Domains\Tags\TagsServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(\Illuminate\Notifications\NotificationServiceProvider::class);
+$app->register(\Domains\Links\LinksServiceProvider::class);
+$app->register(\Domains\Tags\TagsServiceProvider::class);
+$app->register(\Domains\Accounts\AccountsServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
