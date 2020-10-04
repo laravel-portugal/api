@@ -40,7 +40,7 @@ class LinksStoreTest extends TestCase
         Storage::fake('local');
 
         $payload = [
-            'link' => $this->faker->url,
+            'link' => 'https://www.google.com',
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,
@@ -55,7 +55,6 @@ class LinksStoreTest extends TestCase
         ];
 
         $response = $this->call('POST', '/links', $payload, [], $files);
-
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('links', [

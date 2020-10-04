@@ -1,6 +1,6 @@
 <?php
 
-namespace Domains\Account\Tests\Unit;
+namespace Domains\Accounts\Tests\Unit;
 
 use Carbon\Carbon;
 use Domains\Accounts\Database\Factories\UserFactory;
