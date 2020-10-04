@@ -35,7 +35,7 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
     {
         $hash = \base64_encode(Hash::make($notifiable->getEmailForVerification()));
         $link = URL::route(
-            'verification.verify',
+            'accounts.verify',
             [
                 'id' => $notifiable->getKey(),
                 'hash' => $hash,

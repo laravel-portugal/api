@@ -18,6 +18,9 @@ class UserFactory extends Factory
             'email' => $this->faker->safeEmail,
             'password' => Hash::make($this->faker->password(8)),
             'email_verified_at' => Carbon::now(),
+            'trusted' => false,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 
@@ -25,6 +28,13 @@ class UserFactory extends Factory
     {
         return $this->state([
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function deleted(): self
+    {
+        return $this->state([
+            'deleted_at' => Carbon::now(),
         ]);
     }
 }

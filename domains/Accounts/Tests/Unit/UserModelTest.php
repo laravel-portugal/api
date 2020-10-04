@@ -25,11 +25,12 @@ class UserModelTest extends TestCase
         self::assertIsString($this->model->name);
         self::assertIsString($this->model->email);
         self::assertIsString($this->model->password);
-        self::assertIsNull($this->model->email_verified_at);
+        self::assertNull($this->model->email_verified_at);
         self::assertIsBool($this->model->trusted);
 
         self::assertInstanceOf(Carbon::class, $this->model->created_at);
         self::assertInstanceOf(Carbon::class, $this->model->updated_at);
+        self::assertNull($this->model->deleted_at);
     }
 
     /** @test */
