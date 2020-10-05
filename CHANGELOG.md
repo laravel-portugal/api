@@ -23,11 +23,21 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Fixed
 
-- Verify link is valid URL (#23)
+- N/A
 
 ### Security
 
 - N/A
+
+## 1.0.5 - 2020-10-05
+
+### Added
+
+- Add hard limit of unnapproved submissions per e-mail (#17)
+
+### Fixed
+
+- Verify link is valid URL (#23)
 
 ## 1.0.4 - 2020-09-19
 
