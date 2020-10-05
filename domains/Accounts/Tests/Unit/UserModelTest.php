@@ -26,7 +26,7 @@ class UserModelTest extends TestCase
         self::assertIsString($this->model->email);
         self::assertIsString($this->model->password);
         self::assertNull($this->model->email_verified_at);
-        self::assertIsBool($this->model->trusted);
+        self::assertFalse($this->model->trusted);
 
         self::assertInstanceOf(Carbon::class, $this->model->created_at);
         self::assertInstanceOf(Carbon::class, $this->model->updated_at);

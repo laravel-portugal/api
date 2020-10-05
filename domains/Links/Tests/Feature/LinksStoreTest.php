@@ -40,7 +40,7 @@ class LinksStoreTest extends TestCase
         Storage::fake('local');
 
         $payload = [
-            'link' => 'https://www.google.com',
+            'link' => $this->faker->url,
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,

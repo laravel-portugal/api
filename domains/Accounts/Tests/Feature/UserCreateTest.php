@@ -6,6 +6,7 @@ use Domains\Accounts\Models\User;
 use Domains\Accounts\Notifications\VerifyEmailNotification;
 use Faker\Factory;
 use Faker\Generator;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -32,7 +33,7 @@ class UserCreateTest extends TestCase
                 'name',
                 'email',
                 'password',
-            ]);
+            ])->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         Notification::assertNothingSent();
     }
@@ -46,9 +47,9 @@ class UserCreateTest extends TestCase
             'password' => $this->faker->password,
         ];
 
-        $response = $this->call('POST', route('accounts.store'), $payload);
+        $response = $this->post(route('accounts.store'), $payload);
 
-        self::assertTrue($response->isEmpty());
+        self::assertTrue($response->response->isEmpty());
 
         $this->seeInDatabase('users', [
             'name' => $payload['name'],

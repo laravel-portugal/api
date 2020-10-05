@@ -35,6 +35,6 @@ class AccountsStoreController extends Controller
 
         $user->notify(new VerifyEmailNotification());
 
-        return Response::create('', Response::HTTP_NO_CONTENT);
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

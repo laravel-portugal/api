@@ -40,6 +40,6 @@ class LinksStoreController extends Controller
 
         $link->tags()->attach($request->input('tags.*.id'));
 
-        return Response::create('', Response::HTTP_NO_CONTENT);
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }
