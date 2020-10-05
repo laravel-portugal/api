@@ -12,4 +12,8 @@ class User extends Model
     use MustVerifyEmail;
     use Notifiable;
     use SoftDeletes;
+
+    protected $casts = [
+        'email_verified_at' => 'date',
+    ];
 }

@@ -5,10 +5,12 @@ namespace Domains\Accounts\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Crypt;
 
 class VerifyEmailNotification extends Notification implements ShouldQueue
 {
@@ -20,7 +22,7 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
      * @param mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
@@ -31,9 +33,9 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
      * @param mixed $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
-        $hash = \base64_encode(Hash::make($notifiable->getEmailForVerification()));
+        $hash = \base64_encode(Crypt::encrypt($notifiable->getEmailForVerification()));
         $link = URL::route(
             'accounts.verify',
             [
@@ -43,9 +45,9 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
         );
 
         return (new MailMessage)
-            ->subject(Lang::get('Verify Email Address'))
-            ->line(Lang::get('Please click the button below to verify your email address.'))
-            ->action(Lang::get('Verify Email Address'), $link)
-            ->line(Lang::get('If you did not create an account, no further action is required.'));
+            ->subject(__('Verify Email Address'))
+            ->line(__('Please click the button below to verify your email address.'))
+            ->action(__('Verify Email Address'), $link)
+            ->line(__('If you did not create an account, no further action is required.'));
     }
 }
