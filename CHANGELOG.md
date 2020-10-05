@@ -7,6 +7,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 ### Added
 
 - Add hard limit of unnapproved submissions per e-mail (#17)
+- Add account creation (#22)
 
 ### Changed
 
