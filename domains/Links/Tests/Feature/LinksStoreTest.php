@@ -18,14 +18,6 @@ class LinksStoreTest extends TestCase
     private Tag $tag;
     private Generator $faker;
 
-    public function invalidLinkProvider(): array
-    {
-        return [
-            ['https://this_is_not_a_valid_url.invalid'],
-            ['this_is_not_a_valid_url'],
-        ];
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -93,15 +85,11 @@ class LinksStoreTest extends TestCase
             ]);
     }
 
-    /** @test
-     * @dataProvider invalidLinkProvider
-     *
-     * @param string $invalidLink
-     */
-    public function it_fails_to_store_resources_with_invalid_link(string $invalidLink): void
+    /** @test */
+    public function it_fails_to_store_resources_with_invalid_link(): void
     {
         $payload = [
-            'link' => $invalidLink,
+            'link' => 'this_is_not_a_valid_url',
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'author_name' => $this->faker->name,
@@ -115,5 +103,31 @@ class LinksStoreTest extends TestCase
             ->seeJsonStructure([
                 'link',
             ]);
+    }
+
+    /** @test */
+    public function it_stores_resources_with_unregistered_link_domain(): void
+    {
+        Storage::fake('local');
+
+        $payload = [
+            'link' => 'http://unregistered.laravel.pt',
+            'title' => $this->faker->title,
+            'description' => $this->faker->paragraph,
+            'author_name' => $this->faker->name,
+            'author_email' => $this->faker->safeEmail,
+            'tags' => [
+                ['id' => $this->tag->id],
+            ],
+        ];
+
+        $files = [
+            'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
+        ];
+
+        $response = $this->call('POST', '/links', $payload, [], $files);
+
+        self::assertEquals(204, $response->getStatusCode());
+        self::assertTrue($response->isEmpty());
     }
 }
