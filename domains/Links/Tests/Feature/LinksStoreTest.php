@@ -116,4 +116,30 @@ class LinksStoreTest extends TestCase
                 'link',
             ]);
     }
+
+    /** @test */
+    public function it_stores_resources_with_unregistered_link_domain(): void
+    {
+        Storage::fake('local');
+
+        $payload = [
+            'link' => 'http://unregistered.laravel.pt',
+            'title' => $this->faker->title,
+            'description' => $this->faker->paragraph,
+            'author_name' => $this->faker->name,
+            'author_email' => $this->faker->safeEmail,
+            'tags' => [
+                ['id' => $this->tag->id],
+            ],
+        ];
+
+        $files = [
+            'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
+        ];
+
+        $response = $this->call('POST', '/links', $payload, [], $files);
+
+        self::assertEquals(204, $response->getStatusCode());
+        self::assertTrue($response->isEmpty());
+    }
 }
