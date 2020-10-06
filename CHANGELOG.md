@@ -22,7 +22,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Fixed
 
-- N/A
+- Using active_url validation rule breaks tests on Links domain (#35)
 
 ### Security
 
