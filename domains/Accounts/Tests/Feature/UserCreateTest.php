@@ -33,7 +33,8 @@ class UserCreateTest extends TestCase
                 'name',
                 'email',
                 'password',
-            ])->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+            ])
+            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         Notification::assertNothingSent();
     }
@@ -49,6 +50,7 @@ class UserCreateTest extends TestCase
 
         $response = $this->post(route('accounts.store'), $payload);
 
+        $response->assertResponseStatus(Response::HTTP_NO_CONTENT);
         self::assertTrue($response->response->isEmpty());
 
         $this->seeInDatabase('users', [

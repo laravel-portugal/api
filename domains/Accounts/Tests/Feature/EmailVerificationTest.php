@@ -34,7 +34,7 @@ class EmailVerificationTest extends TestCase
         $this->get(route('accounts.verify',
             $this->user->id,
             base64_encode(Hash::make($this->faker->safeEmail))
-        ))->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        ))->assertResponseStatus(Response::HTTP_NOT_FOUND);
 
         $this->seeInDatabase($this->user->getTable(), [
             'id' => $this->user->id,
@@ -51,6 +51,7 @@ class EmailVerificationTest extends TestCase
         ]));
 
         $response->assertResponseStatus(Response::HTTP_OK);
+        $response->response->assertViewIs('accounts::verify-email');
 
         self::assertInstanceOf(Carbon::class, $this->user->refresh()->email_verified_at);
     }
