@@ -18,7 +18,9 @@ class VerifyEmailController extends Controller
         $this->user = User::findOrFail($request->route('id'));
         $hash = \base64_decode($request->route('hash'));
 
-        $this->authorizeForUser($this->user, 'verify', [User::class, $hash]);
+        if (!$this->user || !$this->check($hash)) {
+            abort(Response::HTTP_FORBIDDEN);
+        }
 
         if ($this->user->hasVerifiedEmail()) {
             return view('accounts::verify-email')
@@ -31,8 +33,8 @@ class VerifyEmailController extends Controller
             ->with('alreadyValidated', false);
     }
 
-    private function check(string $hash, User $user): bool
+    private function check(string $hash): bool
     {
-        return Crypt::decrypt($hash) === $user->email;
+        return Crypt::decrypt($hash) === $this->user->email;
     }
 }

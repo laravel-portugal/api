@@ -15,7 +15,6 @@ class AccountsServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Resources/Views', 'accounts');
         $this->loadConfig();
         $this->bootRoutes();
-        $this->registerPolicies();
     }
 
     private function bootRoutes(): void
@@ -26,10 +25,5 @@ class AccountsServiceProvider extends ServiceProvider
     private function loadConfig(): void
     {
         $this->app->configure('accounts');
-    }
-
-    private function registerPolicies()
-    {
-        Gate::policy(User::class, UserPolicy::class);
     }
 }

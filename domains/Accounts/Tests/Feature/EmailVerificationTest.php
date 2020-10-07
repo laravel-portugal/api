@@ -36,7 +36,7 @@ class EmailVerificationTest extends TestCase
             base64_encode(Hash::make($this->faker->safeEmail))
         ))->assertResponseStatus(Response::HTTP_NOT_FOUND);
 
-        $this->seeInDatabase($this->user->getTable(), [
+        $this->seeInDatabase('users', [
             'id' => $this->user->id,
             'email_verified_at' => null,
         ]);
