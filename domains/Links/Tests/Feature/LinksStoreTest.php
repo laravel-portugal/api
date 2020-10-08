@@ -47,7 +47,6 @@ class LinksStoreTest extends TestCase
         ];
 
         $response = $this->call('POST', '/links', $payload, [], $files);
-
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('links', [

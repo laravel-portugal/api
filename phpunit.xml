@@ -17,11 +17,14 @@
         </exclude>
     </coverage>
     <testsuites>
-        <testsuite name="Tags">
-            <directory suffix="Test.php">./domains/Tags/Tests</directory>
+        <testsuite name="Accounts">
+            <directory suffix="Test.php">./domains/Accounts/Tests</directory>
         </testsuite>
         <testsuite name="Links">
             <directory suffix="Test.php">./domains/Links/Tests</directory>
+        </testsuite>
+        <testsuite name="Tags">
+            <directory suffix="Test.php">./domains/Tags/Tests</directory>
         </testsuite>
     </testsuites>
     <php>

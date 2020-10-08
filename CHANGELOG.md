@@ -6,7 +6,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- N/A
+- Add account creation (#22)
 
 ### Changed
 
