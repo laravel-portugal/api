@@ -109,6 +109,8 @@ paths:
                 - author_email
                 - cover_image
                 - tags
+      tags:
+        - Links
 components:
   schemas:
     Tag:
@@ -139,6 +141,8 @@ components:
           minLength: 1
           description: The resource's deleted timestamp
           format: date-time
+      x-tags:
+        - tags
     Link:
       title: Link
       type: object
@@ -171,6 +175,8 @@ components:
             - string
             - 'null'
           format: date-time
+      x-tags:
+        - Links
     Pagination:
       title: Pagination
       type: object
@@ -188,6 +194,8 @@ components:
         next:
           type: string
           description: Next page url
+      x-tags:
+        - Pagination
     Error:
       title: Error
       type: object
@@ -198,6 +206,8 @@ components:
           description: An array of key/value pairs where key is the input that failed on validation and the value is a formatted detail message of the error
           uniqueItems: true
           items: {}
+      x-tags:
+        - Errors
   securitySchemes:
     User Credentials:
       type: oauth2
