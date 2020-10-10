@@ -10,7 +10,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Changed
 
-- N/A
+- Updated Accounts' domain endpoints structure
 
 ### Deprecated
 
