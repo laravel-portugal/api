@@ -189,22 +189,26 @@ components:
       title: Pagination
       type: object
       description: Default pagination structure
+      x-tags:
+        - Structures
+        - Pagination
       properties:
         first:
           type: string
           description: First page url
+          format: uri
         last:
           type: string
           description: Last page url
+          format: uri
         prev:
           type: string
           description: Previous page url
+          format: uri
         next:
           type: string
           description: Next page url
-      x-tags:
-        - Structures
-        - Pagination
+          format: uri
     Error:
       title: Error
       type: object
