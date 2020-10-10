@@ -30,7 +30,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Tag'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tag'
               examples: {}
       operationId: get-tags
       description: List all available tags
@@ -42,8 +44,7 @@ components:
       type: object
       properties:
         id:
-          type: string
-          minLength: 1
+          type: integer
           description: The resource's automatically generated unique identifier
         name:
           type: string
