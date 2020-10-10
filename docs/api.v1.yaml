@@ -1,0 +1,28 @@
+openapi: 3.0.0
+info:
+  title: laravel-portugal/api
+  version: '1.0'
+  license:
+    name: MIT
+    url: 'https://github.com/laravel-portugal/api/blob/master/LICENSE.md'
+  description: API layer to support the public website of the Laravel-Portugal community
+  contact:
+    name: Developers
+    url: 'https://github.com/laravel-portugal/api/issues'
+servers:
+  - url: 'https://api.laravel.pt'
+    description: Production
+  - description: Development
+    url: 'http://api.laravel.pt'
+paths: {}
+components:
+  schemas: {}
+  securitySchemes:
+    User Credentials:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}
+security: []
