@@ -72,7 +72,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '429':
-          description: Too Many Requests
+          description: |-
+            Too Many Requests
+
+            When there's already five unapproved Link resources of a single author.
       description: Store a new Link
       requestBody:
         content:
@@ -111,6 +114,7 @@ paths:
                 - tags
       tags:
         - Links
+      parameters: []
 components:
   schemas:
     Tag:
@@ -214,14 +218,7 @@ components:
       x-tags:
         - Structures
         - Errors
-  securitySchemes:
-    User Credentials:
-      type: oauth2
-      flows:
-        password:
-          tokenUrl: ''
-          refreshUrl: ''
-          scopes: {}
+  securitySchemes: {}
 security: []
 tags:
   - name: Links
