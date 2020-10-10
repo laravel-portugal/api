@@ -119,10 +119,10 @@ paths:
     parameters:
       - schema:
           type: string
-          format: uri
         name: slug
         in: path
         required: true
+        description: The public Link slug
     get:
       summary: 'GET /links/{slug}'
       tags:
