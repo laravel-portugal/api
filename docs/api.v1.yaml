@@ -142,9 +142,9 @@ components:
           description: The resource's deleted timestamp
           format: date-time
       x-tags:
-        - Models
+        - Resources
         - Tags
-      title: Tag resource
+      title: Tag
     Link:
       title: Link resource
       type: object
@@ -178,11 +178,11 @@ components:
             - 'null'
           format: date-time
       x-tags:
+        - Resources
         - Links
-        - Models
       description: A Link resource's details
     Pagination:
-      title: Pagination structure
+      title: Pagination
       type: object
       description: Default pagination structure
       properties:
@@ -199,10 +199,10 @@ components:
           type: string
           description: Next page url
       x-tags:
-        - Pagination
         - Structures
+        - Pagination
     Error:
-      title: Error structure
+      title: Error
       type: object
       description: Default error structure
       properties:
@@ -212,8 +212,8 @@ components:
           uniqueItems: true
           items: {}
       x-tags:
-        - Errors
         - Structures
+        - Errors
   securitySchemes:
     User Credentials:
       type: oauth2
