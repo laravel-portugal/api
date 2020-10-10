@@ -18,8 +18,6 @@ paths:
   /tags:
     get:
       summary: Your GET endpoint
-      tags:
-        - tags-domain
       responses:
         '200':
           description: OK
@@ -37,6 +35,8 @@ paths:
       operationId: get-tags
       description: List all available tags
       parameters: []
+      tags:
+        - tags
 components:
   schemas:
     Tag:
@@ -54,16 +54,19 @@ components:
           type: string
           minLength: 1
           description: The resource's creation timestamp
+          format: date-time
         updated_at:
           type: string
           minLength: 1
           description: The resource's updated timestamp
+          format: date-time
         deleted_at:
-          type: string
+          type:
+            - string
+            - 'null'
           minLength: 1
           description: The resource's deleted timestamp
-      required:
-        - name
+          format: date-time
   securitySchemes:
     User Credentials:
       type: oauth2
@@ -74,4 +77,4 @@ components:
           scopes: {}
 security: []
 tags:
-  - name: tags-domain
+  - name: tags
