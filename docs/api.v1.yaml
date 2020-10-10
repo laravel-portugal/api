@@ -115,6 +115,40 @@ paths:
       tags:
         - Links
       parameters: []
+  /accounts/users:
+    post:
+      summary: POST /accounts/users
+      operationId: post-accounts-users
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create new User accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+              required:
+                - name
+                - email
+                - password
 components:
   schemas:
     Tag:
@@ -227,3 +261,4 @@ security: []
 tags:
   - name: Links
   - name: Tags
+  - name: Accounts
