@@ -114,7 +114,7 @@ paths:
 components:
   schemas:
     Tag:
-      description: ''
+      description: A Tag resource's details
       type: object
       properties:
         id:
@@ -143,8 +143,10 @@ components:
           format: date-time
       x-tags:
         - tags
+        - Models
+      title: Tag resource
     Link:
-      title: Link
+      title: Link resource
       type: object
       properties:
         id:
@@ -177,8 +179,10 @@ components:
           format: date-time
       x-tags:
         - Links
+        - Models
+      description: A Link resource's details
     Pagination:
-      title: Pagination
+      title: Pagination structure
       type: object
       description: Default pagination structure model
       properties:
@@ -196,8 +200,9 @@ components:
           description: Next page url
       x-tags:
         - Pagination
+        - Structures
     Error:
-      title: Error
+      title: Error structure
       type: object
       description: Default error structure model
       properties:
@@ -208,6 +213,7 @@ components:
           items: {}
       x-tags:
         - Errors
+        - Structures
   securitySchemes:
     User Credentials:
       type: oauth2
