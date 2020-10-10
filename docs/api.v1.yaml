@@ -13,10 +13,56 @@ servers:
   - url: 'https://api.laravel.pt'
     description: Production
   - description: Development
-    url: 'http://api.laravel.pt'
-paths: {}
+    url: 'http://api.laravel.test'
+paths:
+  /tags:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - tags-domain
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Tag'
+              examples: {}
+      operationId: get-tags
+      description: List all available tags
+      parameters: []
 components:
-  schemas: {}
+  schemas:
+    Tag:
+      description: ''
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: The resource's automatically generated unique identifier
+        name:
+          type: string
+          minLength: 1
+          description: The resource's submitted name
+        created_at:
+          type: string
+          minLength: 1
+          description: The resource's creation timestamp
+        updated_at:
+          type: string
+          minLength: 1
+          description: The resource's updated timestamp
+        deleted_at:
+          type: string
+          minLength: 1
+          description: The resource's deleted timestamp
+      required:
+        - name
   securitySchemes:
     User Credentials:
       type: oauth2
@@ -26,3 +72,5 @@ components:
           refreshUrl: ''
           scopes: {}
 security: []
+tags:
+  - name: tags-domain
