@@ -115,29 +115,6 @@ paths:
       tags:
         - Links
       parameters: []
-  '/links/{slug}':
-    parameters:
-      - schema:
-          type: string
-        name: slug
-        in: path
-        required: true
-        description: The public Link slug
-    get:
-      summary: 'GET /links/{slug}'
-      tags:
-        - Links
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Link'
-        '404':
-          description: Not Found
-      operationId: get-links-link
-      description: Show a specific Link resource
 components:
   schemas:
     Tag:
