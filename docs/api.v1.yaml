@@ -40,7 +40,8 @@ paths:
   /links:
     get:
       summary: GET /links
-      tags: []
+      tags:
+        - Links
       responses:
         '200':
           description: OK
@@ -208,3 +209,4 @@ components:
 security: []
 tags:
   - name: tags
+  - name: Links
