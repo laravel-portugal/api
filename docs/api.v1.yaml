@@ -149,6 +149,8 @@ paths:
                 - name
                 - email
                 - password
+      tags:
+        - Accounts
 components:
   schemas:
     Tag:
