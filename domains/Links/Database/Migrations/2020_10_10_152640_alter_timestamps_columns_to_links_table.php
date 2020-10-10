@@ -14,9 +14,9 @@ class AlterTimestampsColumnsToLinksTable extends Migration
 
         Schema::table('links', function (Blueprint $table) {
             $table->timestampsTz();
-            $table->timestampTz("deleted_at")->nullable();
+            $table->softDeletesTz();
             $table->timestampTz("approved_at")->nullable();
         });
     }
 }
-    
+

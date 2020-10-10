@@ -14,7 +14,7 @@ class AlterTimestampsColumnsToTagsTable extends Migration
 
         Schema::table('tags', function (Blueprint $table) {
             $table->timestampsTz();
-            $table->timestampTz("deleted_at")->nullable();
+            $table->softDeletesTz();
         });
     }
 }
