@@ -146,7 +146,7 @@ components:
         - Tags
       title: Tag
     Link:
-      title: Link resource
+      title: Link
       type: object
       properties:
         id:
