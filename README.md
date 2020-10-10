@@ -30,6 +30,10 @@ _Note: This assumes you've run `composer install` (without the `--no-dev` option
 
 **We aim to keep the master branch always deployable.** Exceptions may happen, but they should be extremely rare.
 
+## Documentation
+
+Please see the [public documentation site](https://laravel-portugal.stoplight.io/docs/api/docs/1.Introduction.md).
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
