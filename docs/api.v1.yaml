@@ -36,7 +36,7 @@ paths:
       description: List of all storeda tags
       parameters: []
       tags:
-        - tags
+        - Tags
   /links:
     get:
       summary: GET /links
@@ -142,8 +142,8 @@ components:
           description: The resource's deleted timestamp
           format: date-time
       x-tags:
-        - tags
         - Models
+        - Tags
       title: Tag resource
     Link:
       title: Link resource
@@ -184,7 +184,7 @@ components:
     Pagination:
       title: Pagination structure
       type: object
-      description: Default pagination structure model
+      description: Default pagination structure
       properties:
         first:
           type: string
@@ -204,7 +204,7 @@ components:
     Error:
       title: Error structure
       type: object
-      description: Default error structure model
+      description: Default error structure
       properties:
         errors:
           type: array
@@ -224,5 +224,5 @@ components:
           scopes: {}
 security: []
 tags:
-  - name: tags
   - name: Links
+  - name: Tags
