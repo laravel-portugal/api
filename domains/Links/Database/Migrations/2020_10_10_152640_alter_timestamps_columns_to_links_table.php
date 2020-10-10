@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class AlterTimestampsColumnsToLinksTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::table('links', function (Blueprint $table) {
             $table->dropColumn(["created_at", "updated_at", "deleted_at"]);
