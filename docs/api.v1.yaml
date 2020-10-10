@@ -17,7 +17,7 @@ servers:
 paths:
   /tags:
     get:
-      summary: Your GET endpoint
+      summary: GET /tags
       responses:
         '200':
           description: OK
@@ -33,10 +33,81 @@ paths:
                       $ref: '#/components/schemas/Tag'
               examples: {}
       operationId: get-tags
-      description: List all available tags
+      description: List of all storeda tags
       parameters: []
       tags:
         - tags
+  /links:
+    get:
+      summary: GET /links
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    maxItems: 15
+                    items:
+                      $ref: '#/components/schemas/Link'
+                  links:
+                    $ref: '#/components/schemas/Pagination'
+      operationId: get-links
+      description: List of a paginated set of stored links
+    post:
+      summary: POST /links
+      operationId: post-links
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too Many Requests
+      description: Store a new Link
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                link:
+                  type: string
+                  format: hostname
+                title:
+                  type: string
+                description:
+                  type: string
+                author_name:
+                  type: string
+                author_email:
+                  type: string
+                  format: email
+                cover_image:
+                  type: string
+                  format: binary
+                  description: An image file
+                tags:
+                  type: array
+                  description: An array of Tags' id
+                  items:
+                    type: integer
+              required:
+                - link
+                - title
+                - description
+                - author_name
+                - author_email
+                - cover_image
+                - tags
 components:
   schemas:
     Tag:
@@ -67,6 +138,65 @@ components:
           minLength: 1
           description: The resource's deleted timestamp
           format: date-time
+    Link:
+      title: Link
+      type: object
+      properties:
+        id:
+          type: integer
+        link:
+          type: string
+          format: hostname
+        title:
+          type: string
+        description:
+          type: string
+        auhtor_name:
+          type: string
+        author_email:
+          type: string
+          format: email
+        cover_image:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+    Pagination:
+      title: Pagination
+      type: object
+      description: Default pagination structure model
+      properties:
+        first:
+          type: string
+          description: First page url
+        last:
+          type: string
+          description: Last page url
+        prev:
+          type: string
+          description: Previous page url
+        next:
+          type: string
+          description: Next page url
+    Error:
+      title: Error
+      type: object
+      description: Default error structure model
+      properties:
+        errors:
+          type: array
+          description: An array of key/value pairs where key is the input that failed on validation and the value is a formatted detail message of the error
+          uniqueItems: true
+          items: {}
   securitySchemes:
     User Credentials:
       type: oauth2
