@@ -5,12 +5,9 @@ namespace Domains\Accounts\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\URL;
 
 class VerifyEmailNotification extends Notification implements ShouldQueue
 {
@@ -20,6 +17,7 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable): array
@@ -31,13 +29,14 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      * @param mixed $notifiable
+     *
      * @return MailMessage
      */
     public function toMail($notifiable): MailMessage
     {
         $hash = \base64_encode(Crypt::encrypt($notifiable->getEmailForVerification()));
         $link = URL::route(
-            'accounts.verify',
+            'accounts.users.verify',
             [
                 'id' => $notifiable->getKey(),
                 'hash' => $hash,

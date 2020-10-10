@@ -2,9 +2,7 @@
 
 namespace Domains\Accounts;
 
-use Domains\Accounts\Models\User;
-use Domains\Accounts\Policies\UserPolicy;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AccountsServiceProvider extends ServiceProvider
@@ -19,7 +17,13 @@ class AccountsServiceProvider extends ServiceProvider
 
     private function bootRoutes(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        Route::group(
+            [
+                'prefix' => 'accounts',
+                'as' => 'accounts',
+            ],
+            fn () => $this->loadRoutesFrom(__DIR__ . '/routes.php')
+        );
     }
 
     private function loadConfig(): void
