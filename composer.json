@@ -8,6 +8,8 @@
         "php": "^7.4",
         "ext-json": "*",
         "doctrine/dbal": "^2.11",
+        "illuminate/mail": "^8.8",
+        "illuminate/notifications": "^8.8",
         "laravel/lumen-framework": "^8.0",
         "league/flysystem": "^1.1"
     },

@@ -19,7 +19,7 @@ class LinksStoreController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->validate($request, [
-            'link' => ['required', 'string', 'active_url'],
+            'link' => ['required', 'string', 'url'],
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'author_name' => ['required', 'string'],
@@ -40,6 +40,6 @@ class LinksStoreController extends Controller
 
         $link->tags()->attach($request->input('tags.*.id'));
 
-        return Response::create('', Response::HTTP_NO_CONTENT);
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

@@ -6,7 +6,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- Add hard limit of unnapproved submissions per e-mail (#17)
+- N/A
 
 ### Changed
 
@@ -22,11 +22,31 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Fixed
 
-- Verify link is valid URL (#23)
+- N/A
 
 ### Security
 
 - N/A
+
+## 1.1.0 - 2020-10-08
+
+### Added
+
+- Add account creation (#22)
+
+### Fixed
+
+- Using active_url validation rule breaks tests on Links domain (#35)
+
+## 1.0.5 - 2020-10-05
+
+### Added
+
+- Add hard limit of unnapproved submissions per e-mail (#17)
+
+### Fixed
+
+- Verify link is valid URL (#23)
 
 ## 1.0.4 - 2020-09-19
 
