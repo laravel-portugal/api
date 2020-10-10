@@ -2,7 +2,7 @@
 tags: [Errors]
 ---
 
-# Introduction
+# Errors
 
 This API uses conventional HTTP response codes to indicate the success or failure of a request. Codes in the `2xx` range indicate success, codes in the `4xx` range indicate a validation error (e.g., a required parameter was omitted) and codes in the `5xx` range indicate an error with the service internal programming (these should be very rare). Check the table below for a list of possible status codes and their meaning:
 
