@@ -23,13 +23,13 @@ class VerifyEmailController extends Controller
         }
 
         if ($this->user->hasVerifiedEmail()) {
-            return view('accounts::verify-email')
+            return view('accounts::users.verify-email')
                 ->with('alreadyValidated', true);
         }
 
         $this->user->markEmailAsVerified();
 
-        return view('accounts::verify-email')
+        return view('accounts::users.verify-email')
             ->with('alreadyValidated', false);
     }
 

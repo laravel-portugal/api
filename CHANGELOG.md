@@ -6,11 +6,11 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- N/A
+- First version of the API documentation
 
 ### Changed
 
-- N/A
+- Updated Accounts' domain endpoints structure
 
 ### Deprecated
 

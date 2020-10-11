@@ -28,7 +28,7 @@ class UserCreateTest extends TestCase
     /** @test */
     public function it_fails_to_create_a_user_on_validation_errors(): void
     {
-        $this->post(route('accounts.store'), [])
+        $this->post(route('accounts.users.store'), [])
             ->seeJsonStructure([
                 'name',
                 'email',
@@ -48,7 +48,7 @@ class UserCreateTest extends TestCase
             'password' => $this->faker->password,
         ];
 
-        $response = $this->post(route('accounts.store'), $payload);
+        $response = $this->post(route('accounts.users.store'), $payload);
 
         $response->assertResponseStatus(Response::HTTP_NO_CONTENT);
         self::assertTrue($response->response->isEmpty());

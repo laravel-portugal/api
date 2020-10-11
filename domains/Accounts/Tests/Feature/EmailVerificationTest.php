@@ -31,7 +31,8 @@ class EmailVerificationTest extends TestCase
     /** @test */
     public function it_fails_to_validate_a_users_email_on_link_hash_mismatch(): void
     {
-        $this->get(route('accounts.verify',
+        $this->get(route(
+            'accounts.users.verify',
             $this->user->id,
             base64_encode(Hash::make($this->faker->safeEmail))
         ))->assertResponseStatus(Response::HTTP_NOT_FOUND);
@@ -45,13 +46,13 @@ class EmailVerificationTest extends TestCase
     /** @test */
     public function it_validates_a_users_email_with_correct_link_hash(): void
     {
-        $response = $this->get(route('accounts.verify', [
+        $response = $this->get(route('accounts.users.verify', [
             'id' => $this->user->id,
-            'hash' => \base64_encode(Crypt::encrypt($this->user->email))
+            'hash' => \base64_encode(Crypt::encrypt($this->user->email)),
         ]));
 
         $response->assertResponseStatus(Response::HTTP_OK);
-        $response->response->assertViewIs('accounts::verify-email');
+        $response->response->assertViewIs('accounts::users.verify-email');
 
         self::assertInstanceOf(Carbon::class, $this->user->refresh()->email_verified_at);
     }

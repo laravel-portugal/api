@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  title: laravel-portugal/api
+  version: '1.0'
+  license:
+    name: MIT
+    url: 'https://github.com/laravel-portugal/api/blob/master/LICENSE.md'
+  description: API layer to support the public website of the Laravel-Portugal community
+  contact:
+    name: Developers
+    url: 'https://github.com/laravel-portugal/api/issues'
+servers:
+  - url: 'https://api.laravel.pt'
+    description: Production
+  - description: Development
+    url: 'http://api.laravel.test'
+paths:
+  /tags:
+    get:
+      summary: GET /tags
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tag'
+              examples: {}
+      operationId: get-tags
+      description: List of all storeda tags
+      parameters: []
+      tags:
+        - Tags
+  /links:
+    get:
+      summary: GET /links
+      tags:
+        - Links
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    maxItems: 15
+                    items:
+                      $ref: '#/components/schemas/Link'
+                  links:
+                    $ref: '#/components/schemas/Pagination'
+      operationId: get-links
+      description: List of a paginated set of stored links
+    post:
+      summary: POST /links
+      operationId: post-links
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: |-
+            Too Many Requests
+
+            When there's already five unapproved Link resources of a single author.
+      description: Store a new Link
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                link:
+                  type: string
+                  format: hostname
+                title:
+                  type: string
+                description:
+                  type: string
+                author_name:
+                  type: string
+                author_email:
+                  type: string
+                  format: email
+                cover_image:
+                  type: string
+                  format: binary
+                  description: An image file
+                tags:
+                  type: array
+                  description: An array of Tags' id
+                  items:
+                    type: integer
+              required:
+                - link
+                - title
+                - description
+                - author_name
+                - author_email
+                - cover_image
+                - tags
+      tags:
+        - Links
+      parameters: []
+  /accounts/users:
+    post:
+      summary: POST /accounts/users
+      operationId: post-accounts-users
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create new User accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+              required:
+                - name
+                - email
+                - password
+      tags:
+        - Accounts
+components:
+  schemas:
+    Tag:
+      description: A Tag resource's details
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The resource's automatically generated unique identifier
+        name:
+          type: string
+          minLength: 1
+          description: The resource's submitted name
+        created_at:
+          type: string
+          minLength: 1
+          description: The resource's creation timestamp
+          format: date-time
+        updated_at:
+          type: string
+          minLength: 1
+          description: The resource's updated timestamp
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          minLength: 1
+          description: The resource's deleted timestamp
+          format: date-time
+      x-tags:
+        - Resources
+        - Tags
+      title: Tag
+    Link:
+      title: Link
+      type: object
+      properties:
+        id:
+          type: integer
+        link:
+          type: string
+          format: hostname
+        title:
+          type: string
+        description:
+          type: string
+        auhtor_name:
+          type: string
+        author_email:
+          type: string
+          format: email
+        cover_image:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+      x-tags:
+        - Resources
+        - Links
+      description: A Link resource's details
+    Pagination:
+      title: Pagination
+      type: object
+      description: Default pagination structure
+      x-tags:
+        - Structures
+        - Pagination
+      properties:
+        first:
+          type: string
+          description: First page url
+          format: uri
+        last:
+          type: string
+          description: Last page url
+          format: uri
+        prev:
+          type: string
+          description: Previous page url
+          format: uri
+        next:
+          type: string
+          description: Next page url
+          format: uri
+    Error:
+      title: Error
+      type: object
+      description: Default error structure
+      properties:
+        errors:
+          type: array
+          description: An array of key/value pairs where key is the input that failed on validation and the value is a formatted detail message of the error
+          uniqueItems: true
+          items: {}
+      x-tags:
+        - Structures
+        - Errors
+  securitySchemes: {}
+security: []
+tags:
+  - name: Links
+  - name: Tags
+  - name: Accounts
