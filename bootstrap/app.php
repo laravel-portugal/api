@@ -101,6 +101,7 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 
 //$app->register(App\Providers\AuthServiceProvider::class);
 $app->register(\Domains\Accounts\AccountsServiceProvider::class);
+$app->register(\Domains\Discussions\DiscussionsServiceProvider::class);
 $app->register(\Domains\Links\LinksServiceProvider::class);
 $app->register(\Domains\Tags\TagsServiceProvider::class);
 $app->register(\Illuminate\Mail\MailServiceProvider::class);
