@@ -24,7 +24,8 @@ Route::post('/login', [
 
 Route::post('/logout', [
     'as' => 'accounts.logout',
-    'uses' => AccountsLogoutController::class
+    'uses' => AccountsLogoutController::class,
+    'middleware' => 'auth:api'
 ]);
 
 Route::get('/me', [
