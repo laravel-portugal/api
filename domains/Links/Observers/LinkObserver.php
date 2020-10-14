@@ -2,8 +2,10 @@
 
 namespace Domains\Links\Observers;
 
+use Domains\Accounts\Enums\AccountTypeEnum;
 use Domains\Links\Exceptions\UnapprovedLinkLimitReachedException;
 use Domains\Links\Models\Link;
+use Illuminate\Support\Facades\Auth;
 
 class LinkObserver
 {
@@ -14,8 +16,10 @@ class LinkObserver
             ->unapproved()
             ->count();
 
-        throw_if(
-            $pendingCount >= config('links.max_unapproved_links'),
+        throw_unless(
+            Auth::user()->hasRole(AccountTypeEnum::EDITOR)
+            || Auth::user()->isTrusted()
+            || $pendingCount < config('links.max_unapproved_links'),
             new UnapprovedLinkLimitReachedException()
         );
     }

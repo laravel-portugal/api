@@ -2,6 +2,7 @@
 
 namespace Domains\Accounts\Database\Factories;
 
+use Domains\Accounts\Enums\AccountTypeEnum;
 use Domains\Accounts\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -14,6 +15,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'account_type' => AccountTypeEnum::USER,
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
             'password' => Hash::make($this->faker->password(8)),
@@ -28,6 +30,20 @@ class UserFactory extends Factory
     {
         return $this->state([
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function editor(): self
+    {
+        return $this->state([
+            'account_type' => AccountTypeEnum::EDITOR,
+        ]);
+    }
+
+    public function admin(): self
+    {
+        return $this->state([
+            'account_type' => AccountTypeEnum::ADMIN,
         ]);
     }
 
