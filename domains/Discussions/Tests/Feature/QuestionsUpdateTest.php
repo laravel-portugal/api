@@ -46,47 +46,41 @@ class QuestionsUpdateTest extends TestCase
         $this->seeInDatabase('questions', [
             'author_id' => $this->user->id,
             'title' => $payload['title'],
+            'slug' => Str::slug($payload['title']),
             'description' => $payload['description'],
             'updated_at' => Carbon::now()
         ]);
     }
 
     /** @test */
-    public function it_calculates_a_slug(): void
+    public function it_fails_to_update_if_title_is_missing(): void
     {
-        self::assertEquals(Str::slug($this->question->title), $this->question->slug);
+        $this->actingAs($this->user);
+        $this->patch('/questions/' . $this->question->id)
+            ->seeJsonStructure([
+                'title',
+            ]);
     }
 
     /** @test */
-    public function it_stores_question_with_same_title(): void
+    public function it_keeps_previous_description_if_none_is_sent(): void
     {
         $this->actingAs($this->user);
-
-        $response = $this->call('POST', '/questions', [
-            'title' => $this->question->title, // Use same 'title' as the Question created in setUp()
-            'description' => $this->question->description,
+        $response = $this->call('PATCH', '/questions/' . $this->question->id, [
+            'title' => $this->faker->title,
         ]);
 
         self::assertTrue($response->isEmpty());
-        self::assertEquals(2, Question::query()->count());
+        self::assertEquals($this->question->description, $this->question->refresh()->description);
     }
 
     /** @test */
-    public function it_forbids_guests_to_store_questions(): void
+    public function it_forbids_non_owner_to_update_questions(): void
     {
-        $this->post('/questions')
-            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
-    }
-
-    /** @test */
-    public function it_fails_to_store_questions_on_validation_errors(): void
-    {
-        $this->actingAs($this->user);
-
-        $this->post('/questions')
-            ->seeJsonStructure([
-                'title',
-                'description',
-            ]);
+        $this->actingAs(UserFactory::new()->make()); // make another user
+        $this->patch('/questions/' . $this->question->id, [
+            'title' => $this->faker->title,
+        ])
+            ->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 }

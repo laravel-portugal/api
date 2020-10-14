@@ -20,12 +20,12 @@ class QuestionsUpdateController extends Controller
 
         $this->validate($request, [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
         ]);
 
         $question->update([
             'title' => $request->input('title'),
-            'description' => $request->input('description'),
+            'description' => $request->input('description') ?? $question->description,
         ]);
 
         return new Response('', Response::HTTP_NO_CONTENT);
