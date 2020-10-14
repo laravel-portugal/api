@@ -11,7 +11,6 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 
-
 class User extends Model implements Authenticatable
 {
     use MustVerifyEmail;
