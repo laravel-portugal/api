@@ -4,3 +4,6 @@ Homestead.json
 Homestead.yaml
 .env
 .phpunit.result.cache
+/.rnd
+/storage/oauth-private.key
+/storage/oauth-public.key
