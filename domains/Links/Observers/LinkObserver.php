@@ -17,8 +17,8 @@ class LinkObserver
             ->count();
 
         throw_unless(
-            Auth::user()->hasRole(AccountTypeEnum::EDITOR)
-            || Auth::user()->isTrusted()
+            optional(Auth::user())->hasRole(AccountTypeEnum::EDITOR)
+            || optional(Auth::user())->isTrusted()
             || $pendingCount < config('links.max_unapproved_links'),
             new UnapprovedLinkLimitReachedException()
         );
