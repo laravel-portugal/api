@@ -19,7 +19,8 @@ Route::get('/users/verify/{id}/{hash}', [
 
 Route::post('/login', [
     'as' => 'accounts.login',
-    'uses' => AccountsLoginController::class
+    'uses' => AccountsLoginController::class,
+    'middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:10,1'
 ]);
 
 Route::post('/logout', [
