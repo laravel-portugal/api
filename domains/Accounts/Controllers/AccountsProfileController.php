@@ -12,7 +12,6 @@ class AccountsProfileController extends Controller
 {
 
     public function __invoke(Request $request): Response {
-
-        return response();
+        return response($request->user());
     }
 }
