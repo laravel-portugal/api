@@ -2,6 +2,8 @@
 
 use Domains\Accounts\Controllers\AccountsStoreController;
 use Domains\Accounts\Controllers\VerifyEmailController;
+use Domains\Accounts\Controllers\AccountsLoginController;
+use Domains\Accounts\Controllers\AccountsLogoutController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/users', [
@@ -16,17 +18,15 @@ Route::get('/users/verify/{id}/{hash}', [
 
 Route::post('/login', [
     'as' => 'accounts.login',
-    'uses' => VerifyEmailController::class,
+    'uses' => AccountsLoginController::class
 ]);
 
 Route::post('/logout', [
     'as' => 'accounts.logout',
-    'uses' => VerifyEmailController::class,
+    'uses' => AccountsLogoutController::class
 ]);
 
-Route::get('/me', [
+Route::post('/me', [
     'as' => 'accounts.me',
-    'uses' => VerifyEmailController::class,
+    'uses' => AccountsProfileController::class
 ]);
-
-
