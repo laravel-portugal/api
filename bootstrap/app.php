@@ -84,9 +84,9 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 |
 */
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+ $app->routeMiddleware([
+     'auth' => App\Http\Middleware\Authenticate::class,
+ ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -99,12 +99,14 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 |
 */
 
-//$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 $app->register(\Domains\Accounts\AccountsServiceProvider::class);
 $app->register(\Domains\Links\LinksServiceProvider::class);
 $app->register(\Domains\Tags\TagsServiceProvider::class);
 $app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->register(\Illuminate\Notifications\NotificationServiceProvider::class);
+$app->register(Laravel\Passport\PassportServiceProvider::class);
+$app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

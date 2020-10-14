@@ -10,7 +10,8 @@
         "illuminate/mail": "^8.8",
         "illuminate/notifications": "^8.8",
         "laravel/lumen-framework": "^8.0",
-        "league/flysystem": "^1.1"
+        "league/flysystem": "^1.1",
+        "dusterio/lumen-passport": "^0.3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
