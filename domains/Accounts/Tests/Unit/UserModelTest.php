@@ -4,6 +4,7 @@ namespace Domains\Accounts\Tests\Unit;
 
 use Carbon\Carbon;
 use Domains\Accounts\Database\Factories\UserFactory;
+use Domains\Accounts\Enums\AccountTypeEnum;
 use Domains\Accounts\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Tests\TestCase;
@@ -55,5 +56,11 @@ class UserModelTest extends TestCase
     public function it_uses_timestamps(): void
     {
         self::assertTrue($this->model->usesTimestamps());
+    }
+
+    /** @test */
+    public function it_has_a_user_account_type(): void
+    {
+        self::assertEquals(AccountTypeEnum::USER, $this->model->account_type);
     }
 }
