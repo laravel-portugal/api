@@ -108,6 +108,7 @@ $app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->register(\Illuminate\Notifications\NotificationServiceProvider::class);
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
+$app->register(GrahamCampbell\Throttle\ThrottleServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
