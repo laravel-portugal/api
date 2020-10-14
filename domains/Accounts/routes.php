@@ -13,3 +13,20 @@ Route::get('/users/verify/{id}/{hash}', [
     'as' => 'users.verify',
     'uses' => VerifyEmailController::class,
 ]);
+
+Route::post('/login', [
+    'as' => 'accounts.login',
+    'uses' => VerifyEmailController::class,
+]);
+
+Route::post('/logout', [
+    'as' => 'accounts.logout',
+    'uses' => VerifyEmailController::class,
+]);
+
+Route::get('/me', [
+    'as' => 'accounts.me',
+    'uses' => VerifyEmailController::class,
+]);
+
+
