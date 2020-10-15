@@ -4,11 +4,11 @@ namespace Domains\Accounts\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
-use Dusterio\LumenPassport\LumenPassport;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -81,11 +81,17 @@ class AccountsLoginTest extends TestCase
     /** @test */
     public function guest_can_make_login_with_correct_credencial(): void
     {
+        $countTokensBefore = DB::table('oauth_access_tokens')->count();
         $this->post(route('accounts.login'), [
             'email'    => $this->user->email,
             'password' => 'greatpassword'
         ])
             ->seeJsonStructure(['access_token'])
             ->assertResponseStatus(Response::HTTP_OK);
+
+        $countTokensAfter = DB::table('oauth_access_tokens')->count();
+
+        $this->assertEquals($countTokensBefore + 1, $countTokensAfter);
+
     }
 }

@@ -6,6 +6,7 @@ use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -35,8 +36,17 @@ class AccountsLogoutTest extends TestCase
     {
         $token = $this->user->createToken('Token Test')->accessToken;
 
+        $tokenRevoke = DB::table('oauth_access_tokens')->where('name', 'Token Test')->first();
+
+        $this->assertEquals($tokenRevoke->revoked, 0);
+
         $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token])
             ->seeJson(['message' => 'sucessfully'])
             ->assertResponseStatus(Response::HTTP_OK);
+
+        $tokenRevoke = DB::table('oauth_access_tokens')->where('name', 'Token Test')->first();
+
+        $this->assertEquals($tokenRevoke->revoked, 1);
+
     }
 }
