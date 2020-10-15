@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 
 class AccountsLoginTest extends TestCase
 {
@@ -23,6 +24,7 @@ class AccountsLoginTest extends TestCase
 
         $this->user  = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
         $this->faker = Factory::create();
+        Artisan::call('passport:install');
     }
 
     /** @test */
@@ -60,7 +62,20 @@ class AccountsLoginTest extends TestCase
     /** @test */
     public function guest_blocked_for_many_attempts(): void {
 
-        $this->markTestIncomplete();
+        for ($attemp = 0; $attemp < 10; ++$attemp) {
+           $response = $this->post(route('accounts.login'), [
+                'email'    => $this->user->email,
+                'password' => $this->faker->password
+            ]);
+            $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $response = $this->post(route('accounts.login'), [
+            'email'    => $this->user->email,
+            'password' => $this->faker->password
+        ]);
+
+        $response->assertResponseStatus(Response::HTTP_TOO_MANY_REQUESTS);
     }
 
     /** @test */
