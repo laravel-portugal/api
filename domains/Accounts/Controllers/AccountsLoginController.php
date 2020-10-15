@@ -18,19 +18,15 @@ class AccountsLoginController extends Controller
             'password' => ['required', 'string', 'min:6'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
-        if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-                $token    = $user->createToken($user->email . '-'. Request()->ip())->accessToken;
-                $response = ['access_token' => $token];
-                return response($response, 200);
-            } else {
-                $response = ["message" => "Password mismatch"];
-                return response($response, 422);
-            }
+        $user = User::where('email', $request->email)->firstOrFail();
+
+        if (Hash::check($request->password, $user->password)) {
+            $token    = $user->createToken($user->email . '-' . Request()->ip())->accessToken;
+            $response = ['access_token' => $token];
+            return new Response($response, 200);
         } else {
-            $response = ["message" => 'User does not exist'];
-            return response($response, 422);
+            $response = ["message" => "Password mismatch"];
+            return new Response($response, 422);
         }
     }
 }

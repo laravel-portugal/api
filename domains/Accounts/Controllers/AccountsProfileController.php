@@ -13,6 +13,6 @@ class AccountsProfileController extends Controller
 
     public function __invoke(Request $request): Response {
         $response = ['data' => $request->user()];
-        return response($response, 200);
+        return new Response($response, 200);
     }
 }
