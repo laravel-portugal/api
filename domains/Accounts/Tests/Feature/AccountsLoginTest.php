@@ -7,10 +7,10 @@ use Domains\Accounts\Models\User;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Artisan;
 
 class AccountsLoginTest extends TestCase
 {
@@ -21,10 +21,10 @@ class AccountsLoginTest extends TestCase
 
     protected function setUp(): void {
         parent::setUp();
-
+        Artisan::call('passport:install');
         $this->user  = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
         $this->faker = Factory::create();
-        Artisan::call('passport:install');
+
     }
 
     /** @test */
@@ -63,7 +63,7 @@ class AccountsLoginTest extends TestCase
     public function guest_blocked_for_many_attempts(): void {
 
         for ($attemp = 0; $attemp < 10; ++$attemp) {
-           $response = $this->post(route('accounts.login'), [
+            $response = $this->post(route('accounts.login'), [
                 'email'    => $this->user->email,
                 'password' => $this->faker->password
             ]);
