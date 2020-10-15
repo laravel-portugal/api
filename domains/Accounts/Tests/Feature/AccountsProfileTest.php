@@ -16,31 +16,34 @@ class AccountsProfileTest extends TestCase
 
     protected User $user;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
         Artisan::call('passport:install');
         $this->user = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
     }
 
     /** @test */
-    public function guest_cannot_see_profile(): void {
+    public function guest_cannot_see_profile(): void
+    {
         $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . '']);
 
         $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */
-    public function authenticated_user_can_see_profile(): void {
+    public function authenticated_user_can_see_profile(): void
+    {
         $token = $this->user->createToken('Token Test')->accessToken;
 
         $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
-            ->seeJsonStructure([
+            ->seeJson([
                 "data" => [
-                    "id"         => $this->user->id,
-                    "name"       => $this->user->name,
-                    "email"      => $this->user->email,
-                    "created_at" => $this->user->created_at->toJSON(),
-                    "updated_at" => $this->user->updated_at->toJSON()
+                        "id"         => $this->user->id,
+                        "name"       => $this->user->name,
+                        "email"      => $this->user->email,
+                        "created_at" => $this->user->created_at->toJSON(),
+                        "updated_at" => $this->user->updated_at->toJSON()
                 ]
             ])
             ->assertResponseOk();
