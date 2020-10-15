@@ -21,7 +21,7 @@ class User extends Model implements Authenticatable
     use AuthenticableTrait;
 
     protected $hidden = [
-        'password', 'trusted', 'email_verified_at'
+        'password', 'trusted', 'email_verified_at', 'deleted_at'
     ];
 
     protected $casts = [
