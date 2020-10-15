@@ -16,13 +16,13 @@ class AccountsLoginController extends Controller
     {
         $this->validate($request, [
             'email'    => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string'],
         ]);
 
         $user = User::where('email', $request->email)->firstOrFail();
 
         if (Hash::check($request->password, $user->password)) {
-            $token    = $user->createToken($user->email . '-' . Request()->ip())->accessToken;
+            $token    = $user->createToken($user->email)->accessToken;
             $response = ['access_token' => $token];
             return new Response($response, 200);
         } else {
