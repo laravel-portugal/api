@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Hash;
 class AccountsProfileController extends Controller
 {
 
-    public function __invoke(Request $request): Response {
+    public function __invoke(Request $request): Response
+    {
         $response = ['data' => $request->user()];
         return new Response($response, 200);
     }

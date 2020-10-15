@@ -8,9 +8,12 @@ use Illuminate\Http\Response;
 
 class AccountsLogoutController extends Controller
 {
-    public function __invoke(Request $request): Response {
+    public function __invoke(Request $request): Response
+    {
         $token = $request->user()->token();
+
         $token->revoke();
+
         $response = ['message' => 'sucessfully'];
         return new Response($response, 200);
     }
