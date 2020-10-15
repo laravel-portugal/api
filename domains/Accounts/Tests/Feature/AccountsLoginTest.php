@@ -4,6 +4,7 @@ namespace Domains\Accounts\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
+use Dusterio\LumenPassport\LumenPassport;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
@@ -80,11 +81,11 @@ class AccountsLoginTest extends TestCase
     /** @test */
     public function guest_can_make_login_with_correct_credencial(): void
     {
-        $response = $this->post(route('accounts.login'), [
+        $this->post(route('accounts.login'), [
             'email'    => $this->user->email,
             'password' => 'greatpassword'
-        ]);
-        $response->assertResponseStatus(Response::HTTP_OK);
+        ])
+            ->seeJsonStructure(['access_token'])
+            ->assertResponseStatus(Response::HTTP_OK);
     }
-
 }
