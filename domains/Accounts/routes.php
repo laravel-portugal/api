@@ -18,19 +18,19 @@ Route::get('/users/verify/{id}/{hash}', [
 ]);
 
 Route::post('/login', [
-    'as' => 'accounts.login',
+    'as' => 'login',
     'uses' => AccountsLoginController::class,
     'middleware' => 'GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:10,1'
 ]);
 
 Route::post('/logout', [
-    'as' => 'accounts.logout',
+    'as' => 'logout',
     'uses' => AccountsLogoutController::class,
     'middleware' => 'auth:api'
 ]);
 
 Route::get('/me', [
-    'as' => 'accounts.me',
+    'as' => 'me',
     'uses' => AccountsProfileController::class,
     'middleware' => 'auth:api'
 ]);
