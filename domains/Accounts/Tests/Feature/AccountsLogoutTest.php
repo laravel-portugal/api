@@ -20,15 +20,14 @@ class AccountsLogoutTest extends TestCase
     {
         parent::setUp();
         Artisan::call('passport:install');
-        $this->user  = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
+        $this->user = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
     }
 
     /** @test */
     public function it_fails_to_logout_on_wrong_token(): void
     {
-        $response = $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . '']);
-
-        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
+        $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . ''])
+            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */
@@ -36,9 +35,8 @@ class AccountsLogoutTest extends TestCase
     {
         $token = $this->user->createToken('Token Test')->accessToken;
 
-        $response = $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token]);
-
-        $response->assertResponseStatus(Response::HTTP_OK);
+        $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token])
+            ->seeJson(['message' => 'sucessfully'])
+            ->assertResponseStatus(Response::HTTP_OK);
     }
-
 }
