@@ -19,28 +19,27 @@ class AccountsLoginTest extends TestCase
     protected User $user;
     protected Generator $faker;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
         Artisan::call('passport:install');
         $this->user  = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
         $this->faker = Factory::create();
-
     }
 
     /** @test */
-    public function it_fails_to_login_on_validation_errors(): void {
-
+    public function it_fails_to_login_on_validation_errors(): void
+    {
         $response = $this->post(route('accounts.login'), [
             'email' => $this->faker->safeEmail
         ]);
 
         $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
     }
 
     /** @test */
-    public function guest_fail_login_with_not_exist_user(): void {
-
+    public function guest_fail_login_with_not_exist_user(): void
+    {
         $response = $this->post(route('accounts.login'), [
             'email'    => $this->faker->safeEmail,
             'password' => $this->faker->password]);
@@ -49,8 +48,8 @@ class AccountsLoginTest extends TestCase
     }
 
     /** @test */
-    public function guest_fail_login_with_wrong_credencial(): void {
-
+    public function guest_fail_login_with_wrong_credencial(): void
+    {
         $response = $this->post(route('accounts.login'), [
             'email'    => $this->user->email,
             'password' => $this->faker->password
@@ -60,8 +59,8 @@ class AccountsLoginTest extends TestCase
     }
 
     /** @test */
-    public function guest_blocked_for_many_attempts(): void {
-
+    public function guest_blocked_for_many_attempts(): void
+    {
         for ($attemp = 0; $attemp < 10; ++$attemp) {
             $response = $this->post(route('accounts.login'), [
                 'email'    => $this->user->email,
@@ -79,8 +78,8 @@ class AccountsLoginTest extends TestCase
     }
 
     /** @test */
-    public function guest_can_make_login_with_correct_credencial(): void {
-
+    public function guest_can_make_login_with_correct_credencial(): void
+    {
         $response = $this->post(route('accounts.login'), [
             'email'    => $this->user->email,
             'password' => 'greatpassword'
