@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountsStoreController extends Controller
 {
+    private User $user;
+
+    public function __construct(User $users)
+    {
+        $this->users = $users;
+    }
+
     public function __invoke(Request $request): Response
     {
         $this->validate($request, [

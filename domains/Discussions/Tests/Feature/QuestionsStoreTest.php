@@ -38,35 +38,17 @@ class QuestionsStoreTest extends TestCase
             'description' => $this->faker->paragraph,
         ];
 
-        $this->actingAs($this->user);
-        $response = $this->call('POST', route('discussions.questions.store'), $payload);
+        $response = $this->actingAs($this->user)
+            ->call('POST', route('discussions.questions.store'), $payload);
+
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('questions', [
             'author_id' => $this->user->id,
             'title' => $payload['title'],
             'description' => $payload['description'],
+            'slug' => Str::slug($payload['title']),
         ]);
-    }
-
-    /** @test */
-    public function it_calculates_a_slug(): void
-    {
-        self::assertEquals(Str::slug($this->question->title), $this->question->slug);
-    }
-
-    /** @test */
-    public function it_stores_question_with_same_title(): void
-    {
-        $this->actingAs($this->user);
-
-        $response = $this->call('POST', route('discussions.questions.store'), [
-            'title' => $this->question->title, // Use same 'title' as the Question created in setUp()
-            'description' => $this->question->description,
-        ]);
-
-        self::assertTrue($response->isEmpty());
-        self::assertEquals(2, Question::query()->count());
     }
 
     /** @test */
@@ -79,9 +61,8 @@ class QuestionsStoreTest extends TestCase
     /** @test */
     public function it_fails_to_store_questions_on_validation_errors(): void
     {
-        $this->actingAs($this->user);
-
-        $this->post(route('discussions.questions.store'))
+        $this->actingAs($this->user)
+            ->post(route('discussions.questions.store'))
             ->seeJsonStructure([
                 'title',
                 'description',
