@@ -9,12 +9,9 @@ class AlterTimestampsColumnsToTagsTable extends Migration
     public function up(): void
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->dropColumn(["created_at", "updated_at", "deleted_at"]);
-        });
-
-        Schema::table('tags', function (Blueprint $table) {
-            $table->timestampsTz();
-            $table->softDeletesTz();
+            $table->dateTimeTz("created_at")->change();
+            $table->dateTimeTz("updated_at")->change();
+            $table->dateTimeTz("deleted_at")->change();
         });
     }
 }

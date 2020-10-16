@@ -9,13 +9,10 @@ class AlterTimestampsColumnsToLinksTable extends Migration
     public function up(): void
     {
         Schema::table('links', function (Blueprint $table) {
-            $table->dropColumn(["created_at", "updated_at", "approved_at", "deleted_at"]);
-        });
-
-        Schema::table('links', function (Blueprint $table) {
-            $table->timestampsTz();
-            $table->softDeletesTz();
-            $table->timestampTz("approved_at")->nullable();
+            $table->dateTimeTz("approved_at")->nullable()->change();
+            $table->dateTimeTz("created_at")->change();
+            $table->dateTimeTz("updated_at")->change();
+            $table->dateTimeTz("deleted_at")->change();
         });
     }
 }
