@@ -45,29 +45,28 @@ class AccountsLoginTest extends TestCase
             'email'    => $this->faker->safeEmail,
             'password' => $this->faker->password]);
 
-        $response->assertResponseStatus(Response::HTTP_NOT_FOUND);
+        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */
-    public function guest_fail_login_with_wrong_credencial(): void
+    public function guest_fail_login_with_wrong_credential(): void
     {
         $response = $this->post(route('accounts.login'), [
             'email'    => $this->user->email,
             'password' => $this->faker->password
         ]);
 
-        $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */
     public function guest_blocked_for_many_attempts(): void
     {
-        for ($attemp = 0; $attemp < 10; ++$attemp) {
-            $response = $this->post(route('accounts.login'), [
+        for ($attempt = 0; $attempt < 10; ++$attempt) {
+            $this->post(route('accounts.login'), [
                 'email'    => $this->user->email,
                 'password' => $this->faker->password
             ]);
-            $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $response = $this->post(route('accounts.login'), [
@@ -79,9 +78,8 @@ class AccountsLoginTest extends TestCase
     }
 
     /** @test */
-    public function guest_can_make_login_with_correct_credencial(): void
+    public function guest_can_make_login_with_correct_credential(): void
     {
-        $countTokensBefore = DB::table('oauth_access_tokens')->count();
         $this->post(route('accounts.login'), [
             'email'    => $this->user->email,
             'password' => 'greatpassword'
@@ -91,7 +89,7 @@ class AccountsLoginTest extends TestCase
 
         $countTokensAfter = DB::table('oauth_access_tokens')->count();
 
-        $this->assertEquals($countTokensBefore + 1, $countTokensAfter);
+        $this->assertEquals( $countTokensAfter, 1);
 
     }
 }

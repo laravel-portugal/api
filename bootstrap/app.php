@@ -60,7 +60,6 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('mail');
-$app->configure('auth');
 
 /*
  |--------------------------------------------------------------------------
@@ -85,9 +84,10 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 |
 */
 
- $app->routeMiddleware([
-     'auth' => App\Http\Middleware\Authenticate::class,
- ]);
+$app->routeMiddleware([
+    'auth'     => App\Http\Middleware\Authenticate::class,
+    'throttle' => GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

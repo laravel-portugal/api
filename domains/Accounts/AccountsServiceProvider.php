@@ -30,6 +30,7 @@ class AccountsServiceProvider extends ServiceProvider
 
     private function loadConfig(): void
     {
+        $this->app->configure('auth');
         $this->app->configure('accounts');
     }
 }

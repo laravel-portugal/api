@@ -14,7 +14,6 @@ class AccountsLogoutController extends Controller
 
         $token->revoke();
 
-        $response = ['message' => 'sucessfully'];
-        return new Response($response, 200);
+        return new Response('', Response::HTTP_OK);
     }
 }
