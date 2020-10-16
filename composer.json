@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.4",
         "ext-json": "*",
+        "doctrine/dbal": "^2.11",
         "dusterio/lumen-passport": "^0.3.0",
         "graham-campbell/throttle": "8.1",
         "illuminate/mail": "^8.8",
