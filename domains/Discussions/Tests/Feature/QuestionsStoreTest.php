@@ -39,7 +39,7 @@ class QuestionsStoreTest extends TestCase
         ];
 
         $this->actingAs($this->user);
-        $response = $this->call('POST', '/questions', $payload);
+        $response = $this->call('POST', route('discussions.questions.store'), $payload);
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('questions', [
@@ -60,7 +60,7 @@ class QuestionsStoreTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->call('POST', '/questions', [
+        $response = $this->call('POST', route('discussions.questions.store'), [
             'title' => $this->question->title, // Use same 'title' as the Question created in setUp()
             'description' => $this->question->description,
         ]);
@@ -72,7 +72,7 @@ class QuestionsStoreTest extends TestCase
     /** @test */
     public function it_forbids_guests_to_store_questions(): void
     {
-        $this->post('/questions')
+        $this->post(route('discussions.questions.store'))
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -81,7 +81,7 @@ class QuestionsStoreTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $this->post('/questions')
+        $this->post(route('discussions.questions.store'))
             ->seeJsonStructure([
                 'title',
                 'description',
