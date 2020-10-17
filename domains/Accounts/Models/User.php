@@ -20,7 +20,7 @@ class User extends Model implements AuthenticatableContract, JWTSubject
     use Authorizable;
 
     protected $hidden = [
-        'password', 'trusted', 'email_verified_at', 'deleted_at'
+        'password', 'email_verified_at'
     ];
 
     protected $casts = [
