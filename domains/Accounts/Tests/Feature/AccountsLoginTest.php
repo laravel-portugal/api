@@ -95,7 +95,7 @@ class AccountsLoginTest extends TestCase
     public function authenticated_user_cannot_make_another_login(): void
     {
         $token = auth()->login($this->user);
-        $this->post(route('accounts.login'), [], ['Authorization' => 'Bearer ' . $token])
+        $this->post(route('accounts.login'), [], ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

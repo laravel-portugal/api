@@ -23,7 +23,7 @@ class AccountsProfileTest extends TestCase
     /** @test */
     public function guest_cannot_see_profile(): void
     {
-        $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . '']);
+        $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ']);
 
         $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -32,7 +32,7 @@ class AccountsProfileTest extends TestCase
     public function authenticated_user_can_see_profile(): void
     {
         $token = auth()->login($this->user);
-        $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
+        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
             ->seeJson([
                 "data" => [
                     "id" => $this->user->id,

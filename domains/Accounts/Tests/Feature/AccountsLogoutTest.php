@@ -23,7 +23,7 @@ class AccountsLogoutTest extends TestCase
     /** @test */
     public function it_fails_to_logout_on_wrong_token(): void
     {
-        $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . ''])
+        $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer '])
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -32,13 +32,13 @@ class AccountsLogoutTest extends TestCase
     {
         $token = auth()->login($this->user);
 
-        $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
+        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_OK);
 
-        $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token])
+        $this->post(route('accounts.logout'), [], ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_ACCEPTED);
 
-        $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
+        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }
