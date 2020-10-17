@@ -20,7 +20,7 @@ Route::get('/users/verify/{id}/{hash}', [
 Route::post('/login', [
     'as' => 'login',
     'uses' => AccountsLoginController::class,
-    'middleware' => 'throttle:10,1|login'
+    'middleware' => 'throttle:10,1|unAuthenticate'
 ]);
 
 Route::post('/logout', [

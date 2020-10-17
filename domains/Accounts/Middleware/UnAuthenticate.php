@@ -5,7 +5,7 @@ namespace Domains\Accounts\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-class LoginAuthenticate
+class UnAuthenticate
 {
     protected $auth;
 

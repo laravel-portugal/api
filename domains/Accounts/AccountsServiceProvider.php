@@ -40,7 +40,7 @@ class AccountsServiceProvider extends ServiceProvider
         $this->app->routeMiddleware(
             [
                 'auth'     => \App\Http\Middleware\Authenticate::class,
-                'login' => \Domains\Accounts\Middleware\LoginAuthenticate::class,
+                'unAuthenticate' => \Domains\Accounts\Middleware\UnAuthenticate::class,
                 'throttle' => \GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
             ]
         );
