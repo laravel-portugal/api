@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Lumen\Auth\Authorizable;
-use Laravel\Passport\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements AuthenticatableContract, JWTSubject
@@ -19,7 +18,6 @@ class User extends Model implements AuthenticatableContract, JWTSubject
     use Notifiable;
     use SoftDeletes;
     use Authorizable;
-    use HasApiTokens;
 
     protected $hidden = [
         'password', 'trusted', 'email_verified_at', 'deleted_at'
