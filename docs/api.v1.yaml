@@ -153,14 +153,14 @@ paths:
         - Accounts
   /discussions/questions:
     post:
-      summary: ''
+      summary: POST /discussions/questions
       operationId: post-discussions-questions
       responses:
         '204':
           description: No Content
       description: Store a new Question resource
       security:
-        - Authorization Bearer Token: []
+        - ' Bearer Token': []
       requestBody:
         content:
           application/json:
@@ -285,7 +285,7 @@ components:
         - Structures
         - Errors
   securitySchemes:
-    Authorization Bearer Token:
+    ' Bearer Token':
       type: http
       scheme: bearer
       description: ''
