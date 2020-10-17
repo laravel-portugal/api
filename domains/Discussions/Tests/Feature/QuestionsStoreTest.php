@@ -4,8 +4,6 @@ namespace Domains\Discussions\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
-use Domains\Discussions\Database\Factories\QuestionFactory;
-use Domains\Discussions\Models\Question;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
@@ -19,7 +17,6 @@ class QuestionsStoreTest extends TestCase
 
     private Generator $faker;
     private User $user;
-    private Question $question;
 
     protected function setUp(): void
     {
@@ -27,7 +24,6 @@ class QuestionsStoreTest extends TestCase
 
         $this->faker = Factory::create();
         $this->user = UserFactory::new()->create();
-        $this->question = QuestionFactory::new(['author_id' => $this->user->id])->create();
     }
 
     /** @test */
@@ -39,7 +35,8 @@ class QuestionsStoreTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->call('POST', route('discussions.questions.store'), $payload);
+            ->call('POST', route('discussions.questions.store'), $payload)
+            ->assertStatus(Response::HTTP_NO_CONTENT);
 
         self::assertTrue($response->isEmpty());
 
