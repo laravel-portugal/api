@@ -6,15 +6,21 @@ use App\Http\Controllers\Controller;
 use Domains\Discussions\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class QuestionsUpdateController extends Controller
 {
+    private Question $questions;
+
+    public function __construct(Question $questions)
+    {
+        $this->questions = $questions;
+    }
+
     public function __invoke(int $questionId, Request $request): Response
     {
-        $question = Question::findOrFail($questionId);
+        $question = $this->questions->newModelQuery()->findOrFail($questionId);
 
-        if (Auth::user()->cannot('update', $question)) {
+        if ($request->user()->cannot('update', $question)) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
