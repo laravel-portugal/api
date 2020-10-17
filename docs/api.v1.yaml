@@ -114,7 +114,12 @@ paths:
                 - tags
       tags:
         - Links
-      parameters: []
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
   /accounts/users:
     post:
       summary: POST /accounts/users
@@ -151,6 +156,12 @@ paths:
                 - password
       tags:
         - Accounts
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
   /discussions/questions:
     post:
       summary: POST /discussions/questions
@@ -158,6 +169,12 @@ paths:
       responses:
         '204':
           description: No Content
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       description: Store a new Question resource
       security:
         - ' Bearer Token': []
@@ -177,6 +194,12 @@ paths:
       tags:
         - Discussions
         - Questions
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
 components:
   schemas:
     Tag:
