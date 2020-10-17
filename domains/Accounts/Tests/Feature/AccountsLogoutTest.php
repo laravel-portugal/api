@@ -5,7 +5,6 @@ namespace Domains\Accounts\Tests\Feature;
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -34,13 +33,13 @@ class AccountsLogoutTest extends TestCase
     {
         $token = auth()->login($this->user);
 
-        $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token]);
-        $response->assertResponseStatus(Response::HTTP_OK);
+        $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
+            ->assertResponseStatus(Response::HTTP_OK);
 
         $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token])
             ->assertResponseStatus(Response::HTTP_ACCEPTED);
 
-        $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token]);
-        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
+        $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
+            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }
