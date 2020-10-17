@@ -25,6 +25,6 @@ class AccountsLoginController extends Controller
             return new Response($response, Response::HTTP_OK);
         }
 
-        return new Response(['message' => 'The authentication credentials are wrong'], Response::HTTP_UNAUTHORIZED);
+        return new Response(['message' => 'The authentication credentials are wrong'], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
