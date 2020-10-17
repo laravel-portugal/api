@@ -85,8 +85,7 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 */
 
 $app->routeMiddleware([
-    'auth'     => App\Http\Middleware\Authenticate::class,
-    'throttle' => GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
+    //'auth'     => App\Http\Middleware\Authenticate::class,
 ]);
 
 /*
@@ -100,7 +99,7 @@ $app->routeMiddleware([
 |
 */
 
-$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(\App\Providers\AuthServiceProvider::class);
 $app->register(\Domains\Accounts\AccountsServiceProvider::class);
 $app->register(\Domains\Discussions\DiscussionsServiceProvider::class);
 $app->register(\Domains\Links\LinksServiceProvider::class);

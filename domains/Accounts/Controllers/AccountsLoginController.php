@@ -19,12 +19,12 @@ class AccountsLoginController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            $token    = $user->createToken($user->email)->accessToken;
-            $response = ['access_token' => $token];
-            return new Response($response, Response::HTTP_OK);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return new Response(['message' => 'The authentication credentials are wrong'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return new Response(['message' => 'The authentication credentials are wrong'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        $token    = $user->createToken($user->email)->accessToken;
+        $response = ['access_token' => $token];
+        return new Response($response, Response::HTTP_OK);
     }
 }

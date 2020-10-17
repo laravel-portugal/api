@@ -90,6 +90,13 @@ class AccountsLoginTest extends TestCase
         $countTokensAfter = DB::table('oauth_access_tokens')->count();
 
         $this->assertEquals($countTokensAfter, 1);
+    }
 
+    /** @test */
+    public function authenticated_user_cannot_make_another_login(): void
+    {
+        $token = $this->user->createToken('Token Test')->accessToken;
+        $this->post(route('accounts.login'), [], ['Authorization' => 'Bearer ' . $token])
+            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

@@ -42,8 +42,9 @@ class AccountsProfileTest extends TestCase
                     "id" => $this->user->id,
                     "name" => $this->user->name,
                     "email" => $this->user->email,
-                    "created_at" => $this->user->created_at->toJSON(),
-                    "updated_at" => $this->user->updated_at->toJSON()
+                    "created_at" => $this->user->created_at,
+                    "updated_at" => $this->user->updated_at,
+                    "deleted_at" => $this->user->deleted_at,
                 ]
             ])
             ->assertResponseOk();

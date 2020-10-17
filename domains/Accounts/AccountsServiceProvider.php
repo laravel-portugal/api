@@ -15,6 +15,7 @@ class AccountsServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Resources/Views', 'accounts');
         $this->loadConfig();
         $this->bootRoutes();
+        $this->routeMiddleware();
     }
 
     private function bootRoutes(): void
@@ -32,5 +33,16 @@ class AccountsServiceProvider extends ServiceProvider
     {
         $this->app->configure('accounts');
         $this->app->configure('auth');
+    }
+
+    private function routeMiddleware()
+    {
+        $this->app->routeMiddleware(
+            [
+                'auth'     => \App\Http\Middleware\Authenticate::class,
+                'login' => \Domains\Accounts\Middleware\LoginAuthenticate::class,
+                'throttle' => \GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
+            ]
+        );
     }
 }
