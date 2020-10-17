@@ -5,7 +5,6 @@ namespace Domains\Accounts\Tests\Feature;
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -31,13 +30,16 @@ class AccountsLogoutTest extends TestCase
     /** @test */
     public function authenticated_user_can_make_logout(): void
     {
-        $token = Auth::login($this->user);
+        $token = auth()->login($this->user);
 
         $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_OK);
 
         $this->post(route('accounts.logout'), [], ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_ACCEPTED);
+
+        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
+            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
 
     }
 }
