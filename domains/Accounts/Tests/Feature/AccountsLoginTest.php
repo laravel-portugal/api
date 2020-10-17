@@ -45,7 +45,7 @@ class AccountsLoginTest extends TestCase
             'email' => $this->faker->safeEmail,
             'password' => $this->faker->password]);
 
-        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
@@ -56,7 +56,7 @@ class AccountsLoginTest extends TestCase
             'password' => $this->faker->password
         ]);
 
-        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
