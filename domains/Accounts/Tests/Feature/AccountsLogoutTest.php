@@ -30,12 +30,10 @@ class AccountsLogoutTest extends TestCase
     /** @test */
     public function authenticated_user_can_make_logout(): void
     {
-        $token = auth()->login($this->user);
+        auth()->login($this->user);
+        $this->assertEquals(auth()->user()->name, $this->user->name);
+        auth()->logout();
+        $this->assertIsNotObject(auth()->user());
 
-        $this->post(route('accounts.logout'), [], ['Authorization' => "Bearer {$token}"])
-            ->assertResponseStatus(Response::HTTP_ACCEPTED);
-
-        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
-            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }
