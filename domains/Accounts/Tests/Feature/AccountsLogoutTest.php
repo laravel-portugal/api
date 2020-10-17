@@ -34,6 +34,5 @@ class AccountsLogoutTest extends TestCase
         $this->assertEquals(auth()->user()->name, $this->user->name);
         auth()->logout();
         $this->assertIsNotObject(auth()->user());
-
     }
 }
