@@ -33,7 +33,7 @@ paths:
                       $ref: '#/components/schemas/Tag'
               examples: {}
       operationId: get-tags
-      description: List of all storeda tags
+      description: List of all stored tags
       parameters: []
       tags:
         - Tags
@@ -76,7 +76,7 @@ paths:
             Too Many Requests
 
             When there's already five unapproved Link resources of a single author.
-      description: Store a new Link
+      description: Store a new Link resource
       requestBody:
         content:
           application/json:
@@ -128,7 +128,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      description: Create new User accounts
+      description: Store a new User account
       requestBody:
         content:
           application/json:
@@ -151,6 +151,29 @@ paths:
                 - password
       tags:
         - Accounts
+  /discussions/questions:
+    post:
+      summary: ''
+      operationId: post-discussions-questions
+      responses:
+        '204':
+          description: No Content
+      description: Store a new Question resource
+      security:
+        - Authorization Bearer Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+              required:
+                - title
+                - description
 components:
   schemas:
     Tag:
@@ -258,7 +281,11 @@ components:
       x-tags:
         - Structures
         - Errors
-  securitySchemes: {}
+  securitySchemes:
+    Authorization Bearer Token:
+      type: http
+      scheme: bearer
+      description: ''
 security: []
 tags:
   - name: Links
