@@ -39,11 +39,11 @@ class AccountsProfileTest extends TestCase
         $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
             ->seeJson([
                 "data" => [
-                        "id"         => $this->user->id,
-                        "name"       => $this->user->name,
-                        "email"      => $this->user->email,
-                        "created_at" => $this->user->created_at->toJSON(),
-                        "updated_at" => $this->user->updated_at->toJSON()
+                    "id" => $this->user->id,
+                    "name" => $this->user->name,
+                    "email" => $this->user->email,
+                    "created_at" => $this->user->created_at->toJSON(),
+                    "updated_at" => $this->user->updated_at->toJSON()
                 ]
             ])
             ->assertResponseOk();

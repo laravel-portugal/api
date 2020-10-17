@@ -41,7 +41,7 @@ class AccountsLogoutTest extends TestCase
         $this->assertEquals($tokenRevoke->revoked, 0);
 
         $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token])
-            ->assertResponseStatus(Response::HTTP_OK);
+            ->assertResponseStatus(Response::HTTP_ACCEPTED);
 
         $tokenRevoke = DB::table('oauth_access_tokens')->where('name', 'Token Test')->first();
 

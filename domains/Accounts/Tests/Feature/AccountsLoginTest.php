@@ -42,7 +42,7 @@ class AccountsLoginTest extends TestCase
     public function guest_fail_login_with_not_exist_user(): void
     {
         $response = $this->post(route('accounts.login'), [
-            'email'    => $this->faker->safeEmail,
+            'email' => $this->faker->safeEmail,
             'password' => $this->faker->password]);
 
         $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
@@ -52,7 +52,7 @@ class AccountsLoginTest extends TestCase
     public function guest_fail_login_with_wrong_credential(): void
     {
         $response = $this->post(route('accounts.login'), [
-            'email'    => $this->user->email,
+            'email' => $this->user->email,
             'password' => $this->faker->password
         ]);
 
@@ -64,13 +64,13 @@ class AccountsLoginTest extends TestCase
     {
         for ($attempt = 0; $attempt < 10; ++$attempt) {
             $this->post(route('accounts.login'), [
-                'email'    => $this->user->email,
+                'email' => $this->user->email,
                 'password' => $this->faker->password
             ]);
         }
 
         $response = $this->post(route('accounts.login'), [
-            'email'    => $this->user->email,
+            'email' => $this->user->email,
             'password' => $this->faker->password
         ]);
 
@@ -81,7 +81,7 @@ class AccountsLoginTest extends TestCase
     public function guest_can_make_login_with_correct_credential(): void
     {
         $this->post(route('accounts.login'), [
-            'email'    => $this->user->email,
+            'email' => $this->user->email,
             'password' => 'greatpassword'
         ])
             ->seeJsonStructure(['access_token'])
@@ -89,7 +89,7 @@ class AccountsLoginTest extends TestCase
 
         $countTokensAfter = DB::table('oauth_access_tokens')->count();
 
-        $this->assertEquals( $countTokensAfter, 1);
+        $this->assertEquals($countTokensAfter, 1);
 
     }
 }

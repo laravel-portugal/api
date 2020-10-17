@@ -13,7 +13,7 @@ class AccountsLoginController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->validate($request, [
-            'email'    => ['required', 'string', 'email', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string'],
         ]);
 
@@ -26,6 +26,5 @@ class AccountsLoginController extends Controller
         }
 
         return new Response(['message' => 'The authentication credentials are wrong'], Response::HTTP_UNAUTHORIZED);
-
     }
 }
