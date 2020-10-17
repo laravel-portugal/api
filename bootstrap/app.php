@@ -104,11 +104,10 @@ $app->register(\Domains\Accounts\AccountsServiceProvider::class);
 $app->register(\Domains\Discussions\DiscussionsServiceProvider::class);
 $app->register(\Domains\Links\LinksServiceProvider::class);
 $app->register(\Domains\Tags\TagsServiceProvider::class);
-$app->register(\Dusterio\LumenPassport\PassportServiceProvider::class);
 $app->register(\GrahamCampbell\Throttle\ThrottleServiceProvider::class);
 $app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->register(\Illuminate\Notifications\NotificationServiceProvider::class);
-$app->register(\Laravel\Passport\PassportServiceProvider::class);
+$app->register(\Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

@@ -3,28 +3,23 @@
 namespace Domains\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
-use Domains\Accounts\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 class AccountsLoginController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $this->validate($request, [
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string'],
-        ]);
+        $credentials = request(['email', 'password']);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return new Response(['message' => 'The authentication credentials are wrong'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        if (!$token = auth()->attempt($credentials)) {
+            return new Response('', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $token    = $user->createToken($user->email)->accessToken;
-        $response = ['access_token' => $token];
-        return new Response($response, Response::HTTP_OK);
+        return new Response([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ], Response::HTTP_OK);
     }
 }

@@ -10,7 +10,7 @@ class AccountsLogoutController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $request->user()->token()->revoke();
+        auth()->logout();
 
         return new Response('', Response::HTTP_ACCEPTED);
     }

@@ -7,8 +7,6 @@ use Domains\Accounts\Models\User;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -23,7 +21,6 @@ class AccountsLoginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('passport:install');
         $this->user  = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
         $this->faker = Factory::create();
     }
@@ -84,18 +81,20 @@ class AccountsLoginTest extends TestCase
             'email' => $this->user->email,
             'password' => 'greatpassword'
         ])
-            ->seeJsonStructure(['access_token'])
+            ->seeJsonStructure([
+                'access_token',
+                'token_type',
+                'expires_in',
+            ])
             ->assertResponseStatus(Response::HTTP_OK);
 
-        $countTokensAfter = DB::table('oauth_access_tokens')->count();
-
-        $this->assertEquals($countTokensAfter, 1);
+        $this->assertEquals(auth()->user()->id, $this->user->id);
     }
 
     /** @test */
     public function authenticated_user_cannot_make_another_login(): void
     {
-        $token = $this->user->createToken('Token Test')->accessToken;
+        $token = auth()->login($this->user);
         $this->post(route('accounts.login'), [], ['Authorization' => 'Bearer ' . $token])
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }

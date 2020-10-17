@@ -5,7 +5,6 @@ namespace Domains\Accounts\Tests\Feature;
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
@@ -20,7 +19,6 @@ class AccountsLogoutTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('passport:install');
         $this->user = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
     }
 
@@ -34,18 +32,15 @@ class AccountsLogoutTest extends TestCase
     /** @test */
     public function authenticated_user_can_make_logout(): void
     {
-        $token = $this->user->createToken('Token Test')->accessToken;
+        $token = auth()->login($this->user);
 
-        $tokenRevoke = DB::table('oauth_access_tokens')->where('name', 'Token Test')->first();
-
-        $this->assertEquals($tokenRevoke->revoked, 0);
+        $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token]);
+        $response->assertResponseStatus(Response::HTTP_OK);
 
         $this->post(route('accounts.logout'), [], ['Authorization' => 'Bearer ' . $token])
             ->assertResponseStatus(Response::HTTP_ACCEPTED);
 
-        $tokenRevoke = DB::table('oauth_access_tokens')->where('name', 'Token Test')->first();
-
-        $this->assertEquals($tokenRevoke->revoked, 1);
-
+        $response = $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token]);
+        $response->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

@@ -5,7 +5,6 @@ namespace Domains\Accounts\Tests\Feature;
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -19,7 +18,6 @@ class AccountsProfileTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('passport:install');
         $this->user = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
     }
 
@@ -34,8 +32,7 @@ class AccountsProfileTest extends TestCase
     /** @test */
     public function authenticated_user_can_see_profile(): void
     {
-        $token = $this->user->createToken('Token Test')->accessToken;
-
+        $token = auth()->login($this->user);
         $this->get(route('accounts.me'), ['Authorization' => 'Bearer ' . $token])
             ->seeJson([
                 "data" => [
@@ -44,7 +41,7 @@ class AccountsProfileTest extends TestCase
                     "email" => $this->user->email,
                     "created_at" => $this->user->created_at,
                     "updated_at" => $this->user->updated_at,
-                    "deleted_at" => $this->user->deleted_at,
+                    "deleted_at" => $this->user->deleted_at
                 ]
             ])
             ->assertResponseOk();

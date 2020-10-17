@@ -10,8 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Lumen\Auth\Authorizable;
 use Laravel\Passport\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements AuthenticatableContract
+class User extends Model implements AuthenticatableContract, JWTSubject
 {
     use Authenticatable;
     use MustVerifyEmail;
@@ -27,4 +28,16 @@ class User extends Model implements AuthenticatableContract
     protected $casts = [
         'email_verified_at' => 'date',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+
 }
