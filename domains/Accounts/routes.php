@@ -1,10 +1,11 @@
 <?php
 
-use Domains\Accounts\Controllers\AccountsStoreController;
-use Domains\Accounts\Controllers\VerifyEmailController;
 use Domains\Accounts\Controllers\AccountsLoginController;
 use Domains\Accounts\Controllers\AccountsLogoutController;
 use Domains\Accounts\Controllers\AccountsProfileController;
+use Domains\Accounts\Controllers\AccountsStoreController;
+use Domains\Accounts\Controllers\VerifyEmailController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::post('/users', [

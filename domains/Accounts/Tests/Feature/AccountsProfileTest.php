@@ -5,7 +5,6 @@ namespace Domains\Accounts\Tests\Feature;
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -18,7 +17,7 @@ class AccountsProfileTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
+        $this->user = UserFactory::new()->create();
     }
 
     /** @test */
