@@ -34,20 +34,23 @@ class QuestionsUpdateTest extends TestCase
     /** @test */
     public function it_updates_questions(): void
     {
+        Carbon::setTestNow();
         $payload = [
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
         ];
+        $response = $this->actingAs($this->user)
+            ->call(
+                'PATCH',
+                route('discussions.questions.update', ['questionId' => $this->question->id]),
+                $payload
+            );
 
-        $this->actingAs($this->user);
-        $response = $this->call(
-            'PATCH',
-            route('discussions.questions.update', ['questionId' => $this->question->id]),
-            $payload
-        );
+        self::assertResponseStatus(Response::HTTP_NO_CONTENT);
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('questions', [
+            'id' => $this->question->id,
             'author_id' => $this->user->id,
             'title' => $payload['title'],
             'slug' => Str::slug($payload['title']),

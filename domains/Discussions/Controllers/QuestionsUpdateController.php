@@ -18,11 +18,9 @@ class QuestionsUpdateController extends Controller
 
     public function __invoke(int $questionId, Request $request): Response
     {
-        $question = $this->questions->newModelQuery()->findOrFail($questionId);
+        $question = $this->questions->findOrFail($questionId);
 
-        if ($request->user()->cannot('update', $question)) {
-            abort(Response::HTTP_FORBIDDEN);
-        }
+        $this->authorize('update', $question);
 
         $this->validate($request, [
             'title' => ['required', 'string', 'max:255'],
