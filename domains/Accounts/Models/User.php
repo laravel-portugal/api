@@ -27,7 +27,7 @@ class User extends Model implements AuthenticatableContract, JWTSubject
         'email_verified_at' => 'date',
     ];
 
-    public function getJWTIdentifier(): array
+    public function getJWTIdentifier(): int
     {
         return $this->getKey();
     }
