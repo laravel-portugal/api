@@ -11,19 +11,21 @@ use Illuminate\Http\Response;
 class AnswersStoreController extends Controller
 {
     private Answer $answer;
+    private Question $question;
 
-    public function __construct(Answer $answer)
+    public function __construct(Answer $answer, Question $question)
     {
-        $this->answer = $answer;
+        $this->answer   = $answer;
+        $this->question = $question;
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(int $questionId, Request $request): Response
     {
         $this->validate($request, [
             'content' => ['required', 'string'],
         ]);
 
-        $question = Question::findOrFail($request->route('questionId'));
+        $question = $this->question->findOrFail($questionId);
 
         $this->answer
             ->forceFill([
