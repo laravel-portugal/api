@@ -5,7 +5,7 @@ namespace Domains\Accounts\Controllers;
 use App\Http\Controllers\Controller;
 use Domains\Accounts\Resources\UserResource;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\Factory as Auth;
 
 class AccountsProfileController extends Controller
 {
@@ -18,6 +18,6 @@ class AccountsProfileController extends Controller
 
     public function __invoke(): Response
     {
-        return new Response(UserResource::make($this->auth::user()), Response::HTTP_OK);
+        return new Response(UserResource::make($this->auth->user()), Response::HTTP_OK);
     }
 }
