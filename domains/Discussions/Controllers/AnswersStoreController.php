@@ -23,7 +23,7 @@ class AnswersStoreController extends Controller
             'content' => ['required', 'string'],
         ]);
 
-        $question = Question::findOrFail($request[0]);
+        $question = Question::findOrFail($request->route('questionId'));
 
         $this->answer
             ->forceFill([

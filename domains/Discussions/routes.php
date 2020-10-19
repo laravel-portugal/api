@@ -13,6 +13,5 @@ Route::post('/questions', [
 Route::post('/questions/{questionId}/answers', [
     'as' => 'questions.answers',
     'middleware' => 'auth',
-    'uses' => AnswersStoreController::class,
+    'uses' => AnswersStoreController::class
 ]);
-

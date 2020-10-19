@@ -37,7 +37,7 @@ class AnswersStoreTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->call('POST', route('discussions.questions.answers', $this->question->id), $payload)
+            ->call('POST', route('discussions.questions.answers', ['questionId' => $this->question->id]), $payload)
             ->assertStatus(Response::HTTP_NO_CONTENT);
 
         self::assertTrue($response->isEmpty());
@@ -52,7 +52,7 @@ class AnswersStoreTest extends TestCase
     /** @test */
     public function it_forbids_guests_to_store_answer(): void
     {
-        $this->post(route('discussions.questions.answers', $this->question->id))
+        $this->post(route('discussions.questions.answers', ['questionId' => $this->question->id]))
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
