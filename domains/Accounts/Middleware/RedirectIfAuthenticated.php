@@ -5,7 +5,7 @@ namespace Domains\Accounts\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-class UnAuthenticate
+class RedirectIfAuthenticated
 {
     protected $auth;
 
@@ -23,5 +23,4 @@ class UnAuthenticate
 
         return $next($request);
     }
-
 }

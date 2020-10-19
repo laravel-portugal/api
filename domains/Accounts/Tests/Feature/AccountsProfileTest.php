@@ -34,7 +34,6 @@ class AccountsProfileTest extends TestCase
         $token = auth()->login($this->user);
         $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
             ->seeJson([
-                "data" => [
                     "id" => $this->user->id,
                     "name" => $this->user->name,
                     "email" => $this->user->email,
@@ -42,8 +41,7 @@ class AccountsProfileTest extends TestCase
                     "created_at" => $this->user->created_at,
                     "updated_at" => $this->user->updated_at,
                     "deleted_at" => $this->user->deleted_at
-                ]
             ])
-            ->assertResponseOk();
+            ->assertResponseStatus(Response::HTTP_OK);
     }
 }

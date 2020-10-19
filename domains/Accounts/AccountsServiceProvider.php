@@ -37,7 +37,7 @@ class AccountsServiceProvider extends ServiceProvider
     {
         $this->app->routeMiddleware(
             [
-                'unAuthenticate' => \Domains\Accounts\Middleware\UnAuthenticate::class,
+                'guest' => \Domains\Accounts\Middleware\RedirectIfAuthenticated::class,
                 'throttle' => \GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
             ]
         );

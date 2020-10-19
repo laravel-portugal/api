@@ -32,14 +32,11 @@ class AccountsLogoutTest extends TestCase
     {
         $token = auth()->login($this->user);
 
-        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
-            ->assertResponseStatus(Response::HTTP_OK);
+        $this->assertTrue(auth()->check());
 
         $this->post(route('accounts.logout'), [], ['Authorization' => "Bearer {$token}"])
             ->assertResponseStatus(Response::HTTP_ACCEPTED);
 
-        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
-            ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
-
+        $this->assertTrue(auth()->guest());
     }
 }
