@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuestionsAnswersTable extends Migration
+class CreateQuestionAnswersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateQuestionsAnswersTable extends Migration
      */
     public function up()
     {
-        Schema::create('questions_answers', function (Blueprint $table) {
+        Schema::create('question_answers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class, 'author_id');
             $table->foreignIdFor(Question::class, 'question_id');

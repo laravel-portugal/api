@@ -42,7 +42,7 @@ class AnswersStoreTest extends TestCase
 
         self::assertTrue($response->isEmpty());
 
-        $this->seeInDatabase('questions_answers', [
+        $this->seeInDatabase('question_answers', [
             'author_id' => $this->user->id,
             'question_id' => $this->question->id,
             'content' => $payload['content']

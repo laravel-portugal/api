@@ -11,7 +11,7 @@ class Answer extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'questions_answers';
+    protected $table = 'question_answers';
 
     public function author(): BelongsTo
     {

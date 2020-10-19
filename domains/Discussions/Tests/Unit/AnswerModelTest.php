@@ -37,7 +37,7 @@ class AnswerModelTest extends TestCase
     /** @test */
     public function it_uses_correct_table_name(): void
     {
-        self::assertEquals('questions_answers', $this->model->getTable());
+        self::assertEquals('question_answers', $this->model->getTable());
     }
 
     /** @test */
