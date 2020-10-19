@@ -1,6 +1,6 @@
 <?php
 
-use \Domains\Discussions\Models\Question;
+use Domains\Discussions\Models\Question;
 use Domains\Accounts\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,8 +17,8 @@ class CreateQuestionsAnswersTable extends Migration
     {
         Schema::create('questions_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Question::class, 'question_id');
             $table->foreignIdFor(User::class, 'author_id');
+            $table->foreignIdFor(Question::class, 'question_id');
             $table->text('content');
             $table->timestampsTz();
             $table->softDeletesTz();

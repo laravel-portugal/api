@@ -60,7 +60,7 @@ class AnswersStoreTest extends TestCase
     public function it_fails_to_store_answer_on_validation_errors(): void
     {
         $this->actingAs($this->user)
-            ->post(route('discussions.questions.answers', $this->question->id))
+            ->post(route('discussions.questions.answers', ['questionId' => $this->question->id]))
             ->seeJsonStructure([
                 'content',
             ]);
@@ -74,7 +74,7 @@ class AnswersStoreTest extends TestCase
         ];
 
         $this->actingAs($this->user)
-            ->post(route('discussions.questions.answers', '2'), $payload)
+            ->post(route('discussions.questions.answers', ['questionId' => 1000]), $payload)
             ->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 }
