@@ -4,7 +4,6 @@ namespace Domains\Discussions\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
-use Domains\Discussions\Models\Question;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
@@ -47,20 +46,6 @@ class QuestionsStoreTest extends TestCase
             'description' => $payload['description'],
             'slug' => Str::slug($payload['title']),
         ]);
-    }
-
-    /** @test */
-    public function it_stores_question_with_same_title(): void
-    {
-        $this->actingAs($this->user);
-
-        $response = $this->call('POST', route('discussions.questions.store'), [
-            'title' => $this->question->title, // Use same 'title' as the Question created in setUp()
-            'description' => $this->question->description,
-        ]);
-
-        self::assertTrue($response->isEmpty());
-        self::assertEquals(2, Question::query()->count());
     }
 
     /** @test */
