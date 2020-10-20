@@ -7,12 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateQuestionsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
@@ -23,16 +18,7 @@ class CreateQuestionsTable extends Migration
             $table->timestampsTz();
             $table->softDeletesTz();
             $table->timestampTz('resolved_at')->nullable();
-        });
-    }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('questions');
+        });
     }
 }

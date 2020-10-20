@@ -4,7 +4,6 @@ namespace Domains\Discussions\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
 use Domains\Accounts\Models\User;
-use Domains\Discussions\Database\Factories\QuestionFactory;
 use Domains\Discussions\Models\Question;
 use Faker\Factory;
 use Faker\Generator;
@@ -19,7 +18,6 @@ class QuestionsStoreTest extends TestCase
 
     private Generator $faker;
     private User $user;
-    private Question $question;
 
     protected function setUp(): void
     {
@@ -27,7 +25,6 @@ class QuestionsStoreTest extends TestCase
 
         $this->faker = Factory::create();
         $this->user = UserFactory::new()->create();
-        $this->question = QuestionFactory::new(['author_id' => $this->user->id])->create();
     }
 
     /** @test */
@@ -38,21 +35,18 @@ class QuestionsStoreTest extends TestCase
             'description' => $this->faker->paragraph,
         ];
 
-        $this->actingAs($this->user);
-        $response = $this->call('POST', '/questions', $payload);
+        $response = $this->actingAs($this->user)
+            ->call('POST', route('discussions.questions.store'), $payload)
+            ->assertStatus(Response::HTTP_NO_CONTENT);
+
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('questions', [
             'author_id' => $this->user->id,
             'title' => $payload['title'],
             'description' => $payload['description'],
+            'slug' => Str::slug($payload['title']),
         ]);
-    }
-
-    /** @test */
-    public function it_calculates_a_slug(): void
-    {
-        self::assertEquals(Str::slug($this->question->title), $this->question->slug);
     }
 
     /** @test */
@@ -60,7 +54,7 @@ class QuestionsStoreTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->call('POST', '/questions', [
+        $response = $this->call('POST', route('discussions.questions.store'), [
             'title' => $this->question->title, // Use same 'title' as the Question created in setUp()
             'description' => $this->question->description,
         ]);
@@ -72,16 +66,15 @@ class QuestionsStoreTest extends TestCase
     /** @test */
     public function it_forbids_guests_to_store_questions(): void
     {
-        $this->post('/questions')
+        $this->post(route('discussions.questions.store'))
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */
     public function it_fails_to_store_questions_on_validation_errors(): void
     {
-        $this->actingAs($this->user);
-
-        $this->post('/questions')
+        $this->actingAs($this->user)
+            ->post(route('discussions.questions.store'))
             ->seeJsonStructure([
                 'title',
                 'description',

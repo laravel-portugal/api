@@ -12,6 +12,10 @@ class Link extends Model
 {
     use SoftDeletes;
 
+    protected $casts = [
+        'approved_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'link',
         'title',

@@ -4,6 +4,7 @@ namespace Domains\Discussions;
 
 use Domains\Discussions\Models\Question;
 use Domains\Discussions\Observers\QuestionObserver;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class DiscussionsServiceProvider extends ServiceProvider
@@ -17,7 +18,13 @@ class DiscussionsServiceProvider extends ServiceProvider
 
     private function bootRoutes(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        Route::group(
+            [
+                'prefix' => 'discussions',
+                'as' => 'discussions',
+            ],
+            fn() => $this->loadRoutesFrom(__DIR__ . '/routes.php')
+        );
     }
 
     private function bootObservers(): void

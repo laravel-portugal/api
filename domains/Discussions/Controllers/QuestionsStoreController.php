@@ -6,10 +6,16 @@ use App\Http\Controllers\Controller;
 use Domains\Discussions\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class QuestionsStoreController extends Controller
 {
+    private Question $question;
+
+    public function __construct(Question $question)
+    {
+        $this->question = $question;
+    }
+
     public function __invoke(Request $request): Response
     {
         $this->validate($request, [
@@ -17,9 +23,9 @@ class QuestionsStoreController extends Controller
             'description' => ['required', 'string'],
         ]);
 
-        (new Question())
+        $this->question
             ->forceFill([
-                'author_id' => Auth::id(),
+                'author_id' => $request->user()->id,
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
             ])
