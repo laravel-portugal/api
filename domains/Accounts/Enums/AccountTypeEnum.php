@@ -4,7 +4,7 @@ namespace Domains\Accounts\Enums;
 
 final class AccountTypeEnum
 {
-    const USER = 'user';
-    const EDITOR = 'editor';
-    const ADMIN = 'admin';
+    public const USER = 'user';
+    public const EDITOR = 'editor';
+    public const ADMIN = 'admin';
 }

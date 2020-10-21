@@ -19,6 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->softDeletesTz();
             $table->timestampTz('resolved_at')->nullable();
 
+            $table->index('author_id');
         });
     }
 }
