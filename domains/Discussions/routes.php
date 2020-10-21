@@ -5,7 +5,6 @@ use Domains\Discussions\Controllers\QuestionsUpdateController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
-
     Route::post('/questions', [
         'as' => 'questions.store',
         'uses' => QuestionsStoreController::class,
@@ -15,5 +14,4 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'questions.update',
         'uses' => QuestionsUpdateController::class,
     ]);
-
 });

@@ -29,7 +29,7 @@ class QuestionsUpdateController extends Controller
 
         $question->update([
             'title' => $request->input('title'),
-            'description' => $request->input('description') ?? $question->description,
+            'description' => $request->input('description', $question->description),
         ]);
 
         return new Response('', Response::HTTP_NO_CONTENT);
