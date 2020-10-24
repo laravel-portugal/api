@@ -16,7 +16,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => \Domains\Accounts\Models\User::class
-        ]
-    ]
+            'model' => \Domains\Accounts\Models\User::class,
+        ],
+    ],
 ];

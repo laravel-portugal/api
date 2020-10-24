@@ -2,6 +2,8 @@
 
 namespace Domains\Accounts;
 
+use Domains\Accounts\Middleware\RedirectIfAuthenticated;
+use GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,12 +35,12 @@ class AccountsServiceProvider extends ServiceProvider
         $this->app->configure('auth');
     }
 
-    private function routeMiddleware()
+    private function routeMiddleware(): void
     {
         $this->app->routeMiddleware(
             [
-                'guest' => \Domains\Accounts\Middleware\RedirectIfAuthenticated::class,
-                'throttle' => \GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
+                'guest' => RedirectIfAuthenticated::class,
+                'throttle' => ThrottleMiddleware::class,
             ]
         );
     }

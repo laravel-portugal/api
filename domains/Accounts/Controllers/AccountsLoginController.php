@@ -23,15 +23,16 @@ class AccountsLoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if(!$token = $this->auth->attempt($credentials))
+        if (!$token = $this->auth->attempt($credentials)) {
             return new Response([
                 'message' => 'Credentials are incorrect or user doesn\'t exist',
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return new Response([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->auth->factory()->getTTL() * 60
+            'expires_in' => $this->auth->factory()->getTTL() * 60,
         ], Response::HTTP_OK);
     }
 }

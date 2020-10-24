@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 class RedirectIfAuthenticated
 {
-    protected $auth;
+    protected Auth $auth;
 
     public function __construct(Auth $auth)
     {

@@ -20,7 +20,8 @@ class User extends Model implements AuthenticatableContract, JWTSubject
     use Authorizable;
 
     protected $hidden = [
-        'password', 'email_verified_at'
+        'password',
+        'email_verified_at',
     ];
 
     protected $casts = [
@@ -36,6 +37,4 @@ class User extends Model implements AuthenticatableContract, JWTSubject
     {
         return [];
     }
-
-
 }

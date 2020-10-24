@@ -21,39 +21,37 @@ class AccountsLoginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user  = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
+        $this->user = UserFactory::new(['password' => Hash::make('greatpassword')])->create();
         $this->faker = Factory::create();
     }
 
     /** @test */
     public function it_fails_to_login_on_validation_errors(): void
     {
-        $response = $this->post(route('accounts.login'), [
-            'email' => $this->faker->safeEmail
-        ]);
-
-        $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->post(route('accounts.login'), [
+            'email' => $this->faker->safeEmail,
+        ])
+            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
     public function guest_fail_login_with_not_exist_user(): void
     {
-        $response = $this->post(route('accounts.login'), [
+        $this->post(route('accounts.login'), [
             'email' => $this->faker->safeEmail,
-            'password' => $this->faker->password]);
-
-        $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+            'password' => $this->faker->password,
+        ])
+            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
     public function guest_fail_login_with_wrong_credential(): void
     {
-        $response = $this->post(route('accounts.login'), [
+        $this->post(route('accounts.login'), [
             'email' => $this->user->email,
-            'password' => $this->faker->password
-        ]);
-
-        $response->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+            'password' => $this->faker->password,
+        ])
+            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /** @test */
@@ -62,16 +60,15 @@ class AccountsLoginTest extends TestCase
         for ($attempt = 0; $attempt < 10; ++$attempt) {
             $this->post(route('accounts.login'), [
                 'email' => $this->user->email,
-                'password' => $this->faker->password
+                'password' => $this->faker->password,
             ]);
         }
 
-        $response = $this->post(route('accounts.login'), [
+        $this->post(route('accounts.login'), [
             'email' => $this->user->email,
-            'password' => $this->faker->password
-        ]);
-
-        $response->assertResponseStatus(Response::HTTP_TOO_MANY_REQUESTS);
+            'password' => $this->faker->password,
+        ])
+            ->assertResponseStatus(Response::HTTP_TOO_MANY_REQUESTS);
     }
 
     /** @test */
@@ -79,7 +76,7 @@ class AccountsLoginTest extends TestCase
     {
         $this->post(route('accounts.login'), [
             'email' => $this->user->email,
-            'password' => 'greatpassword'
+            'password' => 'greatpassword',
         ])
             ->seeJsonStructure([
                 'access_token',
@@ -87,15 +84,13 @@ class AccountsLoginTest extends TestCase
                 'expires_in',
             ])
             ->assertResponseStatus(Response::HTTP_OK);
-
-        $this->assertEquals(auth()->user()->id, $this->user->id);
     }
 
     /** @test */
     public function authenticated_user_cannot_make_another_login(): void
     {
-        $token = auth()->login($this->user);
-        $this->post(route('accounts.login'), [], ['Authorization' => "Bearer {$token}"])
+        $this->actingAs($this->user)
+            ->post(route('accounts.login'))
             ->assertResponseStatus(Response::HTTP_UNAUTHORIZED);
     }
 }
