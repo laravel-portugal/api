@@ -2,6 +2,7 @@
 
 namespace Domains\Accounts\Models;
 
+use Domains\Accounts\Traits\HasRoles;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -18,6 +19,7 @@ class User extends Model implements AuthenticatableContract, JWTSubject
     use Notifiable;
     use SoftDeletes;
     use Authorizable;
+    use HasRoles;
 
     protected $hidden = [
         'password',
@@ -27,6 +29,11 @@ class User extends Model implements AuthenticatableContract, JWTSubject
     protected $casts = [
         'email_verified_at' => 'date',
     ];
+
+    public function isTrusted(): bool
+    {
+        return $this->trusted;
+    }
 
     public function getJWTIdentifier(): int
     {
