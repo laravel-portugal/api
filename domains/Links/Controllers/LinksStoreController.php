@@ -20,6 +20,11 @@ class LinksStoreController extends Controller
 
     public function __invoke(Request $request): Response
     {
+        throw_unless(
+            Gate::allows('create', [Link::class, $request->input('author_email', '')]),
+            new UnapprovedLinkLimitReachedException()
+        );
+
         $this->validate($request, [
             'link' => ['required', 'string', 'url'],
             'title' => ['required', 'string'],
@@ -30,11 +35,6 @@ class LinksStoreController extends Controller
             'tags' => ['required', 'array'],
             'tags.*.id' => ['required', 'integer', 'exists:tags'],
         ]);
-
-        throw_unless(
-            Gate::allows('create', [Link::class, $request->input('author_email')]),
-            new UnapprovedLinkLimitReachedException()
-        );
 
         $link = $this->links->create([
             'link' => $request->input('link'),

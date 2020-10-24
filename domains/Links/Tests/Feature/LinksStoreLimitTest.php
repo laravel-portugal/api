@@ -3,6 +3,7 @@
 namespace Domains\Links\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
+use Domains\Accounts\Enums\AccountTypeEnum;
 use Domains\Links\Database\Factories\LinkFactory;
 use Domains\Links\Models\Link;
 use Domains\Tags\Database\Factories\TagFactory;
@@ -23,10 +24,14 @@ class LinksStoreLimitTest extends TestCase
     protected string $authorEmail;
     protected Tag $tag;
     protected int $limit;
+    protected array $payload;
+    protected array $files;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        Storage::fake('local');
 
         $this->faker = Factory::create();
         $this->authorEmail = $this->faker->safeEmail;
@@ -40,15 +45,9 @@ class LinksStoreLimitTest extends TestCase
         LinkFactory::times($this->limit)
             ->withAuthorEmail($this->authorEmail)
             ->create();
-    }
 
-    /** @test */
-    public function it_fails_to_store_resources_when_exceeding_unapproved_limit(): void
-    {
-        Storage::fake('local');
-
-        // use the same authorEmail as in the setUp(), this time going over the allowed limit
-        $payload = [
+        // prepare the requests' payload and files
+        $this->payload = [
             'link' => $this->faker->url,
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
@@ -59,39 +58,53 @@ class LinksStoreLimitTest extends TestCase
             ],
         ];
 
-        $files = [
+        $this->files = [
             'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
         ];
+    }
 
-        $response = $this->call('POST', route('links.store'), $payload, [], $files);
+    /** @test */
+    public function it_fails_to_store_links_when_exceeding_unapproved_limit(): void
+    {
+        $response = $this->call('POST', route('links.store'), $this->payload, [], $this->files);
 
         $this->assertEquals(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
         $this->assertEquals($this->limit, Link::count());
     }
 
     /** @test */
-    public function it_stores_resources_above_unapproved_limit_when_from_another_author(): void
+    public function it_stores_links_above_unapproved_limit_when_from_another_author(): void
     {
-        Storage::fake('local');
+        // use another author_email
+        $this->payload['author_email'] = $this->faker->safeEmail;
 
-        $payload = [
-            'link' => $this->faker->url,
-            'title' => $this->faker->title,
-            'description' => $this->faker->paragraph,
-            'author_name' => $this->faker->name,
-            'author_email' => $this->faker->safeEmail,
-            'tags' => [
-                ['id' => $this->tag->id],
-            ],
-        ];
-
-        $files = [
-            'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
-        ];
-
-        $response = $this->call('POST', route('links.store'), $payload, [], $files);
+        $response = $this->call('POST', route('links.store'), $this->payload, [], $this->files);
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertEquals($this->limit + 1, Link::count());
+    }
+
+    /** @test */
+    public function it_stores_links_above_unapproved_limit_when_user_is_trusted(): void
+    {
+        $response = $this->actingAs(UserFactory::new()->trusted()->make())
+            ->call('POST', route('links.store'), $this->payload, [], $this->files);
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertEquals($this->limit + 1, Link::count());
+    }
+
+    /** @test */
+    public function it_stores_links_above_unapproved_limit_when_user_is_editor_or_admin(): void
+    {
+        $response = $this->actingAs(UserFactory::new()->withRole(AccountTypeEnum::EDITOR)->make())
+            ->call('POST', route('links.store'), $this->payload, [], $this->files);
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+
+        $response = $this->actingAs(UserFactory::new()->withRole(AccountTypeEnum::ADMIN)->make())
+            ->call('POST', route('links.store'), $this->payload, [], $this->files);
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+
+        $this->assertEquals($this->limit + 2, Link::count());
     }
 }

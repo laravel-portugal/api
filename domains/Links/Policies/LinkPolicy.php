@@ -13,12 +13,14 @@ class LinkPolicy
 
     public function create(?User $user, string $author_email)
     {
+        if ($user && ($user->isTrusted() || $user->hasRole(AccountTypeEnum::EDITOR))) {
+            return true;
+        }
+
         $pendingCount = Link::forAuthorWithEmail($author_email)
             ->unapproved()
             ->count();
 
-        return optional($user)->hasRole(AccountTypeEnum::EDITOR)
-            || optional($user)->isTrusted()
-            || $pendingCount < config('links.max_unapproved_links');
+        return $pendingCount < config('links.max_unapproved_links');
     }
 }

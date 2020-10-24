@@ -53,4 +53,18 @@ class UserFactory extends Factory
             'deleted_at' => Carbon::now(),
         ]);
     }
+
+    public function trusted(): self
+    {
+        return $this->state([
+            'trusted' => true,
+        ]);
+    }
+
+    public function withRole(string $role): self
+    {
+        return $this->state([
+            'account_type' => $role,
+        ]);
+    }
 }
