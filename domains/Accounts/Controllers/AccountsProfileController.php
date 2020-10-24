@@ -4,20 +4,12 @@ namespace Domains\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
 use Domains\Accounts\Resources\UserResource;
-use Illuminate\Http\Response;
-use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Http\Request;
 
 class AccountsProfileController extends Controller
 {
-    protected $auth;
-
-    public function __construct(Auth $auth)
+    public function __invoke(Request $request): UserResource
     {
-        $this->auth = $auth;
-    }
-
-    public function __invoke(): Response
-    {
-        return new Response(UserResource::make($this->auth->user()), Response::HTTP_OK);
+        return new UserResource($request->user());
     }
 }

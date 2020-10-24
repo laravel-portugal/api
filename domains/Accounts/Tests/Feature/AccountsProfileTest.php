@@ -31,8 +31,8 @@ class AccountsProfileTest extends TestCase
     /** @test */
     public function authenticated_user_can_see_profile(): void
     {
-        $token = auth()->login($this->user);
-        $this->get(route('accounts.me'), ['Authorization' => "Bearer {$token}"])
+        $this->actingAs($this->user)
+            ->get(route('accounts.me'))
             ->seeJson([
                     "id" => $this->user->id,
                     "name" => $this->user->name,
@@ -42,6 +42,6 @@ class AccountsProfileTest extends TestCase
                     "updated_at" => $this->user->updated_at,
                     "deleted_at" => $this->user->deleted_at
             ])
-            ->assertResponseStatus(Response::HTTP_OK);
+            ->assertResponseStatus(Response::HTTP_CREATED);
     }
 }

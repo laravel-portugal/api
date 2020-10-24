@@ -3,9 +3,10 @@
 namespace Domains\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Validation\ValidationException;
 
 
 class AccountsLoginController extends Controller
@@ -19,14 +20,15 @@ class AccountsLoginController extends Controller
 
     public function __invoke(Request $request): Response
     {
-       $credentials = $this->validate($request, [
+        $credentials = $this->validate($request, [
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
-        if (!$token = $this->auth->attempt($credentials)) {
-            return new Response('', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        if(!$token = $this->auth->attempt($credentials))
+            return new Response([
+                'message' => 'Credentials are incorrect or user doesn\'t exist',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
 
         return new Response([
             'access_token' => $token,
