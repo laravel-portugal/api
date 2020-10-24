@@ -1,19 +1,14 @@
 <?php
 
-use Domains\Discussions\Models\Question;
 use Domains\Accounts\Models\User;
+use Domains\Discussions\Models\Question;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateQuestionAnswersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('question_answers', function (Blueprint $table) {
             $table->id();
@@ -23,8 +18,7 @@ class CreateQuestionAnswersTable extends Migration
             $table->timestampsTz();
             $table->softDeletesTz();
 
-            $table->index('question_id');
-            $table->index('author_id');
+            $table->index(['question_id', 'author_id', 'created_at']);
         });
     }
 }
