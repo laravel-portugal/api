@@ -18,7 +18,9 @@ class CreateQuestionAnswersTable extends Migration
             $table->timestampsTz();
             $table->softDeletesTz();
 
-            $table->index(['question_id', 'author_id', 'created_at']);
+            $table->index('question_id');
+            $table->index('author_id');
+            $table->index('created_at');
         });
     }
 }
