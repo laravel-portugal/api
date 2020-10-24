@@ -49,22 +49,24 @@ class QuestionsUpdateTest extends TestCase
             );
 
         $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
-        $this->assertTrue($response->isEmpty());
+
+        self::assertTrue($response->isEmpty());
+
         $this->seeInDatabase('questions', [
             'id' => $this->question->id,
             'author_id' => $this->user->id,
             'title' => $payload['title'],
             'slug' => Str::slug($payload['title']),
             'description' => $payload['description'],
-            'updated_at' => Carbon::now()
+            'updated_at' => Carbon::now(),
         ]);
     }
 
     /** @test */
     public function it_fails_to_update_if_title_is_missing(): void
     {
-        $this->actingAs($this->user);
-        $this->patch(route('discussions.questions.update', ['questionId' => $this->question->id]))
+        $this->actingAs($this->user)
+            ->patch(route('discussions.questions.update', ['questionId' => $this->question->id]))
             ->seeJsonStructure([
                 'title',
             ]);
@@ -73,28 +75,29 @@ class QuestionsUpdateTest extends TestCase
     /** @test */
     public function it_keeps_previous_description_if_none_is_sent(): void
     {
-        $this->actingAs($this->user);
-        $response = $this->call(
-            'PATCH',
-            route('discussions.questions.update', ['questionId' => $this->question->id]),
-            [
-                'title' => $this->faker->title,
-            ]
-        );
+        $response = $this->actingAs($this->user)
+            ->call(
+                'PATCH',
+                route('discussions.questions.update', ['questionId' => $this->question->id]),
+                [
+                    'title' => $this->faker->title,
+                ]
+            );
 
-        $this->assertTrue($response->isEmpty());
-        $this->assertEquals($this->question->description, $this->question->refresh()->description);
+        self::assertTrue($response->isEmpty());
+        self::assertEquals($this->question->description, $this->question->refresh()->description);
     }
 
     /** @test */
     public function it_forbids_non_owner_to_update_questions(): void
     {
-        $this->actingAs(UserFactory::new()->make()) // make another user
+        $this->actingAs(UserFactory::new()->make())
             ->patch(
                 route('discussions.questions.update', ['questionId' => $this->question->id]),
                 [
                     'title' => $this->faker->title,
                 ]
-            )->assertResponseStatus(Response::HTTP_FORBIDDEN);
+            )
+            ->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 }
