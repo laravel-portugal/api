@@ -35,10 +35,12 @@ class QuestionsUpdateTest extends TestCase
     public function it_updates_questions(): void
     {
         Carbon::setTestNow();
+
         $payload = [
             'title' => $this->faker->title,
             'description' => $this->faker->paragraph,
         ];
+
         $response = $this->actingAs($this->user)
             ->call(
                 'PATCH',
@@ -46,9 +48,8 @@ class QuestionsUpdateTest extends TestCase
                 $payload
             );
 
-        self::assertResponseStatus(Response::HTTP_NO_CONTENT);
-        self::assertTrue($response->isEmpty());
-
+        $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
+        $this->assertTrue($response->isEmpty());
         $this->seeInDatabase('questions', [
             'id' => $this->question->id,
             'author_id' => $this->user->id,
@@ -81,19 +82,19 @@ class QuestionsUpdateTest extends TestCase
             ]
         );
 
-        self::assertTrue($response->isEmpty());
-        self::assertEquals($this->question->description, $this->question->refresh()->description);
+        $this->assertTrue($response->isEmpty());
+        $this->assertEquals($this->question->description, $this->question->refresh()->description);
     }
 
     /** @test */
     public function it_forbids_non_owner_to_update_questions(): void
     {
-        $this->actingAs(UserFactory::new()->make()); // make another user
-        $this->patch(
-            route('discussions.questions.update', ['questionId' => $this->question->id]),
-            [
-                'title' => $this->faker->title,
-            ]
-        )->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->actingAs(UserFactory::new()->make()) // make another user
+            ->patch(
+                route('discussions.questions.update', ['questionId' => $this->question->id]),
+                [
+                    'title' => $this->faker->title,
+                ]
+            )->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 }
