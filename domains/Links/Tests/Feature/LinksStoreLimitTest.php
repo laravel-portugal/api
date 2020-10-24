@@ -27,6 +27,14 @@ class LinksStoreLimitTest extends TestCase
     protected array $payload;
     protected array $files;
 
+    public function unrestrictedUserRolesProvider(): array
+    {
+        return [
+            'Editor Role' => [AccountTypeEnum::EDITOR],
+            'Admin Role' => [AccountTypeEnum::ADMIN],
+        ];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,7 +46,7 @@ class LinksStoreLimitTest extends TestCase
         $this->tag = TagFactory::new()->create();
 
         // set a random limit
-        $this->limit = rand(5, 20);
+        $this->limit = $this->faker->numberBetween(1, 10);
         config(['links.max_unapproved_links' => $this->limit]);
 
         // create $limit number of Links
@@ -68,8 +76,8 @@ class LinksStoreLimitTest extends TestCase
     {
         $response = $this->call('POST', route('links.store'), $this->payload, [], $this->files);
 
-        $this->assertEquals(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
-        $this->assertEquals($this->limit, Link::count());
+        self::assertEquals(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertEquals($this->limit, Link::count());
     }
 
     /** @test */
@@ -80,8 +88,8 @@ class LinksStoreLimitTest extends TestCase
 
         $response = $this->call('POST', route('links.store'), $this->payload, [], $this->files);
 
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
-        $this->assertEquals($this->limit + 1, Link::count());
+        self::assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        self::assertEquals($this->limit + 1, Link::count());
     }
 
     /** @test */
@@ -90,21 +98,23 @@ class LinksStoreLimitTest extends TestCase
         $response = $this->actingAs(UserFactory::new()->trusted()->make())
             ->call('POST', route('links.store'), $this->payload, [], $this->files);
 
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
-        $this->assertEquals($this->limit + 1, Link::count());
+        self::assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        self::assertEquals($this->limit + 1, Link::count());
     }
 
-    /** @test */
-    public function it_stores_links_above_unapproved_limit_when_user_is_editor_or_admin(): void
+    /**
+     * @test
+     * @dataProvider unrestrictedUserRolesProvider
+     *
+     * @param string $role
+     */
+    public function it_stores_links_above_unapproved_limit_when_user_has_unrestricted_role(string $role): void
     {
-        $response = $this->actingAs(UserFactory::new()->withRole(AccountTypeEnum::EDITOR)->make())
+        $response = $this->actingAs(UserFactory::new()->withRole($role)->make())
             ->call('POST', route('links.store'), $this->payload, [], $this->files);
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
 
-        $response = $this->actingAs(UserFactory::new()->withRole(AccountTypeEnum::ADMIN)->make())
-            ->call('POST', route('links.store'), $this->payload, [], $this->files);
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
 
-        $this->assertEquals($this->limit + 2, Link::count());
+        self::assertEquals($this->limit + 1, Link::count());
     }
 }

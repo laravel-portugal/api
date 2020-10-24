@@ -11,13 +11,13 @@ class LinkPolicy
 {
     use HandlesAuthorization;
 
-    public function create(?User $user, string $author_email)
+    public function create(?User $user, string $authorEmail)
     {
         if ($user && ($user->isTrusted() || $user->hasRole(AccountTypeEnum::EDITOR))) {
             return true;
         }
 
-        $pendingCount = Link::forAuthorWithEmail($author_email)
+        $pendingCount = Link::forAuthorWithEmail($authorEmail)
             ->unapproved()
             ->count();
 
