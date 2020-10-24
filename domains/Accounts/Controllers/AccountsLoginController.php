@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
-
 
 class AccountsLoginController extends Controller
 {
