@@ -7,6 +7,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 ### Added
 
 - First version of the API documentation
+- A guest should be able to login and logout (#37)
 
 ### Changed
 
