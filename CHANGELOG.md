@@ -8,6 +8,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 - First version of the API documentation
 - A guest should be able to login and logout (#37)
+- An authenticated user can post an answer to a question (#31)
 
 ### Changed
 
