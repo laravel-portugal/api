@@ -385,6 +385,10 @@ paths:
             default: application/json
           in: header
           name: Content-Type
+      tags:
+        - Discussions
+        - Questions
+        - Answers
 components:
   schemas:
     Tag:
@@ -536,3 +540,4 @@ tags:
   - name: Login
   - name: Logout
   - name: Users
+  - name: Answers
