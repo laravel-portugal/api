@@ -43,7 +43,6 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 - Updated Accounts' domain endpoints structure
 - Changed timestamps columns on links and tags tables (#28, #29)
 
-
 ## 1.1.0 - 2020-10-08
 
 ### Added
