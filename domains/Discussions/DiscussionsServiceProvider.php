@@ -2,6 +2,7 @@
 
 namespace Domains\Discussions;
 
+use Domains\Discussions\Middleware\ThrottleGuestMiddleware;
 use Domains\Discussions\Models\Question;
 use Domains\Discussions\Observers\QuestionObserver;
 use Domains\Discussions\Policies\QuestionPolicy;
@@ -17,6 +18,7 @@ class DiscussionsServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootObservers();
         $this->bootPolicies();
+        $this->routeMiddleware();
     }
 
     private function bootRoutes(): void
@@ -38,5 +40,14 @@ class DiscussionsServiceProvider extends ServiceProvider
     private function bootPolicies(): void
     {
         Gate::policy(Question::class, QuestionPolicy::class);
+    }
+
+    private function routeMiddleware(): void
+    {
+        $this->app->routeMiddleware(
+            [
+                'throttle' => ThrottleGuestMiddleware::class,
+            ]
+        );
     }
 }
