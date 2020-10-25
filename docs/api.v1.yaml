@@ -75,7 +75,9 @@ paths:
           description: |-
             Too Many Requests
 
-            When there's already five unapproved Link resources of a single author.
+            When there's already five unapproved Link resources of a single author. 
+
+            Trusted User resources or User resources with ADMIN or EDITOR roles won't have any limit applied.
       description: Store a new Link resource
       requestBody:
         content:
@@ -340,6 +342,49 @@ paths:
                   default: 'null'
               required:
                 - title
+  '/discussions/questions/{questionId}/answers':
+    parameters:
+      - schema:
+          type: string
+        name: questionId
+        in: path
+        required: true
+    post:
+      summary: 'POST /discussions/questions/{questionId}/answers'
+      operationId: post-discussions-questions-questionId-answers
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: |-
+            Not Found
+
+            If the given Question resource ID isn't present in the database.
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Store a new Answer resource associated to the given Question resource
+      security:
+        - ' Bearer Token': []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
 components:
   schemas:
     Tag:
