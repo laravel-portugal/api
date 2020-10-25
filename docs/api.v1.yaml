@@ -298,6 +298,16 @@ paths:
       responses:
         '204':
           description: No Content
+        '403':
+          description: |-
+            Forbidden
+
+            If the given Question resource ID isn't authored by the authenticated User.
+        '404':
+          description: |-
+            Not Found
+
+            If the given Question resource ID isn't present in the database.
         '422':
           description: Unprocessable Entity
           content:
@@ -316,6 +326,20 @@ paths:
             default: application/json
           in: header
           name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  default: 'null'
+              required:
+                - title
 components:
   schemas:
     Tag:
