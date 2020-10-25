@@ -472,9 +472,10 @@ components:
           type: string
           format: date-time
         deleted_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
-          default: 'null'
   securitySchemes:
     ' Bearer Token':
       type: http
