@@ -17,7 +17,7 @@ servers:
 paths:
   /tags:
     get:
-      summary: GET /tags
+      summary: Listing all tags
       responses:
         '200':
           description: OK
@@ -39,7 +39,7 @@ paths:
         - Tags
   /links:
     get:
-      summary: GET /links
+      summary: Listing links
       tags:
         - Links
       responses:
@@ -124,7 +124,7 @@ paths:
           name: Content-Type
   /accounts/users:
     post:
-      summary: POST /accounts/users
+      summary: Create user accounts
       operationId: post-accounts-users
       responses:
         '204':
@@ -167,7 +167,7 @@ paths:
           name: Content-Type
   /discussions/questions:
     post:
-      summary: POST /discussions/questions
+      summary: Creating new questions
       operationId: post-discussions-questions
       responses:
         '204':
@@ -205,7 +205,7 @@ paths:
           name: Content-Type
   /accounts/login:
     post:
-      summary: POST /accounts/login
+      summary: Authenticating a user
       operationId: post-accounts-login
       responses:
         '200':
@@ -258,7 +258,7 @@ paths:
                 - password
   /accounts/logout:
     post:
-      summary: POST /accounts/logout
+      summary: Loggin out a user
       operationId: post-accounts-logout
       responses:
         '200':
@@ -272,7 +272,7 @@ paths:
       parameters: []
   /accounts/me:
     get:
-      summary: GET /accounts/me
+      summary: Show authenticated user details
       tags:
         - Accounts
         - Users
@@ -295,7 +295,7 @@ paths:
         in: path
         required: true
     patch:
-      summary: 'PATCH /discussions/questions/{questionId}'
+      summary: Updating a question
       operationId: patch-discussions-questions-questionId
       responses:
         '204':
@@ -350,7 +350,7 @@ paths:
         in: path
         required: true
     post:
-      summary: 'POST /discussions/questions/{questionId}/answers'
+      summary: Creating an answer for a question
       operationId: post-discussions-questions-questionId-answers
       responses:
         '204':
