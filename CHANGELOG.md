@@ -6,16 +6,11 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- First version of the API documentation
-- A guest should be able to login and logout (#37)
-- Add account types and permissions (#42)
-- An authenticated user can post an answer to a question (#31)
-- An authenticated user can update a question (#27)
+- N/A
 
 ### Changed
 
-- Updated Accounts' domain endpoints structure
-- Changed timestamps columns on links and tags tables (#28, #29)
+- N/A
 
 ### Deprecated
 
@@ -32,6 +27,22 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 ### Security
 
 - N/A
+
+## 2.0.0 - 2020-10-25
+
+### Added
+
+- First version of the API documentation
+- A guest should be able to login and logout (#37)
+- Add account types and permissions (#42)
+- An authenticated user can post an answer to a question (#31)
+- An authenticated user can update a question (#27)
+
+### Changed
+
+- Updated Accounts' domain endpoints structure
+- Changed timestamps columns on links and tags tables (#28, #29)
+
 
 ## 1.1.0 - 2020-10-08
 
