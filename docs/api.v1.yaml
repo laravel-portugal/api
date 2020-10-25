@@ -231,7 +231,7 @@ paths:
       tags:
         - Accounts
         - Login
-      description: Authenticates a User
+      description: Authenticates a User account
       parameters:
         - schema:
             type: string
@@ -267,6 +267,7 @@ paths:
       tags:
         - Accounts
         - Logout
+      parameters: []
   /accounts/me:
     get:
       summary: GET /accounts/me
@@ -394,7 +395,7 @@ components:
     User:
       title: User
       type: object
-      description: ''
+      description: A User resource's details
       x-tags:
         - Resources
         - Users
