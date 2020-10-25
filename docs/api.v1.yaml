@@ -60,7 +60,7 @@ paths:
       operationId: get-links
       description: List of a paginated set of stored links
     post:
-      summary: POST /links
+      summary: Creating a new link
       operationId: post-links
       responses:
         '204':
@@ -258,7 +258,7 @@ paths:
                 - password
   /accounts/logout:
     post:
-      summary: Loggin out a user
+      summary: Logging out a user
       operationId: post-accounts-logout
       responses:
         '200':
