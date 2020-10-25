@@ -250,7 +250,7 @@ paths:
                 password:
                   type: string
                   format: password
-                  minLength: 8
+                  minLength: 6
               required:
                 - username
                 - password
@@ -285,6 +285,37 @@ paths:
       description: Shows details of the authenticated User
       security:
         - ' Bearer Token': []
+  '/discussions/questions/{questionId}':
+    parameters:
+      - schema:
+          type: integer
+        name: questionId
+        in: path
+        required: true
+    patch:
+      summary: 'PATCH /discussions/questions/{questionId}'
+      operationId: patch-discussions-questions-questionId
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - ' Bearer Token': []
+      tags:
+        - Discussions
+        - Questions
+      description: Updates a given Question resource
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
 components:
   schemas:
     Tag:
