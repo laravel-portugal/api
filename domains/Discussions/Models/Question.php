@@ -11,6 +11,8 @@ class Question extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['title', 'description'];
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class)
