@@ -25,6 +25,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('questions/{questionId}', [
     'as' => 'questions.view',
-    'middleware' => 'throttle:30,1',
+    'middleware' => 'throttle_guest:30,1',
     'uses' => QuestionsViewController::class
 ]);

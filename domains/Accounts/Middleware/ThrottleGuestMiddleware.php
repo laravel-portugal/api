@@ -1,6 +1,6 @@
 <?php
 
-namespace Domains\Discussions\Middleware;
+namespace Domains\Accounts\Middleware;
 
 use Closure;
 use GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware as ThrottleMiddleware;

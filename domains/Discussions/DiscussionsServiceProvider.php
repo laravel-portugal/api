@@ -2,7 +2,7 @@
 
 namespace Domains\Discussions;
 
-use Domains\Discussions\Middleware\ThrottleGuestMiddleware;
+use Domains\Accounts\Middleware\ThrottleGuestMiddleware;
 use Domains\Discussions\Models\Question;
 use Domains\Discussions\Observers\QuestionObserver;
 use Domains\Discussions\Policies\QuestionPolicy;
@@ -46,7 +46,7 @@ class DiscussionsServiceProvider extends ServiceProvider
     {
         $this->app->routeMiddleware(
             [
-                'throttle' => ThrottleGuestMiddleware::class,
+                'throttle_guest' => ThrottleGuestMiddleware::class,
             ]
         );
     }
