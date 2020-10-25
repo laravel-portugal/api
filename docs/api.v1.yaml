@@ -156,6 +156,7 @@ paths:
                 - password
       tags:
         - Accounts
+        - Users
       parameters:
         - schema:
             type: string
@@ -200,11 +201,98 @@ paths:
             default: application/json
           in: header
           name: Content-Type
+  /accounts/login:
+    post:
+      summary: POST /accounts/login
+      operationId: post-accounts-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The encoded JWT that authenticates the User
+                  type:
+                    type: string
+                    default: bearer
+                    description: ''
+                  expired_in:
+                    type: integer
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Accounts
+        - Login
+      description: Authenticates a User
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+              required:
+                - username
+                - password
+  /accounts/logout:
+    post:
+      summary: POST /accounts/logout
+      operationId: post-accounts-logout
+      responses:
+        '200':
+          description: OK
+      security:
+        - ' Bearer Token': []
+      description: Logs out the User by revoking the given bearer token
+      tags:
+        - Accounts
+        - Logout
+  /accounts/me:
+    get:
+      summary: GET /accounts/me
+      tags:
+        - Accounts
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      operationId: get-accounts-me
+      description: Shows details of the authenticated User
+      security:
+        - ' Bearer Token': []
 components:
   schemas:
     Tag:
       description: A Tag resource's details
       type: object
+      x-tags:
+        - Resources
+        - Tags
+      title: Tag
       properties:
         id:
           type: integer
@@ -212,28 +300,24 @@ components:
         name:
           type: string
           minLength: 1
-          description: The resource's submitted name
+          description: ''
         created_at:
           type: string
           minLength: 1
-          description: The resource's creation timestamp
+          description: ''
           format: date-time
         updated_at:
           type: string
           minLength: 1
-          description: The resource's updated timestamp
+          description: ''
           format: date-time
         deleted_at:
           type:
             - string
             - 'null'
           minLength: 1
-          description: The resource's deleted timestamp
+          description: ''
           format: date-time
-      x-tags:
-        - Resources
-        - Tags
-      title: Tag
     Link:
       title: Link
       type: object
@@ -307,6 +391,34 @@ components:
       x-tags:
         - Structures
         - Errors
+    User:
+      title: User
+      type: object
+      description: ''
+      x-tags:
+        - Resources
+        - Users
+      properties:
+        id:
+          type: integer
+          description: The resource's automatically generated unique identifier
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        trusted:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+          default: 'null'
   securitySchemes:
     ' Bearer Token':
       type: http
@@ -319,3 +431,6 @@ tags:
   - name: Accounts
   - name: Discussions
   - name: Questions
+  - name: Login
+  - name: Logout
+  - name: Users
