@@ -422,16 +422,16 @@ components:
           type: string
           description: First page url
           format: uri
-        last:
-          type: string
-          description: Last page url
-          format: uri
         prev:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Previous page url
           format: uri
         next:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Next page url
           format: uri
     Error:
