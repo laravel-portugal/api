@@ -6,7 +6,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- N/A
+- An authenticated user can delete a question (#30)
 
 ### Changed
 
