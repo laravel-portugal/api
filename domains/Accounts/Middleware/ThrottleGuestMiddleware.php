@@ -7,7 +7,6 @@ use GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware as ThrottleMiddle
 use GrahamCampbell\Throttle\Throttle;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-
 class ThrottleGuestMiddleware extends ThrottleMiddleware
 {
     protected Auth $auth;
