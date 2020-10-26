@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class QuestionsUpdateTest extends TestCase
+class QuestionsDeleteTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -50,7 +50,7 @@ class QuestionsUpdateTest extends TestCase
 
         $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
 
-        self::assertTrue($response->isEmpty());
+        $this->assertTrue($response->isEmpty());
 
         $this->seeInDatabase('questions', [
             'id' => $this->question->id,
