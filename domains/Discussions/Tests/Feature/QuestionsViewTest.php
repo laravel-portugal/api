@@ -74,7 +74,8 @@ class QuestionsViewTest extends TestCase
     public function it_blocked_guest_for_many_attempts(): void
     {
         for ($attempt = 0; $attempt < 30; ++$attempt) {
-            $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]));
+            $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]))
+                ->assertResponseStatus(Response::HTTP_OK);
         }
 
         $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]))
