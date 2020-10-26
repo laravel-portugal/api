@@ -20,7 +20,7 @@ class QuestionsViewController extends Controller
         }
     }
 
-    public function __invoke(int $questionId)
+    public function __invoke(int $questionId): QuestionResource
     {
         return QuestionResource::make($this->question->findOrFail($questionId));
     }
