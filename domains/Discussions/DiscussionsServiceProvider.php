@@ -39,13 +39,4 @@ class DiscussionsServiceProvider extends ServiceProvider
     {
         Gate::policy(Question::class, QuestionPolicy::class);
     }
-
-    private function routeMiddleware(): void
-    {
-        $this->app->routeMiddleware(
-            [
-                'throttle_guest' => ThrottleGuestMiddleware::class,
-            ]
-        );
-    }
 }
