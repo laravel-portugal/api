@@ -21,7 +21,7 @@ class QuestionsViewTest extends TestCase
     {
         parent::setUp();
 
-        $this->user     = UserFactory::new()->create();
+        $this->user = UserFactory::new()->create();
         $this->question = QuestionFactory::new(['author_id' => $this->user->id])->create();
     }
 
@@ -29,26 +29,26 @@ class QuestionsViewTest extends TestCase
     public function guest_can_see_a_question(): void
     {
         $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]))
-        ->seeJson([
-            'data' => [
-                'id' => $this->question->id,
-                'title' => $this->question->title,
-                'slug' => $this->question->slug,
-                'description' => $this->question->description,
-                'author' => [
-                    'id' => $this->user->id,
-                    'name' => $this->user->name,
-                    'email' => $this->user->email,
-                    'trusted' => $this->user->trusted ? "1" : "0",
-                    'created_at' => $this->user->created_at,
-                    'updated_at'=> $this->user->updated_at,
-                    'deleted_at'=> $this->user->deleted_at
-                ],
-                'created_at' => $this->question->created_at,
-                'updated_at'=> $this->question->updated_at,
-                'deleted_at'=> $this->question->deleted_at
-            ]
-        ]);
+            ->seeJson([
+                'data' => [
+                    'id' => $this->question->id,
+                    'title' => $this->question->title,
+                    'slug' => $this->question->slug,
+                    'description' => $this->question->description,
+                    'author' => [
+                        'id' => $this->user->id,
+                        'name' => $this->user->name,
+                        'email' => $this->user->email,
+                        'trusted' => $this->user->trusted ? "1" : "0",
+                        'created_at' => $this->user->created_at,
+                        'updated_at' => $this->user->updated_at,
+                        'deleted_at' => $this->user->deleted_at
+                    ],
+                    'created_at' => $this->question->created_at,
+                    'updated_at' => $this->question->updated_at,
+                    'deleted_at' => $this->question->deleted_at
+                ]
+            ]);
     }
 
     /** @test */
@@ -71,7 +71,7 @@ class QuestionsViewTest extends TestCase
     }
 
     /** @test */
-    public function guest_blocked_for_many_attempts(): void
+    public function it_guest_blocked_for_many_attempts(): void
     {
         for ($attempt = 0; $attempt < 30; ++$attempt) {
             $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]));
