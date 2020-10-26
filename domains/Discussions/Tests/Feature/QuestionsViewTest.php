@@ -26,7 +26,7 @@ class QuestionsViewTest extends TestCase
     }
 
     /** @test */
-    public function guest_can_see_a_question(): void
+    public function it_allow_guest_see_a_question(): void
     {
         $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]))
             ->seeJson([
@@ -52,7 +52,7 @@ class QuestionsViewTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_user_can_see_a_question(): void
+    public function it_allow_authenticated_user_see_a_question(): void
     {
         $this->actingAs($this->user);
         $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]))
@@ -71,7 +71,7 @@ class QuestionsViewTest extends TestCase
     }
 
     /** @test */
-    public function it_guest_blocked_for_many_attempts(): void
+    public function it_blocked_guest_for_many_attempts(): void
     {
         for ($attempt = 0; $attempt < 30; ++$attempt) {
             $this->get(route('discussions.questions.view', ['questionId' => $this->question->id]));
@@ -82,7 +82,7 @@ class QuestionsViewTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_user_is_not_blocked_for_many_attempts(): void
+    public function it_not_blocked_authenticated_user_for_many_attempts(): void
     {
         $this->actingAs($this->user);
 
