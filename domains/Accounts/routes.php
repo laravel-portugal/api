@@ -35,3 +35,4 @@ Route::get('/me', [
     'uses' => AccountsProfileController::class,
     'middleware' => 'auth:api'
 ]);
+
