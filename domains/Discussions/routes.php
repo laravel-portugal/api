@@ -3,6 +3,7 @@
 use Domains\Discussions\Controllers\AnswersStoreController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
+use Domains\Discussions\Controllers\QuestionsViewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
@@ -22,3 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
 });
 
+Route::get('questions/{questionId}', [
+    'as' => 'questions.view',
+    'uses' => QuestionsViewController::class
+]);
