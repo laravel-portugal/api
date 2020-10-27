@@ -2,12 +2,18 @@
 
 use Domains\Discussions\Controllers\AnswersStoreController;
 use Domains\Discussions\Controllers\QuestionsDeleteController;
+use Domains\Discussions\Controllers\QuestionsGetController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
 use Domains\Discussions\Controllers\QuestionsViewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('questions', [
+        'as' => 'questions.index',
+        'uses' => QuestionsGetController::class
+    ]);
+
     Route::post('/questions', [
         'as' => 'questions.store',
         'uses' => QuestionsStoreController::class,
