@@ -1,6 +1,7 @@
 <?php
 
 use Domains\Discussions\Controllers\AnswersStoreController;
+use Domains\Discussions\Controllers\QuestionsGetController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
 use Domains\Discussions\Controllers\QuestionsViewController;
@@ -22,6 +23,11 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => AnswersStoreController::class
     ]);
 });
+
+Route::get('questions', [
+    'as' => 'questions.index',
+    'uses' => QuestionsGetController::class
+]);
 
 Route::get('questions/{questionId}', [
     'as' => 'questions.view',
