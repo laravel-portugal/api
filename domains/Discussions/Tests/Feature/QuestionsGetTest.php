@@ -86,7 +86,6 @@ class QuestionsGetTest extends TestCase
     {
         $response = $this->get(route('discussions.questions.index', ['page' => 2]));
         $response->assertResponseOk();
-
         self::assertEquals(2, $response->decodedJsonResponse()['meta']['current_page']);
     }
 
@@ -98,7 +97,7 @@ class QuestionsGetTest extends TestCase
 
         $response = $this->get(route('discussions.questions.index', ['author' => $user->id]));
 
-        $this->assertEquals(1, $response->decodedJsonResponse()['meta']['total']);
+        $this->assertEquals(1, count($response->decodedJsonResponse()['data']));
     }
 
     /** @test */
@@ -109,7 +108,7 @@ class QuestionsGetTest extends TestCase
 
         $response = $this->get(route('discussions.questions.index', ['title' => 'LArAvEL-pt']));
 
-        $this->assertEquals(2, $response->decodedJsonResponse()['meta']['total']);
+        $this->assertEquals(2, count($response->decodedJsonResponse()['data']));
     }
 
     /** @test */
@@ -122,13 +121,13 @@ class QuestionsGetTest extends TestCase
             'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
             'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString()
         ]));
-        $this->assertEquals(1, $response->decodedJsonResponse()['meta']['total']);
+        $this->assertEquals(1, count($response->decodedJsonResponse()['data']));
 
         $response = $this->get(route('discussions.questions.index', [
             'created[from]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
             'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString()
         ]));
-        $this->assertEquals(2, $response->decodedJsonResponse()['meta']['total']);
+        $this->assertEquals(2, count($response->decodedJsonResponse()['data']));
     }
 
     /** @test */
@@ -137,7 +136,7 @@ class QuestionsGetTest extends TestCase
         QuestionFactory::new(['resolved_at' => Carbon::now()->toDateString()])->create();
 
         $response = $this->get(route('discussions.questions.index', ['resolved' => true]));
-        $this->assertEquals(1, $response->decodedJsonResponse()['meta']['total']);
+        $this->assertEquals(1, count($response->decodedJsonResponse()['data']));
     }
 
     /** @test */
