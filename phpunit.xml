@@ -13,6 +13,7 @@
             <directory suffix=".php">./domains/*/Database</directory>
             <directory suffix=".php">./domains/*/Routes</directory>
             <directory suffix=".php">./domains/*/Tests</directory>
+            <directory suffix="blade.php">./domains/*/Resources</directory>
             <directory suffix=".php">./tests</directory>
         </exclude>
     </coverage>
@@ -37,5 +38,6 @@
         <server name="DB_CONNECTION" value="sqlite"/>
         <server name="DB_DATABASE" value=":memory:"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
+        <server name="JWT_SECRET" value="base64:XCG4mhDOasIluLLOxIrx"/>
     </php>
 </phpunit>

@@ -3,9 +3,11 @@
 namespace Domains\Links\Controllers;
 
 use App\Http\Controllers\Controller;
+use Domains\Links\Exceptions\UnapprovedLinkLimitReachedException;
 use Domains\Links\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class LinksStoreController extends Controller
 {
@@ -28,6 +30,11 @@ class LinksStoreController extends Controller
             'tags' => ['required', 'array'],
             'tags.*.id' => ['required', 'integer', 'exists:tags'],
         ]);
+
+        throw_unless(
+            Gate::allows('create', [Link::class, $request->input('author_email')]),
+            new UnapprovedLinkLimitReachedException()
+        );
 
         $link = $this->links->create([
             'link' => $request->input('link'),

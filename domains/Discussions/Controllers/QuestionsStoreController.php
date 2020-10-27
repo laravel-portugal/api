@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Domains\Discussions\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class QuestionsStoreController extends Controller
 {
