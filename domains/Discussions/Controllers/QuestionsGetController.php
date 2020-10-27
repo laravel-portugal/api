@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Domains\Discussions\Models\Question;
 use Domains\Discussions\Resources\QuestionResource;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuestionsGetController extends Controller
 {
-    protected $query;
+    protected Question $question;
 
     public function __construct(Auth $auth, Question $question)
     {
@@ -19,7 +20,7 @@ class QuestionsGetController extends Controller
             $this->middleware('throttle:30,1');
         }
 
-        $this->query = $question::query();
+        $this->question = $question;
     }
 
     public function __invoke(Request $request): AnonymousResourceCollection
@@ -33,28 +34,19 @@ class QuestionsGetController extends Controller
             'resolved' => 'sometimes|boolean'
         ]);
 
-        $author = $request->get('author');
-        if ($author != '') {
-            $this->query->where('author_id', $author);
-        }
+        $question = $this->question
+            ->when($authorId = $request->get('author'),
+                fn(Builder $query, int $authorId) => $query->where('author_id', $authorId))
+            ->when($request->get('title'),
+                fn(Builder $query, string $title) => $query->where('title', 'like', '%'.strtoupper($title).'%'))
+            ->when($request->get('created'),
+                fn(Builder $query, array $created) => $query->whereBetween('created_at', [$created['from'], $created['to']]))
+            ->when($request->get('resolved'),
+                fn(Builder $query, bool $resolved) => $query->whereNotNull('resolved_at'))
+            ->when(!$request->get('resolved'),
+                fn(Builder $query, bool $resolved) => $query->whereNull('resolved_at'))
+            ->simplePaginate(15);
 
-        $title = strtoupper($request->get('title'));
-        if ($title != '') {
-            $this->query->where('title', 'like', '%'.$title.'%');
-        }
-
-        $created = $request->get('created');
-        if ($created != null) {
-            $this->query->whereBetween('created_at', [$created['from'], $created['to']]);
-        }
-
-        $resolved = $request->get('resolved');
-        if ($resolved == true) {
-            $this->query->whereNotNull('resolved_at');
-        } elseif ($resolved == false) {
-            $this->query->whereNull('resolved_at');
-        }
-
-        return QuestionResource::collection($this->query->paginate(15));
+        return QuestionResource::collection($question);
     }
 }
