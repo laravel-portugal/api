@@ -104,10 +104,10 @@ class QuestionsGetTest extends TestCase
     /** @test */
     public function it_searchable_by_title(): void
     {
-        QuestionFactory::new(['title' => 'LARAVEL-PT'.Carbon::now()->toString()])->create();
-        QuestionFactory::new(['title' => 'LARAVEL-PT'.Carbon::now()->toString()])->create();
+        QuestionFactory::new(['title' => 'LARAVEL-PT'])->create();
+        QuestionFactory::new(['title' => 'laravel-pt'])->create();
 
-        $response = $this->get(route('discussions.questions.index', ['title' => 'LARAVEL-PT']));
+        $response = $this->get(route('discussions.questions.index', ['title' => 'LArAvEL-pt']));
 
         $this->assertEquals(2, $response->decodedJsonResponse()['meta']['total']);
     }
