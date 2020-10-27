@@ -27,7 +27,7 @@ class QuestionsGetTest extends TestCase
     /** @test */
     public function it_possible_to_see_a_question(): void
     {
-        $this->get(route('discussions.questions.index'))
+        $response = $this->get(route('discussions.questions.index'))
             ->seeJsonStructure([
                 'data' => [
                     [
@@ -42,6 +42,8 @@ class QuestionsGetTest extends TestCase
                     ]
                 ]
             ]);
+
+        $this->assertEquals(15, count($response->decodedJsonResponse()['data']));
     }
 
     /** @test */
@@ -86,7 +88,8 @@ class QuestionsGetTest extends TestCase
     {
         $response = $this->get(route('discussions.questions.index', ['page' => 2]));
         $response->assertResponseOk();
-        self::assertEquals(2, $response->decodedJsonResponse()['meta']['current_page']);
+        $this->assertEquals(2, $response->decodedJsonResponse()['meta']['current_page']);
+        $this->assertEquals(2, $response->decodedJsonResponse()['meta']['current_page']);
     }
 
     /** @test */
