@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class QuestionsDeleteTest extends TestCase
+class QuestionsUpdateTest extends TestCase
 {
     use DatabaseMigrations;
 

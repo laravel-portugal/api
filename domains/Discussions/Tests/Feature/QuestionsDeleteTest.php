@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class QuestionsUpdateTest extends TestCase
+class QuestionsDeleteTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -29,18 +29,18 @@ class QuestionsUpdateTest extends TestCase
         $this->faker = Factory::create();
         $this->user = UserFactory::new()->create();
         $this->question = QuestionFactory::new(['author_id' => $this->user->id])->create();
+
+        Carbon::setTestNow();
     }
 
     /** @test */
     public function it_soft_deletes_a_question_i_own(): void
     {
-        Carbon::setTestNow();
-
         $response = $this->actingAs($this->user)
             ->delete(route('discussions.questions.delete', ['questionId' => $this->question->id]));
 
         $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
-        $this->assertTrue($response->response->isEmpty());
+        self::assertTrue($response->response->isEmpty());
         $this->seeInDatabase('questions', [
             'id' => $this->question->id,
             'updated_at' => Carbon::now(),
@@ -55,7 +55,7 @@ class QuestionsUpdateTest extends TestCase
             ->delete(route('discussions.questions.update', ['questionId' => $this->question->id]));
 
         $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
-        $this->assertTrue($response->response->isEmpty());
+        self::assertTrue($response->response->isEmpty());
         $this->seeInDatabase('questions', [
             'id' => $this->question->id,
             'updated_at' => Carbon::now(),
