@@ -31,7 +31,7 @@ class QuestionsGetController extends Controller
             'created' => 'sometimes|array|size:2',
             'created.from' => 'required_with:created|date',
             'created.to' => 'required_with:created|date|afterOrEqual:created.from',
-            'resolved' => 'sometimes|boolean'
+            'resolved' => 'sometimes|boolean',
         ]);
 
         $question = $this->question
