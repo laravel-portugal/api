@@ -13,9 +13,9 @@ class AccountsStoreController extends Controller
 {
     private User $user;
 
-    public function __construct(User $users)
+    public function __construct(User $user)
     {
-        $this->users = $users;
+        $this->user = $user;
     }
 
     public function __invoke(Request $request): Response
@@ -26,14 +26,13 @@ class AccountsStoreController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = new User();
-        $user->forceFill([
+        $this->user->forceFill([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ])->save();
 
-        $user->notify(new VerifyEmailNotification());
+        $this->user->notify(new VerifyEmailNotification());
 
         return new Response('', Response::HTTP_NO_CONTENT);
     }

@@ -1,43 +1,44 @@
 <?php
 
-namespace Domains\Accounts\Tests\Unit;
+namespace Domains\Discussions\Tests\Unit;
 
 use Carbon\Carbon;
-use Domains\Accounts\Database\Factories\UserFactory;
-use Domains\Accounts\Enums\AccountTypeEnum;
 use Domains\Accounts\Models\User;
+use Domains\Discussions\Database\Factories\QuestionFactory;
+use Domains\Discussions\Models\Question;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class UserModelTest extends TestCase
+class QuestionModelTest extends TestCase
 {
-    private User $model;
+    use DatabaseMigrations;
+
+    private Question $model;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->model = UserFactory::new()->unverified()->make();
+        $this->model = QuestionFactory::new()->make();
     }
 
     /** @test */
     public function it_contains_required_properties(): void
     {
-        self::assertIsString($this->model->name);
-        self::assertIsString($this->model->email);
-        self::assertIsString($this->model->password);
-        self::assertNull($this->model->email_verified_at);
-        self::assertFalse($this->model->trusted);
-
+        self::assertIsInt($this->model->author_id);
+        self::assertIsString($this->model->title);
+        self::assertIsString($this->model->description);
+        self::assertNull($this->model->slug);
+        self::assertNull($this->model->resolved_at);
         self::assertInstanceOf(Carbon::class, $this->model->created_at);
         self::assertInstanceOf(Carbon::class, $this->model->updated_at);
-        self::assertNull($this->model->deleted_at);
     }
 
     /** @test */
     public function it_uses_correct_table_name(): void
     {
-        self::assertEquals('users', $this->model->getTable());
+        self::assertEquals('questions', $this->model->getTable());
     }
 
     /** @test */
@@ -59,8 +60,8 @@ class UserModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_user_account_type(): void
+    public function it_has_author_relation(): void
     {
-        self::assertEquals(AccountTypeEnum::USER, $this->model->account_type);
+        self::assertInstanceOf(User::class, $this->model->author()->getModel());
     }
 }

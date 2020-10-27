@@ -17,7 +17,7 @@ servers:
 paths:
   /tags:
     get:
-      summary: GET /tags
+      summary: Listing all tags
       responses:
         '200':
           description: OK
@@ -33,13 +33,13 @@ paths:
                       $ref: '#/components/schemas/Tag'
               examples: {}
       operationId: get-tags
-      description: List of all storeda tags
+      description: List of all stored tags
       parameters: []
       tags:
         - Tags
   /links:
     get:
-      summary: GET /links
+      summary: Listing links
       tags:
         - Links
       responses:
@@ -60,7 +60,7 @@ paths:
       operationId: get-links
       description: List of a paginated set of stored links
     post:
-      summary: POST /links
+      summary: Creating a new link
       operationId: post-links
       responses:
         '204':
@@ -75,8 +75,10 @@ paths:
           description: |-
             Too Many Requests
 
-            When there's already five unapproved Link resources of a single author.
-      description: Store a new Link
+            When there's already five unapproved Link resources of a single author. 
+
+            Trusted User resources or User resources with ADMIN or EDITOR roles won't have any limit applied.
+      description: Store a new Link resource
       requestBody:
         content:
           application/json:
@@ -114,10 +116,15 @@ paths:
                 - tags
       tags:
         - Links
-      parameters: []
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
   /accounts/users:
     post:
-      summary: POST /accounts/users
+      summary: Create user accounts
       operationId: post-accounts-users
       responses:
         '204':
@@ -128,7 +135,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      description: Create new User accounts
+      description: Store a new User account
       requestBody:
         content:
           application/json:
@@ -151,11 +158,246 @@ paths:
                 - password
       tags:
         - Accounts
+        - Users
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+  /discussions/questions:
+    post:
+      summary: Creating new questions
+      operationId: post-discussions-questions
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Store a new Question resource
+      security:
+        - ' Bearer Token': []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+              required:
+                - title
+                - description
+      tags:
+        - Discussions
+        - Questions
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+  /accounts/login:
+    post:
+      summary: Authenticating a user
+      operationId: post-accounts-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The encoded JWT that authenticates the User
+                  type:
+                    type: string
+                    default: bearer
+                    description: ''
+                  expired_in:
+                    type: integer
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Accounts
+        - Login
+      description: Authenticates a User account
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+              required:
+                - username
+                - password
+  /accounts/logout:
+    post:
+      summary: Logging out a user
+      operationId: post-accounts-logout
+      responses:
+        '200':
+          description: OK
+      security:
+        - ' Bearer Token': []
+      description: Logs out the User by revoking the given bearer token
+      tags:
+        - Accounts
+        - Logout
+      parameters: []
+  /accounts/me:
+    get:
+      summary: Show authenticated user details
+      tags:
+        - Accounts
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      operationId: get-accounts-me
+      description: Shows details of the authenticated User
+      security:
+        - ' Bearer Token': []
+  '/discussions/questions/{questionId}':
+    parameters:
+      - schema:
+          type: integer
+        name: questionId
+        in: path
+        required: true
+    patch:
+      summary: Updating a question
+      operationId: patch-discussions-questions-questionId
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: |-
+            Forbidden
+
+            If the given Question resource ID isn't authored by the authenticated User.
+        '404':
+          description: |-
+            Not Found
+
+            If the given Question resource ID isn't present in the database.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - ' Bearer Token': []
+      tags:
+        - Discussions
+        - Questions
+      description: Updates a given Question resource
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  default: 'null'
+              required:
+                - title
+  '/discussions/questions/{questionId}/answers':
+    parameters:
+      - schema:
+          type: string
+        name: questionId
+        in: path
+        required: true
+    post:
+      summary: Creating an answer for a question
+      operationId: post-discussions-questions-questionId-answers
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: |-
+            Not Found
+
+            If the given Question resource ID isn't present in the database.
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Store a new Answer resource associated to the given Question resource
+      security:
+        - ' Bearer Token': []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+      tags:
+        - Discussions
+        - Questions
+        - Answers
 components:
   schemas:
     Tag:
       description: A Tag resource's details
       type: object
+      x-tags:
+        - Resources
+        - Tags
+      title: Tag
       properties:
         id:
           type: integer
@@ -163,28 +405,24 @@ components:
         name:
           type: string
           minLength: 1
-          description: The resource's submitted name
+          description: ''
         created_at:
           type: string
           minLength: 1
-          description: The resource's creation timestamp
+          description: ''
           format: date-time
         updated_at:
           type: string
           minLength: 1
-          description: The resource's updated timestamp
+          description: ''
           format: date-time
         deleted_at:
           type:
             - string
             - 'null'
           minLength: 1
-          description: The resource's deleted timestamp
+          description: ''
           format: date-time
-      x-tags:
-        - Resources
-        - Tags
-      title: Tag
     Link:
       title: Link
       type: object
@@ -233,16 +471,16 @@ components:
           type: string
           description: First page url
           format: uri
-        last:
-          type: string
-          description: Last page url
-          format: uri
         prev:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Previous page url
           format: uri
         next:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Next page url
           format: uri
     Error:
@@ -258,9 +496,48 @@ components:
       x-tags:
         - Structures
         - Errors
-  securitySchemes: {}
+    User:
+      title: User
+      type: object
+      description: A User resource's details
+      x-tags:
+        - Resources
+        - Users
+      properties:
+        id:
+          type: integer
+          description: The resource's automatically generated unique identifier
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        trusted:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+  securitySchemes:
+    ' Bearer Token':
+      type: http
+      scheme: bearer
+      description: ''
 security: []
 tags:
   - name: Links
   - name: Tags
   - name: Accounts
+  - name: Discussions
+  - name: Questions
+  - name: Login
+  - name: Logout
+  - name: Users
+  - name: Answers

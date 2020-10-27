@@ -4,6 +4,8 @@ namespace Domains\Links;
 
 use Domains\Links\Models\Link;
 use Domains\Links\Observers\LinkObserver;
+use Domains\Links\Policies\LinkPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class LinksServiceProvider extends ServiceProvider
@@ -14,7 +16,7 @@ class LinksServiceProvider extends ServiceProvider
         $this->loadConfig();
 
         $this->bootRoutes();
-        $this->bootObservers();
+        $this->bootPolicies();
     }
 
     private function bootRoutes(): void
@@ -22,13 +24,13 @@ class LinksServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
     }
 
-    private function bootObservers(): void
-    {
-        Link::observe(LinkObserver::class);
-    }
-
     private function loadConfig(): void
     {
         $this->app->configure('links');
+    }
+
+    private function bootPolicies(): void
+    {
+        Gate::policy(Link::class, LinkPolicy::class);
     }
 }
