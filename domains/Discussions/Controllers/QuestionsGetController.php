@@ -48,10 +48,10 @@ class QuestionsGetController extends Controller
             $this->query->whereBetween('created_at', [$created['from'], $created['to']]);
         }
 
-        $resolve = $request->get('resolved');
-        if ($resolve == true) {
+        $resolved = $request->get('resolved');
+        if ($resolved == true) {
             $this->query->whereNotNull('resolved_at');
-        } elseif ($resolve == false) {
+        } elseif ($resolved == false) {
             $this->query->whereNull('resolved_at');
         }
 
