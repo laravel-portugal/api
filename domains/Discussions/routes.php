@@ -2,6 +2,7 @@
 
 use Domains\Discussions\Controllers\AnswersStoreController;
 use Domains\Discussions\Controllers\QuestionsIndexController;
+use Domains\Discussions\Controllers\QuestionsDeleteController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
 use Domains\Discussions\Controllers\QuestionsViewController;
@@ -16,6 +17,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/questions/{questionId}', [
         'as' => 'questions.update',
         'uses' => QuestionsUpdateController::class,
+    ]);
+
+    Route::delete('/questions/{questionId}', [
+        'as' => 'questions.delete',
+        'uses' => QuestionsDeleteController::class
     ]);
 
     Route::post('/questions/{questionId}/answers', [

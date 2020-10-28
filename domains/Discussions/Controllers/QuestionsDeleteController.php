@@ -7,7 +7,7 @@ use Domains\Discussions\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class QuestionsUpdateController extends Controller
+class QuestionsDeleteController extends Controller
 {
     private Question $questions;
 
@@ -20,17 +20,9 @@ class QuestionsUpdateController extends Controller
     {
         $question = $this->questions->findOrFail($questionId);
 
-        $this->authorize('update', $question);
+        $this->authorize('delete', $question);
 
-        $this->validate($request, [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-        ]);
-
-        $question->update([
-            'title' => $request->input('title'),
-            'description' => $request->input('description', $question->description),
-        ]);
+        $question->delete();
 
         return new Response('', Response::HTTP_NO_CONTENT);
     }
