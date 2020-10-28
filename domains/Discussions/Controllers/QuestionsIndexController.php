@@ -40,10 +40,13 @@ class QuestionsIndexController extends Controller
             ->when($request->get('title'),
                 fn(Builder $query, string $title) => $query->where('title', 'like', '%'.strtoupper($title).'%'))
             ->when($request->get('created'),
-                fn(Builder $query, array $created) => $query->whereBetween('created_at', [$created['from'], $created['to']]))
-            ->when($request->get('resolved'),
+                fn(Builder $query, array $created) => $query->whereBetween('created_at', [
+                    $created['from'],
+                    $created['to'],
+                ]))
+            ->when($request->get('resolved') == "1",
                 fn(Builder $query, bool $resolved) => $query->whereNotNull('resolved_at'))
-            ->when(!$request->get('resolved'),
+            ->when($request->get('resolved') == "0",
                 fn(Builder $query, bool $resolved) => $query->whereNull('resolved_at'))
             ->simplePaginate(15);
 
