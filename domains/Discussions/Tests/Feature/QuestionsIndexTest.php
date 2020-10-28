@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class QuestionsGetTest extends TestCase
+class QuestionsIndexTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -28,7 +28,7 @@ class QuestionsGetTest extends TestCase
     public function it_list_non_deleted_question(): void
     {
         $deleteQuestion = QuestionFactory::new([
-            'deleted_at' => Carbon::now()->toDateString(),
+            'deleted_at' => Carbon::now(),
         ])
             ->create();
 
@@ -138,11 +138,11 @@ class QuestionsGetTest extends TestCase
     public function it_search_by_created_date(): void
     {
         QuestionFactory::new([
-            'created_at' => Carbon::now()->subYears(2)->toDateString(),
+            'created_at' => Carbon::now()->subYears(2),
         ])
             ->create();
         QuestionFactory::new([
-            'created_at' => Carbon::now()->subYears(3)->toDateString(),
+            'created_at' => Carbon::now()->subYears(3),
         ])
             ->create();
 
@@ -167,7 +167,7 @@ class QuestionsGetTest extends TestCase
     public function it_search_by_resolved(): void
     {
         QuestionFactory::new([
-            'resolved_at' => Carbon::now()->toDateString(),
+            'resolved_at' => Carbon::now(),
         ])
             ->count(5)
             ->create();
