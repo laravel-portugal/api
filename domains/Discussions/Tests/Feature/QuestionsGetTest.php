@@ -21,13 +21,18 @@ class QuestionsGetTest extends TestCase
         parent::setUp();
 
         $this->user = UserFactory::new()->create();
-        QuestionFactory::times(20)->create();
+        QuestionFactory::times(10)->create();
     }
 
     /** @test */
-    public function it_possible_to_see_a_question(): void
+    public function it_list_non_deleted_question(): void
     {
-        $response = $this->get(route('discussions.questions.index'))
+        $deleteQuestion = QuestionFactory::new([
+            'deleted_at' => Carbon::now()->toDateString(),
+        ])
+            ->create();
+
+        $this->json('GET', route('discussions.questions.index'))
             ->seeJsonStructure([
                 'data' => [
                     [
@@ -38,16 +43,23 @@ class QuestionsGetTest extends TestCase
                         'author',
                         'created_at',
                         'updated_at',
-                        'deleted_at'
+                        'deleted_at',
                     ]
-                ]
+                ],
+                'links' => [
+                    'first', 'prev', 'next', 'last',
+                ],
+            ])
+            ->seeJsonDoesntContains([
+                'email' => $deleteQuestion->author->email,
+            ])
+            ->seeJsonContains([
+                'to' => 10,
             ]);
-
-        self::assertEquals(15, count($response->decodedJsonResponse()['data']));
     }
 
     /** @test */
-    public function it_blocked_guest_for_many_attempts(): void
+    public function it_blocks_guest_for_many_attempts(): void
     {
         for ($attempt = 0; $attempt < 30; ++$attempt) {
             $this->get(route('discussions.questions.index'))
@@ -59,7 +71,7 @@ class QuestionsGetTest extends TestCase
     }
 
     /** @test */
-    public function it_not_blocked_authenticated_user_for_many_attempts(): void
+    public function it_not_blocks_authenticated_user_for_many_attempts(): void
     {
         $this->actingAs($this->user);
 
@@ -72,81 +84,108 @@ class QuestionsGetTest extends TestCase
     }
 
     /** @test */
-    public function it_includes_paginate(): void
+    public function it_navigates_to_next_page(): void
     {
-        $response = $this->get(route('discussions.questions.index'))
-            ->seeJsonStructure([
-                'data' =>
-                    'links',
+        $this->json('GET', route('discussions.questions.index', [
+            'page' => 2,
+        ]))
+            ->seeJsonContains([
+                'current_page' => 2,
             ]);
-
-        $response->assertResponseOk();
     }
 
     /** @test */
-    public function it_supports_pagination_navigation(): void
-    {
-        $response = $this->get(route('discussions.questions.index', ['page' => 2]));
-        $response->assertResponseOk();
-
-        self::assertEquals(2, $response->decodedJsonResponse()['meta']['current_page']);
-    }
-
-    /** @test */
-    public function it_searchable_by_author(): void
+    public function it_search_by_author(): void
     {
         $user = UserFactory::new()->create();
-        QuestionFactory::new(['author_id' => $user->id])->create();
+        QuestionFactory::new([
+            'author_id' => $user->id,
+        ])
+            ->count(3)
+            ->create();
 
-        $response = $this->get(route('discussions.questions.index', ['author' => $user->id]));
-
-        self::assertEquals(1, count($response->decodedJsonResponse()['data']));
+        $this->json('GET', route('discussions.questions.index', [
+            'author' => $user->id,
+        ]))
+            ->seeJsonContains([
+                'id' => $user->id,
+            ])
+            ->seeJsonContains([
+                'to' => 3,
+            ]);
     }
 
     /** @test */
-    public function it_searchable_by_title(): void
+    public function it_search_by_title(): void
     {
-        QuestionFactory::new(['title' => 'LARAVEL-PT'])->create();
-        QuestionFactory::new(['title' => 'laravel-pt'])->create();
+        QuestionFactory::new([
+            'title' => 'LARAVEL-PT',
+        ])->create();
+        QuestionFactory::new([
+            'title' => 'laravel-Pt',
+        ])
+            ->create();
 
-        $response = $this->get(route('discussions.questions.index', ['title' => 'LArAvEL-pt']));
-
-        self::assertEquals(2, count($response->decodedJsonResponse()['data']));
+        $this->json('GET', route('discussions.questions.index', [
+            'title' => 'LArAvEL-pT',
+        ]))
+            ->seeJsonContains([
+                'to' => 2,
+            ]);
     }
 
     /** @test */
-    public function it_searchable_by_created_at(): void
+    public function it_search_by_created_date(): void
     {
-        QuestionFactory::new(['created_at' => Carbon::now()->subYears(2)->toDateString()])->create();
-        QuestionFactory::new(['created_at' => Carbon::now()->subYears(3)->toDateString()])->create();
+        QuestionFactory::new([
+            'created_at' => Carbon::now()->subYears(2)->toDateString(),
+        ])
+            ->create();
+        QuestionFactory::new([
+            'created_at' => Carbon::now()->subYears(3)->toDateString(),
+        ])
+            ->create();
 
-        $response = $this->get(route('discussions.questions.index', [
+        $this->json('GET', route('discussions.questions.index', [
             'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
             'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString()
-        ]));
-        self::assertEquals(1, count($response->decodedJsonResponse()['data']));
+        ]))
+            ->seeJsonContains([
+                'to' => 1,
+            ]);
 
-        $response = $this->get(route('discussions.questions.index', [
+        $this->json('GET', route('discussions.questions.index', [
             'created[from]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
             'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString()
-        ]));
-        self::assertEquals(2, count($response->decodedJsonResponse()['data']));
+        ]))
+            ->seeJsonContains([
+                'to' => 2,
+            ]);
     }
 
     /** @test */
-    public function it_searchable_by_resolved(): void
+    public function it_search_by_resolved(): void
     {
-        QuestionFactory::new(['resolved_at' => Carbon::now()->toDateString()])->create();
+        QuestionFactory::new([
+            'resolved_at' => Carbon::now()->toDateString(),
+        ])
+            ->count(5)
+            ->create();
 
-        $response = $this->get(route('discussions.questions.index', ['resolved' => true]));
-
-        self::assertEquals(1, count($response->decodedJsonResponse()['data']));
+        $this->json('GET', route('discussions.questions.index', [
+            'resolved' => true,
+        ]))
+            ->seeJsonContains([
+                'to' => 5,
+            ]);
     }
 
     /** @test */
     public function it_fails_by_validations(): void
     {
-        $this->get(route('discussions.questions.index', ['author' => 'author']))
+        $this->get(route('discussions.questions.index', [
+            'author' => 'author',
+        ]))
             ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $this->get(route('discussions.questions.index', ['resolved' => 12332]))
