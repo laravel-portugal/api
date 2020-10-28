@@ -43,6 +43,7 @@ class QuestionsIndexTest extends TestCase
                         'author',
                         'created_at',
                         'updated_at',
+                        'resolved_at',
                         'deleted_at',
                     ]
                 ],
@@ -172,11 +173,23 @@ class QuestionsIndexTest extends TestCase
             ->count(5)
             ->create();
 
+        $this->json('GET', route('discussions.questions.index'))
+            ->seeJsonContains([
+                'to' => 15,
+            ]);
+
         $this->json('GET', route('discussions.questions.index', [
             'resolved' => true,
         ]))
             ->seeJsonContains([
                 'to' => 5,
+            ]);
+
+        $this->json('GET', route('discussions.questions.index', [
+            'resolved' => false,
+        ]))
+            ->seeJsonContains([
+                'to' => 10,
             ]);
     }
 

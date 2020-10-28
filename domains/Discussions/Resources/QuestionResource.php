@@ -17,6 +17,7 @@ class QuestionResource extends JsonResource
             'author' => UserResource::make($this->author),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'resolved_at' => $this->resolved_at,
             'deleted_at' => $this->deleted_at,
         ];
     }
