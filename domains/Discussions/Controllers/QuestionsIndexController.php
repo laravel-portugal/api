@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class QuestionsGetController extends Controller
+class QuestionsIndexController extends Controller
 {
     protected Question $question;
 
