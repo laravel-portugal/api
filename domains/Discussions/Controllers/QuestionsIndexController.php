@@ -35,19 +35,17 @@ class QuestionsIndexController extends Controller
         ]);
 
         $question = $this->question
-            ->when($authorId = $request->get('author'),
-                fn(Builder $query, int $authorId) => $query->where('author_id', $authorId))
-            ->when($request->get('title'),
-                fn(Builder $query, string $title) => $query->where('title', 'like', '%'.strtoupper($title).'%'))
-            ->when($request->get('created'),
-                fn(Builder $query, array $created) => $query->whereBetween('created_at', [
-                    $created['from'],
-                    $created['to'],
-                ]))
-            ->when($request->get('resolved') == "1",
-                fn(Builder $query, bool $resolved) => $query->whereNotNull('resolved_at'))
-            ->when($request->get('resolved') == "0",
-                fn(Builder $query, bool $resolved) => $query->whereNull('resolved_at'))
+            ->when($request->input('author'),
+                fn(Builder $query, int $authorId) => $query->FindByAuthorId($authorId))
+            ->when($request->input('title'),
+                fn(Builder $query, string $title) => $query->findByTitle($title))
+            ->when($request->input('created'),
+                fn(Builder $query, array $created) => $query->findByCreatedDate([$created['from'], $created['to']]))
+            ->when($request->boolean('resolved'),
+                fn(Builder $query) => $query->resolved())
+            ->when(!$request->boolean('resolved') && $request->input('resolved') != null,
+                fn(Builder $query) => $query->nonResolved())
+            ->latest()
             ->simplePaginate(15);
 
         return QuestionResource::collection($question);
