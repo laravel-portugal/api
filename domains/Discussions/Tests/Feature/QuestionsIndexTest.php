@@ -56,7 +56,8 @@ class QuestionsIndexTest extends TestCase
             ])
             ->seeJsonContains([
                 'to' => 10,
-            ]);
+            ])
+            ->assertResponseOk();
     }
 
     /** @test */
@@ -99,6 +100,7 @@ class QuestionsIndexTest extends TestCase
     public function it_search_by_author(): void
     {
         $user = UserFactory::new()->create();
+
         QuestionFactory::new([
             'author_id' => $user->id,
         ])
@@ -121,7 +123,9 @@ class QuestionsIndexTest extends TestCase
     {
         QuestionFactory::new([
             'title' => 'LARAVEL-PT',
-        ])->create();
+        ])
+            ->create();
+
         QuestionFactory::new([
             'title' => 'laravel-Pt',
         ])
@@ -142,6 +146,7 @@ class QuestionsIndexTest extends TestCase
             'created_at' => Carbon::now()->subYears(2),
         ])
             ->create();
+
         QuestionFactory::new([
             'created_at' => Carbon::now()->subYears(3),
         ])
@@ -193,26 +198,38 @@ class QuestionsIndexTest extends TestCase
             ]);
     }
 
-    /** @test */
-    public function it_fails_by_validations(): void
+    /**
+     * @test
+     * @dataProvider datesProvider
+     */
+    public function it_fails_by_validations($param, $expected)
     {
-        $this->get(route('discussions.questions.index', [
-            'author' => 'author',
-        ]))
-            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->get(route('discussions.questions.index', $param))
+            ->assertResponseStatus($expected);;
+    }
 
-        $this->get(route('discussions.questions.index', ['resolved' => 12332]))
-            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        $this->get(route('discussions.questions.index', [
-            'created[from]' => Carbon::now()->toDateString(),
-        ]))
-            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        $this->get(route('discussions.questions.index', [
-            'created[from]' => Carbon::now()->toDateString(),
-            'created[to]' => Carbon::now()->subDay()->toDateString(),
-        ]))
-            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    public function datesProvider()
+    {
+        return [
+            'Search author by string' => [
+                ['author' => 'author'],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            ],
+            'Search resolved with int' => [
+                ['resolved' => 21333],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            ],
+            'Search create only from date' => [
+                ['created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString()],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            ],
+            'Search with a "to" date less than "from"' => [
+                [
+                    'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
+                    'created[to]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
+                ],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            ],
+        ];
     }
 }
