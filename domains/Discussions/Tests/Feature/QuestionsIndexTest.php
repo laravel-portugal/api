@@ -108,7 +108,7 @@ class QuestionsIndexTest extends TestCase
             'author' => $user->id,
         ]))
             ->seeJsonContains([
-                'id' => $user->id,
+                'email' => $user->email,
             ])
             ->seeJsonContains([
                 'to' => 3,
