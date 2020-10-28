@@ -16,7 +16,7 @@ class QuestionsUpdateController extends Controller
         $this->questions = $questions;
     }
 
-    public function __invoke(int $questionId, Request $request): Response
+    public function __invoke(Request $request, int $questionId): Response
     {
         $question = $this->questions->findOrFail($questionId);
 
