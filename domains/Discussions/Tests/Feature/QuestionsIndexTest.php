@@ -172,35 +172,43 @@ class QuestionsIndexTest extends TestCase
     /** @test */
     public function it_search_by_resolved(): void
     {
-        QuestionFactory::new([
+        $questonsResolved = QuestionFactory::new([
             'resolved_at' => Carbon::now(),
         ])
-            ->count(5)
             ->create();
 
         $this->json('GET', route('discussions.questions.index'))
             ->seeJsonContains([
-                'to' => 15,
+                'resolved_at' => $questonsResolved->resolved_at,
+            ])
+            ->seeJsonContains([
+                'resolved_at' => null,
             ]);
 
         $this->json('GET', route('discussions.questions.index', [
             'resolved' => true,
         ]))
             ->seeJsonContains([
-                'to' => 5,
+                'resolved_at' => $questonsResolved->resolved_at,
+            ])
+            ->seeJsonDoesntContains([
+                'resolved_at' => null,
             ]);
 
         $this->json('GET', route('discussions.questions.index', [
             'resolved' => false,
         ]))
+            ->seeJsonDoesntContains([
+                'resolved_at' => $questonsResolved->resolved_at,
+            ])
             ->seeJsonContains([
-                'to' => 10,
+                'resolved_at' => null,
             ]);
     }
 
     /**
      * @test
-     * @dataProvider datesProvider
+     * @dataProvider invalidSearchablePropertiesValuesProvider
      */
     public function it_fails_by_validations($param, $expected)
     {
@@ -208,27 +216,27 @@ class QuestionsIndexTest extends TestCase
             ->assertResponseStatus($expected);;
     }
 
-    public function datesProvider()
+    public function invalidSearchablePropertiesValuesProvider()
     {
         return [
             'Search author by string' => [
                 ['author' => 'author'],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                Response::HTTP_UNPROCESSABLE_ENTITY,
             ],
             'Search resolved with int' => [
                 ['resolved' => 21333],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                Response::HTTP_UNPROCESSABLE_ENTITY,
             ],
             'Search create only from date' => [
                 ['created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString()],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                Response::HTTP_UNPROCESSABLE_ENTITY,
             ],
             'Search with a "to" date less than "from"' => [
                 [
                     'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
                     'created[to]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
                 ],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                Response::HTTP_UNPROCESSABLE_ENTITY,
             ],
         ];
     }

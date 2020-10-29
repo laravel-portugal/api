@@ -14,6 +14,8 @@ class Question extends Model
 
     protected $fillable = ['title', 'description'];
 
+    protected $dates = ['resolved_at'];
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class)
