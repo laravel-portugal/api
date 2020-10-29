@@ -26,17 +26,17 @@ class QuestionsIndexController extends Controller
     public function __invoke(Request $request): AnonymousResourceCollection
     {
         $this->validate($request, [
-            'author' => 'sometimes|integer',
-            'title' => 'sometimes|string',
-            'created' => 'sometimes|array|size:2',
-            'created.from' => 'required_with:created|date',
-            'created.to' => 'required_with:created|date|afterOrEqual:created.from',
-            'resolved' => 'sometimes|boolean',
+            'author' => ['sometimes', 'integer'],
+            'title' => ['sometimes', 'string'],
+            'created' => ['sometimes', 'array', 'size:2'],
+            'created.from' => ['required_with:created', 'date'],
+            'created.to' => ['required_with:created', 'date', 'afterOrEqual:created.from'],
+            'resolved' => ['sometimes', 'boolean'],
         ]);
 
         $question = $this->question
             ->when($request->input('author'),
-                fn(Builder $query, int $authorId) => $query->FindByAuthorId($authorId))
+                fn(Builder $query, int $authorId) => $query->findByAuthorId($authorId))
             ->when($request->input('title'),
                 fn(Builder $query, string $title) => $query->findByTitle($title))
             ->when($request->input('created'),
