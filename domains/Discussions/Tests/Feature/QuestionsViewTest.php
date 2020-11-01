@@ -46,6 +46,7 @@ class QuestionsViewTest extends TestCase
                     ],
                     'created_at' => $this->question->created_at,
                     'updated_at' => $this->question->updated_at,
+                    'resolved_at' => $this->question->resolved_at,
                     'deleted_at' => $this->question->deleted_at
                 ]
             ]);
@@ -65,6 +66,7 @@ class QuestionsViewTest extends TestCase
                     'author',
                     'created_at',
                     'updated_at',
+                    'resolved_at',
                     'deleted_at'
                 ]
             ]);
