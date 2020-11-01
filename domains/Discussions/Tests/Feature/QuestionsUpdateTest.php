@@ -49,9 +49,7 @@ class QuestionsUpdateTest extends TestCase
             );
 
         $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
-
         self::assertTrue($response->isEmpty());
-
         $this->seeInDatabase('questions', [
             'id' => $this->question->id,
             'author_id' => $this->user->id,

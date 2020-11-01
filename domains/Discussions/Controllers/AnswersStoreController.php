@@ -19,7 +19,7 @@ class AnswersStoreController extends Controller
         $this->question = $question;
     }
 
-    public function __invoke(int $questionId, Request $request): Response
+    public function __invoke(Request $request, int $questionId): Response
     {
         $this->validate($request, [
             'content' => ['required', 'string'],

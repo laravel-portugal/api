@@ -11,7 +11,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'author_id');
+            $table->foreignIdFor(User::class, 'author_id')->constrained();
             $table->string('title')->index();
             $table->string('slug');
             $table->text('description');
