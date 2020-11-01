@@ -59,7 +59,7 @@ class QuestionsGetAnswersTest extends TestCase
     /** @test */
     public function it_gets_paginated_answers_for_a_question(): void
     {
-        $this->get(route('discussions.questions.answers', ['id' => $this->question->id]))
+        $this->get(route('discussions.questions.answersList', ['id' => $this->question->id]))
             ->seeJson([
                 "id" => $this->answer->id,
                 "question_id" => '' . $this->question->id
@@ -73,7 +73,7 @@ class QuestionsGetAnswersTest extends TestCase
     /** @test */
     public function it_gets_paginated_answers_for_a_question_from_a_particular_author(): void
     {
-        $this->get(route('discussions.questions.answers', ['id' => $this->question->id, 'author' => $this->user->id]))
+        $this->get(route('discussions.questions.answersList', ['id' => $this->question->id, 'author' => $this->user->id]))
             ->seeJson(['id' => $this->answer->id])
             ->dontSeeJson(['id' => $this->secondAnswer->id]);
     }
@@ -84,7 +84,7 @@ class QuestionsGetAnswersTest extends TestCase
         $aWeekAgo = Carbon::now()->subDays(8);
         $yesterday = Carbon::yesterday();
 
-        $this->get(route('discussions.questions.answers', ['id' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d'))
+        $this->get(route('discussions.questions.answersList', ['id' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d'))
             ->seeJson([
                 "id" => $this->answer->id,
                 "question_id" => '' . $this->question->id
@@ -100,7 +100,7 @@ class QuestionsGetAnswersTest extends TestCase
         $aWeekAgo = Carbon::now()->subDays(8);
         $yesterday = Carbon::yesterday();
 
-        $this->get(route('discussions.questions.answers', ['id' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d') . '&author=1')
+        $this->get(route('discussions.questions.answersList', ['id' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d') . '&author=1')
             ->seeJson([
                 "id" => $this->answer->id,
                 "question_id" => '' . $this->question->id

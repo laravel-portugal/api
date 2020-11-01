@@ -30,6 +30,6 @@ Route::get('questions/{questionId}', [
 ]);
 
 Route::get('/questions/{id}/answers', [
-    'as' => 'questions.answers',
+    'as' => 'questions.answersList',
     'uses' => QuestionsGetAnswersController::class
 ]);
