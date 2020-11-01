@@ -9,11 +9,6 @@ use Domains\Discussions\Controllers\QuestionsViewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('questions', [
-        'as' => 'questions.index',
-        'uses' => QuestionsIndexController::class
-    ]);
-
     Route::post('/questions', [
         'as' => 'questions.store',
         'uses' => QuestionsStoreController::class,
@@ -26,16 +21,21 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::delete('/questions/{questionId}', [
         'as' => 'questions.delete',
-        'uses' => QuestionsDeleteController::class
+        'uses' => QuestionsDeleteController::class,
     ]);
 
     Route::post('/questions/{questionId}/answers', [
         'as' => 'questions.answers',
-        'uses' => AnswersStoreController::class
+        'uses' => AnswersStoreController::class,
     ]);
 });
 
+Route::get('questions', [
+    'as' => 'questions.index',
+    'uses' => QuestionsIndexController::class,
+]);
+
 Route::get('questions/{questionId}', [
     'as' => 'questions.view',
-    'uses' => QuestionsViewController::class
+    'uses' => QuestionsViewController::class,
 ]);
