@@ -16,6 +16,27 @@ class QuestionsIndexTest extends TestCase
 
     private User $user;
 
+    public function invalidSearchablePropertiesValuesProvider(): array
+    {
+        return [
+            'Search author by string' => [
+                ['author' => 'author'],
+            ],
+            'Search resolved with int' => [
+                ['resolved' => 21333],
+            ],
+            'Search create only from date' => [
+                ['created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString()],
+            ],
+            'Search with a "to" date less than "from"' => [
+                [
+                    'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
+                    'created[to]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
+                ],
+            ],
+        ];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,7 +66,7 @@ class QuestionsIndexTest extends TestCase
                         'updated_at',
                         'resolved_at',
                         'deleted_at',
-                    ]
+                    ],
                 ],
                 'links' => [
                     'first', 'prev', 'next', 'last',
@@ -97,7 +118,7 @@ class QuestionsIndexTest extends TestCase
     }
 
     /** @test */
-    public function it_search_by_author(): void
+    public function it_searches_by_author(): void
     {
         $user = UserFactory::new()->create();
 
@@ -119,7 +140,7 @@ class QuestionsIndexTest extends TestCase
     }
 
     /** @test */
-    public function it_search_by_title(): void
+    public function it_searches_by_title(): void
     {
         QuestionFactory::new([
             'title' => 'LARAVEL-PT',
@@ -140,7 +161,7 @@ class QuestionsIndexTest extends TestCase
     }
 
     /** @test */
-    public function it_search_by_created_date(): void
+    public function it_searches_by_created_date(): void
     {
         QuestionFactory::new([
             'created_at' => Carbon::now()->subYears(2),
@@ -154,7 +175,7 @@ class QuestionsIndexTest extends TestCase
 
         $this->json('GET', route('discussions.questions.index', [
             'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
-            'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString()
+            'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString(),
         ]))
             ->seeJsonContains([
                 'to' => 1,
@@ -162,7 +183,7 @@ class QuestionsIndexTest extends TestCase
 
         $this->json('GET', route('discussions.questions.index', [
             'created[from]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
-            'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString()
+            'created[to]' => Carbon::now()->addMonth()->subYears(2)->toDateString(),
         ]))
             ->seeJsonContains([
                 'to' => 2,
@@ -170,26 +191,18 @@ class QuestionsIndexTest extends TestCase
     }
 
     /** @test */
-    public function it_search_by_resolved(): void
+    public function it_searches_by_resolved_flag(): void
     {
-        $questonsResolved = QuestionFactory::new([
+        $questionsResolved = QuestionFactory::new([
             'resolved_at' => Carbon::now(),
         ])
             ->create();
-
-        $this->json('GET', route('discussions.questions.index'))
-            ->seeJsonContains([
-                'resolved_at' => $questonsResolved->resolved_at,
-            ])
-            ->seeJsonContains([
-                'resolved_at' => null,
-            ]);
 
         $this->json('GET', route('discussions.questions.index', [
             'resolved' => true,
         ]))
             ->seeJsonContains([
-                'resolved_at' => $questonsResolved->resolved_at,
+                'resolved_at' => $questionsResolved->resolved_at,
             ])
             ->seeJsonDoesntContains([
                 'resolved_at' => null,
@@ -199,7 +212,7 @@ class QuestionsIndexTest extends TestCase
             'resolved' => false,
         ]))
             ->seeJsonDoesntContains([
-                'resolved_at' => $questonsResolved->resolved_at,
+                'resolved_at' => $questionsResolved->resolved_at,
             ])
             ->seeJsonContains([
                 'resolved_at' => null,
@@ -209,35 +222,12 @@ class QuestionsIndexTest extends TestCase
     /**
      * @test
      * @dataProvider invalidSearchablePropertiesValuesProvider
+     *
+     * @param array $searchParamAndValue
      */
-    public function it_fails_by_validations($param, $expected)
+    public function it_fails_search_if_given_invalid_search_params_values(array $searchParamAndValue): void
     {
-        $this->get(route('discussions.questions.index', $param))
-            ->assertResponseStatus($expected);;
-    }
-
-    public function invalidSearchablePropertiesValuesProvider()
-    {
-        return [
-            'Search author by string' => [
-                ['author' => 'author'],
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-            ],
-            'Search resolved with int' => [
-                ['resolved' => 21333],
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-            ],
-            'Search create only from date' => [
-                ['created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString()],
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-            ],
-            'Search with a "to" date less than "from"' => [
-                [
-                    'created[from]' => Carbon::now()->subMonth()->subYears(2)->toDateString(),
-                    'created[to]' => Carbon::now()->subMonth()->subYears(3)->toDateString(),
-                ],
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-            ],
-        ];
+        $this->get(route('discussions.questions.index', $searchParamAndValue))
+            ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY, );
     }
 }
