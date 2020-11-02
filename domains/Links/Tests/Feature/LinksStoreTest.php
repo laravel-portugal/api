@@ -124,8 +124,14 @@ class LinksStoreTest extends TestCase
     /** @test */
     public function it_uses_logged_in_user_email_and_name_when_submitting_a_link(): void
     {
+        // create a random user
+        $randomUser = UserFactory::new(['email' => $this->faker->safeEmail])->create();
+        // create a user and login
         $user = UserFactory::new(['email' => $this->faker->safeEmail])->create();
         $this->actingAs($user);
+
+        // use an existing user's email and it should go OK since we're logged in.
+        $this->payload['author_email'] = $randomUser->email;
 
         $response = $this->call('POST', '/links', $this->payload, [], $this->files);
 

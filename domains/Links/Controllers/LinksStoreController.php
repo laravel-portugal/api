@@ -25,7 +25,7 @@ class LinksStoreController extends Controller
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'author_name' => ['required', 'string'],
-            'author_email' => ['required', 'email', 'unique:users,email'],
+            'author_email' => ['required', 'email', $request->user() ? null : 'unique:users,email'],
             'cover_image' => ['required', 'image'],
             'tags' => ['required', 'array'],
             'tags.*.id' => ['required', 'integer', 'exists:tags'],
