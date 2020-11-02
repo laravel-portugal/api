@@ -20,5 +20,10 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'questions.answers',
         'uses' => AnswersStoreController::class
     ]);
+
+    Route::patch('questions/{questionId}/answers/{answerId}', [
+        'as' => 'questions.answers.update',
+        'uses' => AnswersUpdateController::class,
+    ]);
 });
 
