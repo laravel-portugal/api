@@ -12,7 +12,7 @@ use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class AnswersUpdateTest extends TestCase
 {
