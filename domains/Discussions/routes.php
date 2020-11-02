@@ -1,6 +1,7 @@
 <?php
 
 use Domains\Discussions\Controllers\AnswersStoreController;
+use Domains\Discussions\Controllers\AnswersUpdateController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
 use Illuminate\Support\Facades\Route;
