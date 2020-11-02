@@ -25,7 +25,7 @@ class LinksStoreController extends Controller
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'author_name' => ['required', 'string'],
-            'author_email' => ['required', 'email'],
+            'author_email' => ['required', 'email', 'unique:users,email'],
             'cover_image' => ['required', 'image'],
             'tags' => ['required', 'array'],
             'tags.*.id' => ['required', 'integer', 'exists:tags'],
@@ -40,8 +40,8 @@ class LinksStoreController extends Controller
             'link' => $request->input('link'),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'author_name' => $request->input('author_name'),
-            'author_email' => $request->input('author_email'),
+            'author_name' => optional($request->user())->name ?? $request->input('author_name'),
+            'author_email' => optional($request->user())->email ?? $request->input('author_email'),
             'cover_image' => $request->file('cover_image')->store('cover_images'),
         ]);
 
