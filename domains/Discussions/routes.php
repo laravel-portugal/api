@@ -1,9 +1,12 @@
 <?php
 
 use Domains\Discussions\Controllers\AnswersStoreController;
+use Domains\Discussions\Controllers\QuestionsDeleteController;
+use Domains\Discussions\Controllers\QuestionsIndexController;
 use Domains\Discussions\Controllers\AnswersUpdateController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
+use Domains\Discussions\Controllers\QuestionsViewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
@@ -17,9 +20,14 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => QuestionsUpdateController::class,
     ]);
 
+    Route::delete('/questions/{questionId}', [
+        'as' => 'questions.delete',
+        'uses' => QuestionsDeleteController::class,
+    ]);
+
     Route::post('/questions/{questionId}/answers', [
         'as' => 'questions.answers',
-        'uses' => AnswersStoreController::class
+        'uses' => AnswersStoreController::class,
     ]);
 
     Route::patch('questions/{questionId}/answers/{answerId}', [
@@ -28,3 +36,12 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
 });
 
+Route::get('questions', [
+    'as' => 'questions.index',
+    'uses' => QuestionsIndexController::class,
+]);
+
+Route::get('questions/{questionId}', [
+    'as' => 'questions.view',
+    'uses' => QuestionsViewController::class,
+]);

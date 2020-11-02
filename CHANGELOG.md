@@ -6,7 +6,9 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- N/A
+- An authenticated user can delete a question (#30)
+- A guest or an authenticated user can see details of a question (#48)
+- A guest or an authenticated user can list questions (#26)
 
 ### Changed
 
