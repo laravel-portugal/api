@@ -11,6 +11,7 @@ use Domains\Discussions\Models\Question;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -38,14 +39,20 @@ class AnswersUpdateTest extends TestCase
     /** @test */
     public function it_updates_answer(): void
     {
+        Carbon::setTestNow();
+
         $payload = [
             'content' => $this->faker->paragraph,
         ];
 
         $response = $this->actingAs($this->user)
-            ->call('PATCH', route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => $this->answer->id]), $payload)
-            ->assertStatus(Response::HTTP_NO_CONTENT);
+            ->call(
+                'PATCH',
+                route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => $this->answer->id]),
+                $payload
+            );
 
+        $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
         self::assertTrue($response->isEmpty());
 
         $this->seeInDatabase('question_answers', [

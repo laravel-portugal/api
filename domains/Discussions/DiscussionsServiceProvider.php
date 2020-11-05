@@ -2,8 +2,10 @@
 
 namespace Domains\Discussions;
 
+use Domains\Discussions\Models\Answer;
 use Domains\Discussions\Models\Question;
 use Domains\Discussions\Observers\QuestionObserver;
+use Domains\Discussions\Policies\AnswerPolicy;
 use Domains\Discussions\Policies\QuestionPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -38,5 +40,6 @@ class DiscussionsServiceProvider extends ServiceProvider
     private function bootPolicies(): void
     {
         Gate::policy(Question::class, QuestionPolicy::class);
+        Gate::policy(Answer::class, AnswerPolicy::class);
     }
 }
