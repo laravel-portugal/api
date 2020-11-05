@@ -28,12 +28,13 @@ class AnswersUpdateTest extends TestCase
     {
         parent::setUp();
 
-        $this->faker    = Factory::create();
-        $this->user     = UserFactory::new()->create();
+        $this->faker = Factory::create();
+        $this->user = UserFactory::new()->create();
         $this->question = QuestionFactory::new(['author_id' => $this->user->id])->create();
-        $this->answer   = AnswerFactory::new([
+        $this->answer = AnswerFactory::new([
             'author_id' => $this->user->id,
-            'question_id' => $this->question->id])->create();
+            'question_id' => $this->question->id,
+        ])->create();
     }
 
     /** @test */
@@ -58,7 +59,7 @@ class AnswersUpdateTest extends TestCase
         $this->seeInDatabase('question_answers', [
             'author_id' => $this->user->id,
             'question_id' => $this->question->id,
-            'content' => $payload['content']
+            'content' => $payload['content'],
         ]);
     }
 
@@ -87,7 +88,7 @@ class AnswersUpdateTest extends TestCase
         ];
 
         $this->actingAs($this->user)
-            ->post(route('discussions.questions.answers.update', ['questionId' => 1000, 'answerId' => $this->answer->id]), $payload)
+            ->patch(route('discussions.questions.answers.update', ['questionId' => 1000, 'answerId' => $this->answer->id]), $payload)
             ->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -99,7 +100,7 @@ class AnswersUpdateTest extends TestCase
         ];
 
         $this->actingAs($this->user)
-            ->post(route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => 1000]), $payload)
+            ->patch(route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => 1000]), $payload)
             ->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 }

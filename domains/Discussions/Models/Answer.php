@@ -13,6 +13,8 @@ class Answer extends Model
 
     protected $table = 'question_answers';
 
+    protected $fillable = ['content'];
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class)
