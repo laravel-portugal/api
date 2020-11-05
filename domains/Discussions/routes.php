@@ -1,7 +1,7 @@
 <?php
 
 use Domains\Discussions\Controllers\AnswersStoreController;
-use Domains\Discussions\Controllers\QuestionsGetAnswersController;
+use Domains\Discussions\Controllers\AnswersIndexController;
 use Domains\Discussions\Controllers\QuestionsDeleteController;
 use Domains\Discussions\Controllers\QuestionsIndexController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
@@ -41,7 +41,7 @@ Route::get('questions/{questionId}', [
     'uses' => QuestionsViewController::class,
 ]);
 
-Route::get('/questions/{id}/answers', [
+Route::get('/questions/{questionId}/answers', [
     'as' => 'questions.answersList',
-    'uses' => QuestionsGetAnswersController::class
+    'uses' => AnswersIndexController::class
 ]);
