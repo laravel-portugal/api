@@ -21,6 +21,7 @@ class Answer extends Model
             ->withTrashed();
     }
 
+
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class)

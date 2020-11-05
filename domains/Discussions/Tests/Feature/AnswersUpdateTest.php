@@ -29,12 +29,9 @@ class AnswersUpdateTest extends TestCase
         parent::setUp();
 
         $this->faker = Factory::create();
-        $this->user = UserFactory::new()->create();
-        $this->question = QuestionFactory::new(['author_id' => $this->user->id])->create();
-        $this->answer = AnswerFactory::new([
-            'author_id' => $this->user->id,
-            'question_id' => $this->question->id,
-        ])->create();
+        $this->answer = AnswerFactory::new()->create();
+        $this->user = $this->answer->author;
+        $this->question = $this->answer->question;
     }
 
     /** @test */
@@ -46,15 +43,15 @@ class AnswersUpdateTest extends TestCase
             'content' => $this->faker->paragraph,
         ];
 
-        $response = $this->actingAs($this->user)
-            ->call(
-                'PATCH',
+        $request = $this->actingAs($this->user)
+            ->patch(
                 route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => $this->answer->id]),
                 $payload
             );
 
         $this->assertResponseStatus(Response::HTTP_NO_CONTENT);
-        self::assertTrue($response->isEmpty());
+
+        $this->assertTrue($request->response->isEmpty());
 
         $this->seeInDatabase('question_answers', [
             'author_id' => $this->user->id,
