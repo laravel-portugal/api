@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Domains\Discussions\Controllers;
 
 use App\Http\Controllers\Controller;
