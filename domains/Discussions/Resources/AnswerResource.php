@@ -12,11 +12,17 @@ class AnswerResource extends JsonResource
         return [
             'id' => $this->id,
             'content' => $this->content,
-            'question' => QuestionResource::make($this->question),
-            'author' => UserResource::make($this->author),
+            'question_id' => $this->question_id,
+            'author_id' => $this->author_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
+            'question' => QuestionResource::collection(
+                $this->whenLoaded('question')
+            ),
+            'author' => UserResource::collection(
+                $this->whenLoaded('author')
+            ),
         ];
     }
 }

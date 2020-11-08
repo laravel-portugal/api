@@ -3,8 +3,8 @@
 namespace Domains\Discussions\Tests\Feature;
 
 use Carbon\Carbon;
-use Illuminate\Http\Response;
 use Tests\TestCase;
+use Illuminate\Http\Response;
 use Domains\Accounts\Models\User;
 use Domains\Discussions\Models\Answer;
 use Domains\Discussions\Models\Question;
@@ -18,7 +18,6 @@ class AnswersIndexControllerTest extends TestCase
     use DatabaseMigrations;
 
     private User $user;
-    private User $secondUser;
     private Question $question;
     private Answer $answer;
     private Answer $secondAnswer;
@@ -28,7 +27,7 @@ class AnswersIndexControllerTest extends TestCase
         parent::setUp();
 
         $this->user = UserFactory::new()->create();
-        $this->secondUser = UserFactory::new()->create();
+        $secondUser = UserFactory::new()->create();
 
         $this->question = QuestionFactory::new([
             'author_id' => $this->user->id
@@ -42,7 +41,7 @@ class AnswersIndexControllerTest extends TestCase
 
         $this->secondAnswer = AnswerFactory::new([
             'question_id' => $this->question->id,
-            'author_id' => $this->secondUser->id,
+            'author_id' => $secondUser->id,
             'created_at' => Carbon::now()->toDateTimeString()
         ])->create();
     }
@@ -50,58 +49,26 @@ class AnswersIndexControllerTest extends TestCase
     /** @test */
     public function it_gets_paginated_answers_for_a_question(): void
     {
-        $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]))
+        $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->seeJsonStructure([
-                "data" => [
-                    0 => [
-                        "id",
-                        "content",
-                        "question" => [
-                            "id",
-                            "title",
-                            "slug",
-                            "description",
-                            "author" => [
-                                "id",
-                                "name",
-                                "email",
-                                "trusted",
-                                "created_at",
-                                "updated_at",
-                                "deleted_at",
-                            ],
-                            "created_at",
-                            "updated_at",
-                            "resolved_at",
-                            "deleted_at",
-                        ],
-                        "author" => [
-                            "id",
-                            "name",
-                            "email",
-                            "trusted",
-                            "created_at",
-                            "updated_at",
-                            "deleted_at",
-                        ],
-                        "created_at",
-                        "updated_at",
-                        "deleted_at",
-                    ]
-                ]
+                    "id",
+                    "content",
+                    "question_id",
+                    "author_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
             ])
-            // answer 1
-        ->seeJsonContains(['id' => $this->answer->id])
-        ->seeJsonContains(['content' => $this->answer->content])
-            // answer 2
-        ->seeJsonContains(['id' => $this->secondAnswer->id])
-        ->seeJsonContains(['content' => $this->secondAnswer->content]);
+            ->seeJsonContains(['id' => $this->answer->id])
+            ->seeJsonContains(['content' => $this->answer->content])
+            ->seeJsonContains(['id' => $this->secondAnswer->id])
+            ->seeJsonContains(['content' => $this->secondAnswer->content]);
     }
 
-    /** @test */
+    /** @test **/
     public function it_gets_paginated_answers_for_a_question_from_a_particular_author(): void
     {
-        $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id, 'author' => $this->user->id]))
+        $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id, 'author' => $this->user->id]))
             ->seeJson(['id' => $this->answer->id])
             ->dontSeeJson(['id' => $this->secondAnswer->id]);
     }
@@ -112,11 +79,9 @@ class AnswersIndexControllerTest extends TestCase
         $aWeekAgo = Carbon::now()->subDays(8);
         $yesterday = Carbon::yesterday();
 
-        $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d'))
-            // answer 1
+        $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d'))
             ->seeJsonContains(['id' => $this->answer->id])
             ->seeJsonContains(['content' => $this->answer->content])
-            // answer 2
             ->seeJsonDoesntContains([
                 "id" => $this->secondAnswer->id
             ]);
@@ -134,14 +99,11 @@ class AnswersIndexControllerTest extends TestCase
         $aWeekAgo = Carbon::now()->subDays(8);
         $yesterday = Carbon::yesterday();
 
-        $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d') . '&author=1')
-            // answer 1
+        $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]) . '?created[from]=' . $aWeekAgo->format('Y-m-d') . '&created[to]=' . $yesterday->format('Y-m-d') . '&author=1')
             ->seeJsonContains(['id' => $this->answer->id])
             ->seeJsonContains(['content' => $this->answer->content])
-            // answer 3
             ->seeJsonContains(['id' => $thirdAnswer->id])
             ->seeJsonContains(['content' => $thirdAnswer->content])
-            // answer 2
             ->dontSeeJson([
                 "id" => $this->secondAnswer->id
             ]);
@@ -151,11 +113,11 @@ class AnswersIndexControllerTest extends TestCase
     public function it_blocks_guest_for_many_attempts(): void
     {
         for ($attempt = 0; $attempt < 30; ++$attempt) {
-            $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]))
+            $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
                 ->assertResponseStatus(Response::HTTP_OK);
         }
 
-        $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]))
+        $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->assertResponseStatus(Response::HTTP_TOO_MANY_REQUESTS);
     }
 
@@ -165,10 +127,10 @@ class AnswersIndexControllerTest extends TestCase
         $this->actingAs($this->user);
 
         for ($attempt = 0; $attempt < 30; ++$attempt) {
-            $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]));
+            $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]));
         }
 
-        $this->get(route('discussions.questions.answersList', ['questionId' => $this->question->id]))
+        $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->assertResponseStatus(Response::HTTP_OK);
     }
 }
