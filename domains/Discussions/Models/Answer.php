@@ -21,10 +21,14 @@ class Answer extends Model
             ->withTrashed();
     }
 
-
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class)
             ->withTrashed();
+    }
+
+    public function scopeOfQuestion($query, int $questionId)
+    {
+        return $query->where('question_id', $questionId);
     }
 }

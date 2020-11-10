@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 class AnswersUpdateController extends Controller
 {
     private Answer $answer;
+    private Question $question;
 
     public function __construct(Question $question, Answer $answer)
     {
@@ -18,11 +19,12 @@ class AnswersUpdateController extends Controller
         $this->answer = $answer;
     }
 
-    public function __invoke(int $questionId, int $answerId, Request $request): Response
+    public function __invoke(Request $request, int $questionId, int $answerId): Response
     {
-        $answer = $this->answer->where('question_id', $questionId)->findOrFail($answerId);
+        $answer = $this->answer->OfQuestion($questionId)->findOrFail($answerId);
+        $question = $this->question->findOrFail($questionId);
 
-        $this->authorize('update', $answer);
+        $this->authorize('update', [$answer, $question]);
 
         $this->validate($request, [
             'content' => ['required', 'string'],
