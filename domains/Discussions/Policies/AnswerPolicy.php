@@ -13,8 +13,8 @@ class AnswerPolicy
 {
     use HandlesAuthorization;
 
-    public function update(User $user, Answer $answer, Question $question): bool
+    public function update(User $user, Answer $answer): bool
     {
-        return $answer->author->is($user) && $answer->question->is($question);
+        return $answer->author->is($user);
     }
 }

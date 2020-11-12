@@ -21,10 +21,9 @@ class AnswersUpdateController extends Controller
 
     public function __invoke(Request $request, int $questionId, int $answerId): Response
     {
-        $answer = $this->answer->OfQuestion($questionId)->findOrFail($answerId);
-        $question = $this->question->findOrFail($questionId);
+        $answer = $this->answer->ofQuestion($questionId)->findOrFail($answerId);
 
-        $this->authorize('update', [$answer, $question]);
+        $this->authorize('update', $answer);
 
         $this->validate($request, [
             'content' => ['required', 'string'],
