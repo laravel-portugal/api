@@ -3,9 +3,8 @@
 namespace Domains\Discussions\Tests\Feature;
 
 use Domains\Accounts\Database\Factories\UserFactory;
-use Domains\Accounts\Models\User;
 use Domains\Discussions\Database\Factories\AnswerFactory;
-use Domains\Discussions\Database\Factories\QuestionFactory;
+use Domains\Accounts\Models\User;
 use Domains\Discussions\Models\Answer;
 use Domains\Discussions\Models\Question;
 use Faker\Factory;
@@ -99,5 +98,19 @@ class AnswersUpdateTest extends TestCase
         $this->actingAs($this->user)
             ->patch(route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => 1000]), $payload)
             ->assertResponseStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /** @test */
+    public function it_fails_to_update_on_invalid_author()
+    {
+        $payload = [
+            'content' => $this->faker->paragraph,
+        ];
+
+        $this->actingAs(UserFactory::new()->make())
+            ->patch(
+                route('discussions.questions.answers.update', ['questionId' => $this->question->id, 'answerId' => $this->answer->id]),
+                $payload
+            )->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 }
