@@ -13,6 +13,8 @@ class Answer extends Model
 
     protected $table = 'question_answers';
 
+    protected $fillable = ['content'];
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class)
@@ -23,5 +25,10 @@ class Answer extends Model
     {
         return $this->belongsTo(Question::class)
             ->withTrashed();
+    }
+
+    public function scopeOfQuestion($query, int $questionId)
+    {
+        return $query->where('question_id', $questionId);
     }
 }

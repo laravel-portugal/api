@@ -3,6 +3,7 @@
 use Domains\Discussions\Controllers\AnswersStoreController;
 use Domains\Discussions\Controllers\QuestionsDeleteController;
 use Domains\Discussions\Controllers\QuestionsIndexController;
+use Domains\Discussions\Controllers\AnswersUpdateController;
 use Domains\Discussions\Controllers\QuestionsStoreController;
 use Domains\Discussions\Controllers\QuestionsUpdateController;
 use Domains\Discussions\Controllers\QuestionsViewController;
@@ -27,6 +28,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/questions/{questionId}/answers', [
         'as' => 'questions.answers',
         'uses' => AnswersStoreController::class,
+    ]);
+
+    Route::patch('questions/{questionId}/answers/{answerId}', [
+        'as' => 'questions.answers.update',
+        'uses' => AnswersUpdateController::class,
     ]);
 });
 
