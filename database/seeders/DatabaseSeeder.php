@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('production')) {
             abort(1, 'Not allowed in production!');
         }
-//        $this->call(TagsTableSeeder::class);
         $this->call(LinksTableSeeder::class);
     }
 }
