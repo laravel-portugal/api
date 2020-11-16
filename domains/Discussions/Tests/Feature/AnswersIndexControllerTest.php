@@ -3,15 +3,15 @@
 namespace Domains\Discussions\Tests\Feature;
 
 use Carbon\Carbon;
-use Tests\TestCase;
-use Illuminate\Http\Response;
-use Domains\Accounts\Models\User;
-use Domains\Discussions\Models\Answer;
-use Domains\Discussions\Models\Question;
-use Laravel\Lumen\Testing\DatabaseMigrations;
 use Domains\Accounts\Database\Factories\UserFactory;
+use Domains\Accounts\Models\User;
 use Domains\Discussions\Database\Factories\AnswerFactory;
 use Domains\Discussions\Database\Factories\QuestionFactory;
+use Domains\Discussions\Models\Answer;
+use Domains\Discussions\Models\Question;
+use Illuminate\Http\Response;
+use Laravel\Lumen\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class AnswersIndexControllerTest extends TestCase
 {
@@ -27,7 +27,6 @@ class AnswersIndexControllerTest extends TestCase
         parent::setUp();
 
         $this->user = UserFactory::new()->create();
-        $secondUser = UserFactory::new()->create();
 
         $this->question = QuestionFactory::new([
             'author_id' => $this->user->id
@@ -41,7 +40,6 @@ class AnswersIndexControllerTest extends TestCase
 
         $this->secondAnswer = AnswerFactory::new([
             'question_id' => $this->question->id,
-            'author_id' => $secondUser->id,
             'created_at' => Carbon::now()->toDateTimeString()
         ])->create();
     }
@@ -51,13 +49,13 @@ class AnswersIndexControllerTest extends TestCase
     {
         $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->seeJsonStructure([
-                    "id",
-                    "content",
-                    "question_id",
-                    "author_id",
-                    "created_at",
-                    "updated_at",
-                    "deleted_at"
+                'id',
+                'content',
+                'question_id',
+                'author_id',
+                'created_at',
+                'updated_at',
+                'deleted_at'
             ])
             ->seeJsonContains(['id' => $this->answer->id])
             ->seeJsonContains(['content' => $this->answer->content])
@@ -65,7 +63,7 @@ class AnswersIndexControllerTest extends TestCase
             ->seeJsonContains(['content' => $this->secondAnswer->content]);
     }
 
-    /** @test **/
+    /** @test * */
     public function it_gets_paginated_answers_for_a_question_from_a_particular_author(): void
     {
         $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id, 'author' => $this->user->id]))
@@ -132,5 +130,18 @@ class AnswersIndexControllerTest extends TestCase
 
         $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->assertResponseStatus(Response::HTTP_OK);
+    }
+
+    /** @test  */
+    public function it_gets_question_and_author_when_loaded() :void
+    {
+        $answer = AnswerFactory::new([
+            'question_id' => $this->question->id,
+            'author_id' => $this->user->id,
+            'created_at' => Carbon::now()->subWeek()->toDateTimeString()
+        ])->create()->load('question', 'author');
+
+        $this->assertArrayHasKey('author', $answer->relationsToArray());
+        $this->assertArrayHasKey('question', $answer->relationsToArray());
     }
 }

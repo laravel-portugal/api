@@ -36,9 +36,9 @@ class AnswersIndexController extends Controller
             ->findOrFail($questionId)
             ->answers()
             ->when($authorId = $request->input('author'),
-                static fn(Builder $answers, int $authorId) => $answers->whereAuthorId($authorId))
+                static fn(Builder $answers) => $answers->whereAuthorId($authorId))
             ->when($created = $request->input('created'),
-                static fn(Builder $answers, array $created) => $answers->whereBetween('created_at', [$created['from'], $created['to']]))
+                static fn(Builder $answers) => $answers->whereBetween('created_at', [$created['from'], $created['to']]))
             ->latest()
             ->simplePaginate(15);
 
