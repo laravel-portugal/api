@@ -49,13 +49,17 @@ class AnswersIndexControllerTest extends TestCase
     {
         $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->seeJsonStructure([
-                'id',
-                'content',
-                'question_id',
-                'author_id',
-                'created_at',
-                'updated_at',
-                'deleted_at'
+                'data' => [
+                    0 => [
+                        'id',
+                        'content',
+                        'question_id',
+                        'author_id',
+                        'created_at',
+                        'updated_at',
+                        'deleted_at'
+                    ]
+                ]
             ])
             ->seeJsonContains(['id' => $this->answer->id])
             ->seeJsonContains(['content' => $this->answer->content])
@@ -132,8 +136,8 @@ class AnswersIndexControllerTest extends TestCase
             ->assertResponseStatus(Response::HTTP_OK);
     }
 
-    /** @test  */
-    public function it_gets_question_and_author_when_loaded() :void
+    /** @test */
+    public function it_gets_question_and_author_when_loaded(): void
     {
         $answer = AnswerFactory::new([
             'question_id' => $this->question->id,
