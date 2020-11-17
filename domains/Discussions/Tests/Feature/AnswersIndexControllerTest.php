@@ -50,7 +50,7 @@ class AnswersIndexControllerTest extends TestCase
         $this->get(route('discussions.questions.answers.list', ['questionId' => $this->question->id]))
             ->seeJsonStructure([
                 'data' => [
-                    0 => [
+                    [
                         'id',
                         'content',
                         'question_id',
