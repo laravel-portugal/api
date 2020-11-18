@@ -3,16 +3,17 @@
 namespace Database\Seeders;
 
 use Domains\Links\Database\Seeders\LinksTableSeeder;
-use Domains\Tags\Database\Seeders\TagsTableSeeder;
+use Exception;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        if (app()->environment('production')) {
-            abort(1, 'Not allowed in production!');
+        if ($this->container['config']->get('app.env') === 'production') {
+            throw new Exception('This is not allowed when in production environment.');
         }
+
         $this->call(LinksTableSeeder::class);
     }
 }
