@@ -7,14 +7,14 @@ use Illuminate\Database\Seeder;
 
 class TagsTableSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $tags = [
-            [ 'name' => 'Eloquent' ],
-            [ 'name' => 'Livewire' ],
-            [ 'name' => 'Vue' ],
-            [ 'name' => 'Testing' ],
-        ];
-        TagFactory::new()->createMany($tags);
+        TagFactory::new()
+            ->createMany([
+                ['name' => 'Eloquent'],
+                ['name' => 'Livewire'],
+                ['name' => 'Vue'],
+                ['name' => 'Testing'],
+            ]);
     }
 }
