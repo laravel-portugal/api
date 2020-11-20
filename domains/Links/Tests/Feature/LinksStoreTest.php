@@ -18,7 +18,6 @@ class LinksStoreTest extends TestCase
 
     private Tag $tag;
     private Generator $faker;
-
     private array $payload;
     private array $files;
 
@@ -43,7 +42,7 @@ class LinksStoreTest extends TestCase
             'cover_image' => UploadedFile::fake()->image('cover_image.jpg'),
         ];
 
-        Storage::fake('local');
+        Storage::fake('public');
     }
 
     /** @test */
@@ -69,7 +68,7 @@ class LinksStoreTest extends TestCase
             ]
         );
 
-        Storage::assertExists('cover_images/' . $this->files['cover_image']->hashName());
+        Storage::disk('public')->assertExists('cover_images/' . $this->files['cover_image']->hashName());
     }
 
     /** @test */
