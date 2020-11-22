@@ -42,7 +42,7 @@ class LinksStoreController extends Controller
             'description' => $request->input('description'),
             'author_name' => optional($request->user())->name ?? $request->input('author_name'),
             'author_email' => optional($request->user())->email ?? $request->input('author_email'),
-            'cover_image' => $request->file('cover_image')->store('cover_images'),
+            'cover_image' => $request->file('cover_image')->store('cover_images', 'public'),
         ]);
 
         $link->tags()->attach($request->input('tags.*.id'));
