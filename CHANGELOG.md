@@ -26,7 +26,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Fixed
 
-- N/A
+- Link cover image should be stored publicly (#58)
 
 ### Security
 
