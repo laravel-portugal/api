@@ -6,6 +6,7 @@ use Domains\Accounts\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends Model
@@ -22,6 +23,11 @@ class Question extends Model
             ->withTrashed();
     }
 
+    public function answers(): HasMany
+    {
+        return $this->hasMany(Answer::class);
+    }
+  
     public function scopeFindByAuthorId(Builder $query, int $term): Builder
     {
         return $query->where('author_id', $term);
