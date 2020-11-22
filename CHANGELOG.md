@@ -9,6 +9,8 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 - An authenticated user can delete a question (#30)
 - A guest or an authenticated user can see details of a question (#48)
 - A guest or an authenticated user can list questions (#26)
+- Guest cannot submit Links for existing author_email (#52)
+- An authenticated user can update an answer of a given question (#33)
 - A guest or an authenticated user can list answers of a question (#32)
 
 ### Changed
@@ -25,7 +27,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Fixed
 
-- N/A
+- Link cover image should be stored publicly (#58)
 
 ### Security
 
