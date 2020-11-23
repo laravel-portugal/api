@@ -12,6 +12,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 - Guest cannot submit Links for existing author_email (#52)
 - An authenticated user can update an answer of a given question (#33)
 - A guest or an authenticated user can list answers of a question (#32)
+- Ported `storage:link` command from Laravel
 
 ### Changed
 
