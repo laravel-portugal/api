@@ -6,7 +6,7 @@ networks:
 
 services:
   frontend:
-    image: reg.laravel.pt/frontend:${TAG}
+    image: reg.laravel.pt/api:${TAG}
     container_name: frontend
     networks:
       - web
