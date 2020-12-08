@@ -5,7 +5,7 @@ networks:
     external: true
 
 services:
-  frontend:
+  api:
     image: reg.laravel.pt/api:${TAG}
     container_name: frontend
     networks:
