@@ -4,6 +4,9 @@ networks:
   web:
     external: true
 
+volumes:
+  cover-images:
+
 services:
   api:
     image: reg.laravel.pt/api:${TAG}
@@ -20,3 +23,4 @@ services:
       - "traefik.http.routers.api.tls.certresolver=leresolver"
     volumes:
     - ./.env:/var/www/html/.env
+    - cover-images:/var/www/html/.env
