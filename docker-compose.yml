@@ -8,6 +8,7 @@ services:
   api:
     image: reg.laravel.pt/api:${TAG}
     container_name: api
+    restart: always
     networks:
       - web
     labels:
