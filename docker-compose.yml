@@ -7,7 +7,7 @@ networks:
 services:
   api:
     image: reg.laravel.pt/api:${TAG}
-    container_name: frontend
+    container_name: api
     networks:
       - web
     labels:
@@ -15,5 +15,5 @@ services:
       - "traefik.http.routers.frontend.rule=Host(`api.sidecar.laravel.pt`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
-      - "traefik.http.routers.frontend.service=frontend"
+      - "traefik.http.routers.frontend.service=api"
       - "traefik.http.routers.frontend.tls.certresolver=leresolver"
