@@ -18,3 +18,5 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=80"
       - "traefik.http.routers.api.service=api"
       - "traefik.http.routers.api.tls.certresolver=leresolver"
+    volumes:
+    - ./.env:/var/www/html/.env
