@@ -3,7 +3,6 @@ version: "3.7"
 networks:
   web:
     external: true
-  laravel_portugal: {}
 
 volumes:
   cover_images:
@@ -16,6 +15,8 @@ services:
     restart: always
     networks:
       - web
+    expose:
+      - 80
     labels:
       - "traefik.enable=true"
 #      - "traefik.http.routers.api.rule=Host(`api.sidecar.laravel.pt`)"
@@ -31,6 +32,8 @@ services:
 
   postgres:
     image: postgres:13
+    expose:
+      - 5432
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
@@ -38,5 +41,14 @@ services:
       POSTGRES_USER: root
       POSTGRES_DB: laravel_portugal
     restart: always
+    networks:
+      - web
+
+  redis:
+    image: redis:6.0.9
+    expose:
+      - 6379
+    restart: unless-stopped
+    command: redis-server --appendonly yes
     networks:
       - web
