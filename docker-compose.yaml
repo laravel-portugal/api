@@ -7,7 +7,7 @@ services:
       - 80
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - .:/srv
+      - .:/var/www/html
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped
@@ -20,7 +20,7 @@ services:
     expose:
       - 9000
     volumes:
-      - .:/var/www/html/api
+      - .:/var/www/html
     restart: unless-stopped
     networks:
       - net
