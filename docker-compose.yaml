@@ -15,7 +15,7 @@ services:
       - net
 
   app:
-    image: docker.pkg.github.com/laravel-portugal/infrastructure/php:7.4-fpm-dev
+    image: docker.pkg.github.com/laravel-portugal/infrastructure/php:7.4-fpm
     user: "1000:1000"
     expose:
       - 9000
@@ -37,15 +37,6 @@ services:
       POSTGRES_USER: root
       POSTGRES_DB: laravel_portugal_db
     restart: unless-stopped
-    networks:
-      - data
-
-  redis:
-    image: redis:6.0.9
-    expose:
-      - 6379
-    restart: unless-stopped
-    command: redis-server --appendonly yes
     networks:
       - data
 

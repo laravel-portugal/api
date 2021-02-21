@@ -5,23 +5,20 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.laravel-portugal.entrypoints=https"
-      - "traefik.http.routers.laravel-portugal.rule=Host(`api.laravel-portugal.pt`)"
+      - "traefik.http.routers.laravel-portugal.rule=Host(`api.laravel.pt`)"
       - "traefik.http.services.laravel-portugal.loadbalancer.healthcheck.path=/health-check"
       - "traefik.http.services.laravel-portugal.loadbalancer.healthcheck.interval=60s"
     networks:
       - web
 
   app:
+    image: docker.pkg.github.com/laravel-portugal/infrastructure/php:7.4-fpm-dev
     networks:
       - web
 
   db:
     ports:
       - 5432:5432
-
-  redis:
-    ports:
-      - 6379:6379
 
 networks:
   web:
