@@ -1,9 +1,10 @@
 .env
-.phpunit.result.cache
 .idea
 .php_cs.cache
-vendor
+.phpunit.result.cache
 Homestead.json
 Homestead.yaml
 database/database.sqlite
+docker-compose.override.yaml
 public/storage
+vendor

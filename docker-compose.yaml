@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+  server:
+    image: caddy
+    expose:
+      - 80
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - .:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    networks:
+      - net
+
+  app:
+    image: docker.pkg.github.com/laravel-portugal/infrastructure/php:7.4-fpm-dev
+    user: "1000:1000"
+    expose:
+      - 9000
+    volumes:
+      - .:/var/www/html/api
+    restart: unless-stopped
+    networks:
+      - net
+      - data
+
+  db:
+    image: postgres:13
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: laravel_portugal_db
+    restart: unless-stopped
+    networks:
+      - data
+
+  redis:
+    image: redis:6.0.9
+    expose:
+      - 6379
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    networks:
+      - data
+
+networks:
+  net:
+  data:
+
+volumes:
+  caddy_data:
+  caddy_config:
+  postgres_data:

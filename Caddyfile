@@ -1,0 +1,6 @@
+http://api.laravel-portugal.test,
+api.laravel-portugal.pt
+
+root * /srv
+php_fastcgi app:9000
+file_server
