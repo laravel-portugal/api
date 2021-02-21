@@ -1,4 +1,5 @@
-http://api.laravel.test
+http://api.laravel.test,
+api.laravel.pt
 
 root * /var/www/html/public
 php_fastcgi app:9000
