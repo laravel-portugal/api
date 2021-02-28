@@ -16,7 +16,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Changed
 
-- N/A
+- Switched from response status 202 to 204 on successful accounts' logout operation
 
 ### Deprecated
 

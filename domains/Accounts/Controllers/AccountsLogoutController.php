@@ -19,6 +19,6 @@ class AccountsLogoutController extends Controller
     {
         $this->auth->logout();
 
-        return new Response('', Response::HTTP_ACCEPTED);
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }
