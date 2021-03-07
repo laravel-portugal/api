@@ -11,6 +11,7 @@
         "graham-campbell/throttle": "8.1",
         "illuminate/mail": "^8.8",
         "illuminate/notifications": "^8.8",
+        "josepostiga/larabeat": "^1.0",
         "laravel/lumen-framework": "^8.0",
         "league/flysystem": "^1.1",
         "tymon/jwt-auth": "^1.0"

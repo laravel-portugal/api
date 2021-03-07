@@ -107,6 +107,7 @@ $app->register(\Domains\Tags\TagsServiceProvider::class);
 $app->register(\GrahamCampbell\Throttle\ThrottleServiceProvider::class);
 $app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->register(\Illuminate\Notifications\NotificationServiceProvider::class);
+$app->register(\JosePostiga\Larabeat\LarabeatServiceProvider::class);
 $app->register(\Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*

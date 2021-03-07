@@ -6,7 +6,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
-- N/A
+- Require `josepostiga/larabeat` package to support health-check endpoints.
 
 ### Changed
 
@@ -26,7 +26,7 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Security
 
-- N/A
+- Update dependencies
 
 ## 2.1.0 - 2021-03-07
 
