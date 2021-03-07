@@ -6,6 +6,32 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 ### Added
 
+- N/A
+
+### Changed
+
+- N/A
+
+### Deprecated
+
+- N/A
+
+### Removed
+
+- N/A
+
+### Fixed
+
+- N/A
+
+### Security
+
+- N/A
+
+## 2.1.0 - 2021-03-07
+
+### Added
+
 - An authenticated user can delete a question (#30)
 - A guest or an authenticated user can see details of a question (#48)
 - A guest or an authenticated user can list questions (#26)
@@ -18,21 +44,9 @@ All notable changes to `laravel-portugal/api` will be documented in this file
 
 - Switched from response status 202 to 204 on successful accounts' logout operation
 
-### Deprecated
-
-- N/A
-
-### Removed
-
-- N/A
-
 ### Fixed
 
 - Link cover image should be stored publicly (#58)
-
-### Security
-
-- N/A
 
 ## 2.0.0 - 2020-10-25
 
