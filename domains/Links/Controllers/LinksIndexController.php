@@ -27,6 +27,7 @@ class LinksIndexController extends Controller
                 );
             })
             ->approved()
+            ->latest()
             ->simplePaginate();
 
         return LinkResource::collection($links);
